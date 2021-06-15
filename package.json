@@ -1,0 +1,27 @@
+{
+  "name": "cac-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "start.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "abba danmusa",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "connect-flash": "^0.1.1",
+    "connect-mongo": "^4.4.1",
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^10.0.0",
+    "es6-promisify": "^7.0.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "moment": "^2.29.1",
+    "mongoose": "^5.12.14",
+    "passport": "^0.4.1",
+    "pug": "^3.0.2",
+    "webpack": "^5.39.0",
+    "webpack-cli": "^4.7.2"
+  }
+}
