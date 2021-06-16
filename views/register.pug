@@ -1,0 +1,15 @@
+extends layout
+
+block content
+
+  .inner 
+    form.form(action="/register" method="POST")
+      label(for="name") Name
+      input(type="text" name="name" value=(body.name || '') required)
+      label(for="userName") User Name
+      input(type="text" name="userName" value=(body.userName || '') required)
+      label(for="password") Password
+      input(type="password" name="password" value=(body.password || '') required)
+      label(for="password-confirm") Confirm Password
+      input(type="password" name="confirm-password" value=(body.confirm-password || '') required)
+      input.button(type="submit" value="Register")

@@ -1,4 +1,4 @@
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+// const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const path = require('path')
 
 const javascript = {
@@ -11,7 +11,7 @@ const javascript = {
 }
 const styles = {
     test: /\.(css)$/i,
-    use: ExtractTextPlugin.extract(['css-loader']),
+    // use: ExtractTextPlugin.extract(['css-loader']),
 }
 
 module.exports = {

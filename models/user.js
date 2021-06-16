@@ -6,6 +6,11 @@ const slug = require('slug')
 const Schema = mongoose.Schema
 
 const userSchema = new Schema({
+    name: {
+        type: String,
+        required: 'Please supply a name',
+        trim: true
+    },
     userName: {
         type: String,
         trim: true,
@@ -13,16 +18,12 @@ const userSchema = new Schema({
         unique: true,
         lowercase: true
     },
-    name: {
+    state: {
         type: String,
-        required: 'Please supply a name',
-        trim: true
+        trim: true,
+        required: 'Please supply a state',
     },
     slug: String,
-    description: {
-        type: String,
-        trim: true
-    },
     // resetPasswordToken: String,
     // resetPasswordExpires: Date,
 })

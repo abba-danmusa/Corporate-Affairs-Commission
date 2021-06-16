@@ -12,6 +12,7 @@
     "license": "ISC",
     "dependencies": {
         "add": "^2.0.6",
+        "babel-loader": "^8.2.2",
         "body-parser": "^1.19.0",
         "concurrently": "^6.2.0",
         "connect-flash": "^0.1.1",
@@ -24,6 +25,7 @@
         "moment": "^2.29.1",
         "mongoose": "^5.12.14",
         "mongoose-mongodb-errors": "^0.0.2",
+        "nodemon": "^2.0.7",
         "passport": "^0.4.1",
         "passport-local-mongoose": "^6.1.0",
         "pug": "^3.0.2",
