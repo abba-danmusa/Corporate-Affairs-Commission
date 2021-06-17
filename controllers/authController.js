@@ -18,6 +18,6 @@ exports.isLoggedIn = (req, res, next) => {
         next()
         return
     }
-    req.flash('error', 'You must login to add this item to your bag')
+    req.flash('error', 'You must login to Enter any Business Info.')
     res.redirect('/')
 }

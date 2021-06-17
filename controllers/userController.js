@@ -22,10 +22,3 @@ exports.saveEntry = async(req, res) => {
     req.flash('success', 'Business Details have been saved successfully')
     res.redirect('back')
 }
-
-// exports.login = (req, res) => {
-//     const user = new User({
-//         name: req.name
-//         us
-//     })
-// }

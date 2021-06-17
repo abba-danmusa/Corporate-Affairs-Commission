@@ -2,6 +2,16 @@ const User = require("../models/user")
 const { promisify } = require('es6-promisify')
 const { check, validationResult } = require('express-validator')
 
+
+exports.passwordProtected = (req, res, next) => {
+    res.set('WWW-Authenticate', 'Basic realm="Corporate Affairs Commission"')
+    if (req.headers.authorization == 'Basic Y2FjYWRtaW46bG92ZQ==') {
+        next()
+    } else {
+        res.status(401).send('Authentication Required')
+    }
+}
+
 exports.loginForm = (req, res) => {
     res.render('login', { title: 'Admin Login' })
 }
@@ -46,4 +56,8 @@ exports.register = async(req, res) => {
     await register(user, req.body.password)
     req.flash('success', 'A new User Account has been created')
     res.redirect('back')
+}
+
+exports.inComingEntries = (req, res) => {
+    res.render('home', { title: 'Dashbord' })
 }

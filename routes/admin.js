@@ -4,11 +4,10 @@ const { catchErrors } = require('../handlers/errorHandlers')
 const adminController = require('../controllers/adminController')
 
 // Get routes
-router.get('/admin', adminController.loginForm)
-router.get('/register-new-user', adminController.registerForm)
+router.get('/admin', adminController.passwordProtected, adminController.inComingEntries)
+router.get('/admin/register-user', adminController.passwordProtected, adminController.registerForm)
 
 // Post routes
-router.post('/register-new-user', catchErrors(adminController.validateRegister), catchErrors(adminController.register))
-router.post('/admin', )
+router.post('/admin/register-user', adminController.passwordProtected, catchErrors(adminController.validateRegister), catchErrors(adminController.register))
 
 module.exports = router

@@ -8,9 +8,11 @@ const { promisify } = require('es6-promisify')
 const flash = require('connect-flash')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
-const routes = require('./routes/index')
+const userRoutes = require('./routes/index')
+const adminRoutes = require('./routes/admin')
 const helpers = require('./helpers')
 const errorHandlers = require('./handlers/errorHandlers')
+const { passwordProtected } = require('./controllers/adminController')
 require('./handlers/passport')
 
 // create express app 
@@ -62,7 +64,7 @@ app.use((req, res, next) => {
     next()
 })
 
-app.use('/', routes)
+app.use('/', userRoutes, adminRoutes)
 
 // if that above routes didnt work, 404 them and forward to error handler
 app.use(errorHandlers.notFound)
