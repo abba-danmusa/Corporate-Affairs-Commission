@@ -12,7 +12,6 @@ const userRoutes = require('./routes/index')
 const adminRoutes = require('./routes/admin')
 const helpers = require('./helpers')
 const errorHandlers = require('./handlers/errorHandlers')
-const { passwordProtected } = require('./controllers/adminController')
 require('./handlers/passport')
 
 // create express app 
@@ -24,23 +23,29 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
 
 // Takes the raw requests and turns them into usable properties on req.body
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+
+// Exposes a bunch of methods for validating data. Used heavily on userController.validateRegister
+// app.use(buildCheckFunction())
+// app.use(buildSanitizeFunction())
 
 // populates req.cookies with any cookies that came along with the request
 app.use(cookieParser())
 
 // Sessions allow us to store data on visitors from request to request
-// This keeps users logged in and allows us to send flash messages
-app.use(session({
+// This keeps users logged in and allows us to send flash 
+let sessionOptions = session({
     secret: process.env.SECRET,
     key: process.env.KEY,
-    resave: false,
-    saveUninitialized: false,
     store: MongoStore.create({
         mongoUrl: process.env.DATABASE
-    })
-}))
+    }),
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 1000 * 60 * 60 * 24, httpOnly: true }
+})
+app.use(sessionOptions)
 
 // // Passport JS is what we use to handle our logins
 app.use(passport.initialize())
@@ -81,4 +86,26 @@ if (app.get('env') === 'development') {
 // production error handler
 app.use(errorHandlers.productionErrors)
 
-module.exports = app
+const server = require('http').createServer(app)
+const io = require('socket.io')(server)
+
+io.use((socket, next) => {
+    sessionOptions(socket.request, socket.request.res, next)
+})
+
+io.on('connection', (socket) => {
+    if (socket.request.session.user) {
+        let user = socket.request.session.user
+
+        socket.emit('welcome', { user: user.name })
+
+        socket.on('businessDetailsFromBrowser', (data) => {
+            socket.broadcast.emit('businessMessageFromServer', {
+                regNumber: data.regNumber,
+                user: user.name
+            })
+        })
+    }
+})
+
+module.exports = server
