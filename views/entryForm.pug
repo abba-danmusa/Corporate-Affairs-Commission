@@ -1,15 +1,26 @@
-mixin loginForm()
+extends layout
+block content
+
   .signup-form
-    form(action="/" method="post")
-      h2 Login
-      .form-group
-        input(type="text" class="form-control" name="Username" placeholder="Username" required="required")
-      .form-group
-        input(type="password" class="form-control" name="confirm_password" placeholder="Confirm Password" required="required")
-      label(for="select") State:
-      select(id="select" name="field4")
-        optgroup 
-          label="SELECT--"
+    form(action="/new-entry" method="post")
+      h2 Register
+        .form-group
+          input(type="text" class="form-control" name="regNumber" placeholder="REGISTRATION NO" required="required")
+        .form-group
+          input(type="text" class="form-control" name="businessName" placeholder="BUSINESS NAME" required="required")
+        .form-group
+          input(type="date" name='dateOfReg')
+        .form-group
+          input(type="text" class="form-control" name="natureOfBusiness" placeholder="NATURE OF BUSINESS" required="required")
+        .form-group
+          input(type="text" class="form-control" name="proprietor1" placeholder="PROPRIETOR 1" required="required")
+        .form-group
+          input(type="text" class="form-control" name="proprietor2" placeholder="PROPIETOR 2")
+        .form-group
+          input(type="text" class="form-control" name="proprietor3" placeholder="PROPIETOR 3")
+        label(for="state") State:
+          select(id="select" name="state")
+            optgroup(label="SELECT--")
             option(value="LAGOS") LAGOS
             option(value="ABUJA") ABUJA
             option(value="RIVERS") RIVERS
@@ -46,7 +57,7 @@ mixin loginForm()
             option(value="SOKOTO") SOKOTO
             option(value="TARABA") TARABA
             option(value="YOBE") YOBE
-            option(value="ZAMFARA") ZAMFARA
-              
-      div(class="form-group")
-        button(type="submit" class="btn btn-success btn-lg btn-block") Submit
+            option(value="ZAMFARA") ZAMFARA  
+
+        form-group
+          button(type="submit" class="btn btn-success btn-lg btn-block") Save

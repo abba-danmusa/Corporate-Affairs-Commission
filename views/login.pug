@@ -1,10 +1,18 @@
 extends layout
 
-include mixins/_loginForm
-include mixins/_forgotForm
+//- include mixins/_loginForm
+//- include mixins/_forgotForm
 
 block content
 
   .inner
-    +loginForm()
-    //- +forgotForm()
+    .signup-form
+      form(action="/" method="POST")
+        h2 Login
+        .form-group
+          input(type="text" class="form-control" name="userName" placeholder="User Name" required="required")
+        .form-group
+          input(type="password" class="form-control" name="password" placeholder="password" required="required")
+                
+        div(class="form-group")
+          button(type="submit" class="btn btn-success btn-lg btn-block") Submit

@@ -16,7 +16,7 @@ exports.saveEntry = async(req, res) => {
         dateOfReg: req.body.dateOfReg,
         state: req.body.state,
         natureOfBusiness: req.body.natureOfBusiness,
-        proprietors: [req.body.proprietor1, req.body.proprietor2, req.body.proprietor3, req.body.proprietor4]
+        proprietors: [req.body.proprietor1, req.body.proprietor2, req.body.proprietor3]
     })
     await business.save()
     req.flash('success', 'Business Details have been saved successfully')
