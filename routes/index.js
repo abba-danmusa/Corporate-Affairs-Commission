@@ -5,7 +5,7 @@ const userController = require('../controllers/userController')
 const authController = require('../controllers/authController')
 
 // Get routes
-router.get('/', authController.isLoggedIn, userController.entryForm)
+router.get('/', authController.hasSession, userController.entryForm)
 router.get('/login', authController.hasSession, userController.loginForm)
 router.get('/:state/saved-entries', authController.isLoggedIn, catchErrors(userController.getHistory))
 router.get('/logout', authController.isLoggedIn, authController.logout)

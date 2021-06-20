@@ -82,6 +82,17 @@ exports.register = async(req, res) => {
     res.redirect('back')
 }
 
+exports.getUsers = async(req, res) => {
+    const users = await User.find({})
+    res.render('registeredUsers', { title: 'Users', users })
+}
+
+exports.deleteUser = async(req, res) => {
+    const user = await User.findOneAndDelete({ _id: req.params.id })
+    req.flash('success', 'User Deleted Successfully')
+    res.redirect('back')
+}
+
 exports.registerAdmin = async(req, res) => {
     const admin = new Admin(req.body)
     const register = promisify(Admin.register.bind(Admin))

@@ -490,7 +490,7 @@ nav {
   width: fit-content;
   color: white;
   text-decoration: none;
-  padding: 5px 5px;
+  padding: 5px 10px;
 }
 
 .site-identity {
@@ -773,6 +773,10 @@ select {
       -ms-flex-direction: column;
           flex-direction: column;
   width: 40%;
+}
+
+.entry-form .author {
+  visibility: collapse;
 }
 
 .error {

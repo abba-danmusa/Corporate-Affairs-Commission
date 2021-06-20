@@ -1,0 +1,12 @@
+extends layout
+block content
+  .inner
+    each user in users
+      h1= `USER NAME: ${user.userName}`
+      h3= `NAME: ${user.name}`
+      h3= `STATE: ${user.state}`
+      .actions
+        form(action=`/admin/registered-users/edit-user/${user._id}` method='post')
+          button.link__button(type='submit') EDIT USER
+        form(action=`/admin/registered-users/delete-user/${user._id}` method='post')
+          button.link__button(type='submit') DELETE USER
