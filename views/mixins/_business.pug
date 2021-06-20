@@ -1,0 +1,13 @@
+mixin business(business)
+  each item in business
+    .business
+      
+      h1= `BUSINESS NAME: ${item.businessName}`
+      h3= `REGISTRATION NO.: ${item.regNumber}`
+      h4= `ADDRESS: ${item.businessAddress}` 
+      h4= `NATURE OF BUSINESS: ${item.natureOfBusiness}`
+      h4= `REGISTRATION DATE: ${item.dateOfReg}`
+      h4= `PROPRIETORS: ${item.proprietors}`
+      h6= `SAVED BY: ${item.author}`
+      form(action=`/${user.state}/business/${item.id}` method='post')
+        button.link__button(type='submit') DELETE BUSINESS

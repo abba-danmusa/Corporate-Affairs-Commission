@@ -3,9 +3,9 @@
     "version": "1.0.0",
     "main": "start.js",
     "scripts": {
-        "prod": "node ./start.js",
+        "start": "node ./start.js",
         "watch": "nodemon ./start.js --ignore public/",
-        "start": "concurrently \"npm run watch\" \"npm run assets\" --names \"💻,📦\" --prefix name",
+        "dev": "concurrently \"npm run watch\" \"npm run assets\" --names \"💻,📦\" --prefix name",
         "assets": "webpack"
     },
     "author": "abba danmusa",

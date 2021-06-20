@@ -169,3 +169,9 @@ exports.getSearchedData = async(req, res) => {
 
     res.render('searchedResult', { title: 'Result', businesses, searchQuery, page, pages, total })
 }
+
+exports.deleteBusiness = async(req,res) => {
+    const business = await Business.findOneAndDelete({_id: req.params.id})
+    req.flash('success', 'Business Details Has Been Deleted Successfully')
+    res.redirect('/admin/businesses')
+}

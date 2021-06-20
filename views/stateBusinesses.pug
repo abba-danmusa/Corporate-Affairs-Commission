@@ -25,14 +25,14 @@ block content
         each business in businesses
           tr
             td
-              a(href=`/admin/business/${business.businessName}/${business._id}`)=business.regNumber
+              a(href=`/${user.state}/business/${business._id}`)=business.regNumber
             td
-              a(href=`/admin/business/${business.businessName}/${business._id}`)=business.businessName
+              a(href=`/${user.state}/business/${business._id}`)=business.businessName
             td
-              a(href=`/admin/business/${business.businessName}/${business._id}`)=business.natureOfBusiness
+              a(href=`/${user.state}/business/${business._id}`)=business.natureOfBusiness
             td
-              a(href=`/admin/business/${business.businessName}/${business._id}`)=business.state
+              a(href=`/${user.state}/business/${business._id}`)=business.state
             td
-              a(href=`/admin/business/${business.businessName}/${business._id}`)=business.dateOfReg
+              a(href=`/${user.state}/business/${business._id}`)=business.dateOfReg
     +pagination(page, pages, total)  
       

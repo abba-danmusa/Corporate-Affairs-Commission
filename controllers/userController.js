@@ -44,6 +44,12 @@ exports.getHistory = async(req, res) => {
     res.render('stateBusinesses', { title: `Businesses, ${businesses.state } branch`, businesses, page, pages, total })
 }
 
+exports.getBusiness = async(req, res) => {
+    const business = await Business.find({_id:req.params.id})
+    
+    res.render('stateBusiness', { business})
+}
+
 exports.searchByBusinessName = async(req, res) => {
     const business = await Business.
     find({

@@ -20,9 +20,9 @@ block content
             input.businessAddress(type="text" class="form-control" name="businesAddress" placeholder="BUSINESS ADDRESS" required="required")
           label(for="state") State:
             select.state(id="select" name="state")
-              optgroup(label="SELECT--")
-              option(value="LAGOS") LAGOS
-              option(value="ABUJA") ABUJA
+              optgroup(label="SELECT--", value=`${user.state}`)
+              option(value="LAGOS" ) LAGOS
+              option(value="ABUJA" ) ABUJA
               option(value="RIVERS") RIVERS
               option(value="ABIA") ABIA
               option(value="ADAMAWA") ADAMAWA

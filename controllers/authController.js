@@ -17,9 +17,9 @@ exports.loginAdmin = passport.authenticate('local', {
 exports.hasSession = (req, res, next) => {
     if (req.user) {
         res.redirect('/')
-    } else {
-        next()
+        return
     }
+        next()
 }
 
 exports.logout = (req, res) => {

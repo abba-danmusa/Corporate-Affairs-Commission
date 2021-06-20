@@ -21,6 +21,7 @@ router.get('/admin/search/results', adminController.getSearchedData)
 router.post('/admin', authController.loginAdmin)
 router.post('/admin/register-user', catchErrors(adminController.validateRegister), catchErrors(adminController.register))
 router.post('/admin/registered-users/delete-user/:id', catchErrors(adminController.deleteUser))
+router.post('/admin/business/:name/:id', catchErrors(adminController.deleteBusiness))
 router.post('/admin/register-admin', catchErrors(adminController.validateAdminRegister), catchErrors(adminController.registerAdmin))
 
 module.exports = router

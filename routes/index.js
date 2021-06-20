@@ -5,9 +5,10 @@ const userController = require('../controllers/userController')
 const authController = require('../controllers/authController')
 
 // Get routes
-router.get('/', authController.hasSession, userController.entryForm)
-router.get('/login', userController.loginForm)
+router.get('/', authController.isLoggedIn, userController.entryForm)
+router.get('/login',authController.hasSession, userController.loginForm)
 router.get('/:state/saved-entries', authController.isLoggedIn, catchErrors(userController.getHistory))
+router.get('/:state/business/:id', catchErrors(userController.getBusiness))
 router.get('/logout', authController.isLoggedIn, authController.logout)
 router.get('/search/results', authController.isLoggedIn, userController.getSearchedData)
 

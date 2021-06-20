@@ -1,0 +1,8 @@
+extends layout
+
+include mixins/_business
+
+block content
+  .inner
+    a.link__button(href=`/${user.state}/saved-entries`) BACK
+  +business(business)
