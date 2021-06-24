@@ -7,13 +7,13 @@ const businessSchema = new Schema({
         type: String,
         trim: true,
         required: 'You must enter a registration number',
-        unique: true
+        unique: 'Registration Number already exist'
     },
     businessName: {
         type: String,
         trim: true,
         required: 'You must enter a business name',
-        unique: true
+        unique: 'Business Name already exist'
     },
     dateOfReg: {
         type: Date,
@@ -44,8 +44,8 @@ const businessSchema = new Schema({
 
 businessSchema.index({
     regNumber: 'text',
-    // businessName: 'text',
-    // state: 'text'
+    businessName: 'text',
+    state: 'text'
 })
 
 module.exports = mongoose.model('Business', businessSchema)

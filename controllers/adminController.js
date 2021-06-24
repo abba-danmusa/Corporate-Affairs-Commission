@@ -60,7 +60,6 @@ exports.register = async(req, res) => {
 }
 
 exports.inComingEntries = async(req, res) => {
-    res.render('test')
-        // const businesses = await Business.find({})
-        // res.render('businessLog', { title: 'Dashbord', businesses })
+    const businesses = await Business.find({})
+    res.render('businessLog', { title: 'Dashbord', businesses })
 }

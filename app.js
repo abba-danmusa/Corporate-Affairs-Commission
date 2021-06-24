@@ -101,49 +101,58 @@ io.on('connection', function(socket) {
             socket.join('admin')
         }
 
-        // Creats a function to send staus
-        sendStatus = function(s) {
-            socket.emit('status', s)
-        }
-
-        // Limit and emit data from the database
-        Business.find().stream()
-            .on('data', function(doc) {
-                console.log(doc)
-                socket.to('admin').emit('detailsFromServer', {
-                    regNumber: doc.regNumber,
-                    businessName: doc.businessName,
-                    dateOfReg: doc.dateOfReg,
-                    state: doc.state,
-                    natureOfBusiness: doc.natureOfBusiness,
-                    dateEntered: doc.dateEntered,
-                    userName: user
-                })
-            })
-            .on('error', function(err) {
-                throw err
-            })
-
-
-        // stores to the database from the browser
-        socket.on('detailsFromBrowser', (data) => {
-            let regNumber = data.regNumber
-            let userName = user
-            Business.insertMany({ regNumber }, function() {
-                socket.to('admin').emit('detailsFromServer', {
-                    regNumber: data.regNumber,
-                    userName: user
-                })
-
-                // Sends status of success
-                sendStatus({
-                    message: 'Details Saved',
-                    clear: true
-                })
-            })
+        socket.to('admin').emit('output', user)
+        Business.find({}).limit(20).then(data => {}).catch(err => {
+            throw err
         })
+
+        // socket.to('admin').emit('detailsFromServer', document)
+
+        // // Creats a function to send staus
+        // sendStatus = function(s) {
+        //     socket.emit('status', s)
+        // }
+
+        // // Limit and emit data from the database
+        // Business.find().stream()
+        //     .on('data', function(doc) {
+        //         console.log(doc)
+        //         socket.to('admin').emit('detailsFromServer', {
+        //             regNumber: doc.regNumber,
+        //             businessName: doc.businessName,
+        //             dateOfReg: doc.dateOfReg,
+        //             state: doc.state,
+        //             natureOfBusiness: doc.natureOfBusiness,
+        //             dateEntered: doc.dateEntered,
+        //             userName: user
+        //         })
+        //     })
+        //     .on('error', function(err) {
+        //         throw err
+        //     })
+
+
+        // // stores to the database from the browser
+        // socket.on('detailsFromBrowser', (data) => {
+        //     let regNumber = data.regNumber
+        //     let userName = user
+        //     Business.insertMany({ regNumber }, function() {
+        //         socket.to('admin').emit('detailsFromServer', {
+        //             regNumber: data.regNumber,
+        //             userName: user
+        //         })
+
+        //         // Sends status of success
+        //         sendStatus({
+        //             message: 'Details Saved',
+        //             clear: true
+        //         })
+        //     })
+        // })
     }
 })
+
+
 
 
 module.exports = server

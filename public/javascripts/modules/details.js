@@ -9,7 +9,7 @@ export default class Socket {
         this.natureOfBusiness = $('.natureOfBusiness')
         this.state = $('.state')
         this.details = $('#myTable')
-        this.events()
+            // this.events()
         this.openConnection()
     }
 
@@ -30,6 +30,8 @@ export default class Socket {
 
         // collect details from server when a user saves data
         this.socket.on('detailsFromServer', (data) => {
+            console.log('hello')
+            console.log(data)
             this.displayDetailsFromServer(data)
             if (data.length) {
                 for (let x = 0; x < data.length; x++) {}
@@ -40,12 +42,12 @@ export default class Socket {
     displayDetailsFromServer(data) {
         let businesses = document.createElement('tr')
         businesses.innerHTML = `
-            <tr>
-            <td>${data.regNumber}</td>
-            <td>${data.businessName}</td>
-            <td>${data.natureOfBusiness}</td>
-            <td>${data.state}</td>
-            <td>${data.dateOfReg}</td>
+        <tr>
+        <td>${data.regNumber}</td>
+        <td>${data.businessName}</td>
+        <td>${data.natureOfBusiness}</td>
+        <td>${data.state}</td>
+        <td>${data.dateOfReg}</td>
         `
         this.details.appendChild(businesses)
             // this.details.insertAdjacentHTML('beforeend', `
@@ -54,11 +56,11 @@ export default class Socket {
             // `)
     }
 
-    sendDetailsToServer() {
-        this.socket.emit('detailsFromBrowser', { regNumber: this.regNumber.value })
-        this.details.insertAdjacentHTML('beforeend', `
-            <div>${this.regNumber.value}</div>
-            <p>sent by ${this.userName}</p>
-        `)
-    }
+    // sendDetailsToServer() {
+    //     this.socket.emit('detailsFromBrowser', { regNumber: this.regNumber.value })
+    //     this.details.insertAdjacentHTML('beforeend', `
+    //         <div>${this.regNumber.value}</div>
+    //         <p>sent by ${this.userName}</p>
+    //     `)
+    // }
 }

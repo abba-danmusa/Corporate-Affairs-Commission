@@ -1,7 +1,6 @@
 import { $, $$ } from './modules/bling'
-import Chat from './modules/details'
+import Socket from './modules/socket.io'
 // import chat from './modules/test'
 // chat()
-if (document.querySelector("#chat-wrapper")) {
-    new Chat()
-}
+if (document.querySelector("#chat-wrapper")) {}
+new Socket()

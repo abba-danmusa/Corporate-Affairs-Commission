@@ -18,7 +18,7 @@ mongoose.connection.once('open', () => {
 require('./models/user')
 require('dotenv').config({ path: 'variables.env' })
     // start the app
-const app = require('./app')
-app.listen(process.env.PORT, () => {
+const server = require('./app')
+server.listen(process.env.PORT, () => {
     console.log(`Server running on PORT ${process.env.PORT}`)
 })

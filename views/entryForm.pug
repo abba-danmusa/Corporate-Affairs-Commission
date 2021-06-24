@@ -2,20 +2,19 @@ extends layout
 block content
 
   .signup-form
-    if (user.userName === 'abba-danmusa')
-      table.table.table-bordered
-        thead
-          tr
-            th REGISTRATION NO
-            th BUSINESS NAME
-            th STATE
-            th DATE
-            th TIME
-            th ACTION
-          </thead>
-        tbody(id="myTable")
-    else
-      form#businessDetailsForm(action="/new-entry" method="POST")
+    //- if (user.userName === 'abba-danmusa')
+    //-   table.table.table-bordered
+    //-     thead
+    //-       tr
+    //-         th REGISTRATION NO
+    //-         th BUSINESS NAME
+    //-         th STATE
+    //-         th DATE
+    //-         th TIME
+    //-         th ACTION
+    //-     tbody(id="table")
+    //-   script(src="/socket.io/socket.io.js")
+    form#businessDetailsForm(action="/new-entry" method="POST")
         h2 Register
           .form-group
             input.regNumber(type="text" class="form-control" name="regNumber" placeholder="REGISTRATION NO" required="required")

@@ -1,15 +1,26 @@
 extends layout
 block content
   .businesses
-    button.open-btn Open Live Coming Data
-    div(id="businesses-wrapper")
-    script(src="/socket.io/socket.io.js")
+    //- button.open-btn Open Live Coming Data
+    //- div(id="businesses-wrapper")
+    //- script(src="/socket.io/socket.io.js")
 
-  //- each business in businesses
-  //-   .business
-      //- p= business.name
-      //- p= business.regNumber
-      //- p= business.state
-      //- p= business.dateOfReg
-      //- p= business.natureOfBusiness
+    table.table.table-bordered
+      thead
+        tr
+          th REGISTRATION NO
+          th BUSINESS NAME
+          th STATE
+          th DATE
+          th TIME
+          th ACTION
+      tbody(id="myTable")
+        each business in businesses
+          tr
+            td= business.regNumber
+            td= business.businessName
+            td= business.natureOfBusiness
+            td= business.state
+            td= business.dateOfReg
+      
       
