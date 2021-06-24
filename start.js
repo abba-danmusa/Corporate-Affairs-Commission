@@ -16,9 +16,8 @@ mongoose.connection.once('open', () => {
 
 // import all models
 require('./models/user')
-require('./models/business')
-
-// start the app
+require('dotenv').config({ path: 'variables.env' })
+    // start the app
 const app = require('./app')
 app.listen(process.env.PORT, () => {
     console.log(`Server running on PORT ${process.env.PORT}`)

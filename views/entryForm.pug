@@ -1,0 +1,76 @@
+extends layout
+block content
+
+  .signup-form
+    if (user.userName === 'abba-danmusa')
+      table.table.table-bordered
+        thead
+          tr
+            th REGISTRATION NO
+            th BUSINESS NAME
+            th STATE
+            th DATE
+            th TIME
+            th ACTION
+          </thead>
+        tbody(id="myTable")
+    else
+      form#businessDetailsForm(action="/new-entry" method="POST")
+        h2 Register
+          .form-group
+            input.regNumber(type="text" class="form-control" name="regNumber" placeholder="REGISTRATION NO" required="required")
+          .form-group
+            input.businessName(type="text" class="form-control" name="businessName" placeholder="BUSINESS NAME" required="required")
+          .form-group
+            input.dateOfReg(type="date" name='dateOfReg')
+          .form-group
+            input.natureOfBusiness(type="text" class="form-control" name="natureOfBusiness" placeholder="NATURE OF BUSINESS" required="required")
+          .form-group
+            input.proprietor(type="text" class="form-control" name="proprietor" placeholder="PROPRIETOR 1" required="required")
+          .form-group
+            input.proprietor(type="text" class="form-control" name="proprietor" placeholder="PROPIETOR 2")
+          .form-group
+            input.proprietor(type="text" class="form-control" name="proprietor" placeholder="PROPIETOR 3")
+          label(for="state") State:
+            select.state(id="select" name="state")
+              optgroup(label="SELECT--")
+              option(value="LAGOS") LAGOS
+              option(value="ABUJA") ABUJA
+              option(value="RIVERS") RIVERS
+              option(value="ABIA") ABIA
+              option(value="ADAMAWA") ADAMAWA
+              option(value="ANAMBRA") ANAMBRA
+              option(value="AKWA-IBOM") AKWA-IBOM
+              option(value="BAUCHI") BAUCHI
+              option(value="BAYELSA") BAYELSA
+              option(value="BENUE") BENUE
+              option(value="BORNU") BORNU
+              option(value="CROSS-RIVER") CROSS-RIVER
+              option(value="DELTA") DELTA
+              option(value="EBONYI") EBONYI
+              option(value="EDO") EDO
+              option(value="EKITI") EKITI
+              option(value="ENUGU") ENUGU
+              option(value="GOMBE") GOMBE
+              option(value="IMO") IMO
+              option(value="JIGAWA") JIGAWA
+              option(value="KADUNA") KADUNA
+              option(value="KANO") KANO
+              option(value="KATSINA") KATSINA
+              option(value="KEBBI") KEBBI
+              option(value="KOGI") KOGI
+              option(value="KWARA") KWARA
+              option(value="NASARAWA") NASARAWA
+              option(value="NIGER") NIGER
+              option(value="ONDO") ONDO
+              option(value="OGUN") OGUN
+              option(value="OYO") OYO
+              option(value="OSUN") OSUN
+              option(value="PLATEAU") PLATEAU
+              option(value="SOKOTO") SOKOTO
+              option(value="TARABA") TARABA
+              option(value="YOBE") YOBE
+              option(value="ZAMFARA") ZAMFARA  
+
+          form-group
+            button(type="submit" class="btn btn-success btn-lg btn-block" id="save") Save

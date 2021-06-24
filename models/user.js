@@ -13,19 +13,15 @@ const userSchema = new Schema({
     },
     userName: {
         type: String,
-        trim: true,
         required: 'Please supply a user name',
-        unique: true,
-        lowercase: true
+        trim: true
     },
     state: {
         type: String,
-        trim: true,
-        required: 'Please supply a state',
+        required: 'You must supply a state',
+        trim: true
     },
     slug: String,
-    // resetPasswordToken: String,
-    // resetPasswordExpires: Date,
 })
 
 userSchema.pre('save', async function(next) {

@@ -1,0 +1,9 @@
+extends layout
+block content
+  if user
+    .businesses
+      form(action='/new-entry' method='POST' id='form')
+        input(id='regNumber' type='text' placeholder='Enter a message...')
+        input(type='submit')
+      #details
+  script(src="/socket.io/socket.io.js")

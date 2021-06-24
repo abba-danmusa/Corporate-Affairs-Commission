@@ -12,6 +12,8 @@ const userRoutes = require('./routes/index')
 const adminRoutes = require('./routes/admin')
 const helpers = require('./helpers')
 const errorHandlers = require('./handlers/errorHandlers')
+const { saveEntry } = require('./controllers/userController')
+const Business = mongoose.model('Business')
 require('./handlers/passport')
 
 // create express app 
@@ -23,28 +25,22 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
 
 // Takes the raw requests and turns them into usable properties on req.body
-app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
-
-// Exposes a bunch of methods for validating data. Used heavily on userController.validateRegister
-// app.use(buildCheckFunction())
-// app.use(buildSanitizeFunction())
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // populates req.cookies with any cookies that came along with the request
 app.use(cookieParser())
 
 // Sessions allow us to store data on visitors from request to request
-// This keeps users logged in and allows us to send flash 
+// This keeps users logged in and allows us to send flash messages
 let sessionOptions = session({
     secret: process.env.SECRET,
-    key: process.env.KEY,
-    store: MongoStore.create({
-        mongoUrl: process.env.DATABASE
-    }),
+    store: new MongoStore({ mongoUrl: process.env.DATABASE }),
     resave: false,
     saveUninitialized: false,
     cookie: { maxAge: 1000 * 60 * 60 * 24, httpOnly: true }
 })
+
 app.use(sessionOptions)
 
 // // Passport JS is what we use to handle our logins
@@ -89,23 +85,65 @@ app.use(errorHandlers.productionErrors)
 const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 
-io.use((socket, next) => {
+io.use(function(socket, next) {
     sessionOptions(socket.request, socket.request.res, next)
 })
 
-io.on('connection', (socket) => {
-    if (socket.request.session.user) {
-        let user = socket.request.session.user
+io.on('connection', function(socket) {
+    if (socket.request.session.passport.user) {
+        console.log('connected')
 
-        socket.emit('welcome', { user: user.name })
+        let user = socket.request.session.passport.user
+        console.log(user)
 
-        socket.on('businessDetailsFromBrowser', (data) => {
-            socket.broadcast.emit('businessMessageFromServer', {
-                regNumber: data.regNumber,
-                user: user.name
+        socket.emit('welcome', { userName: user })
+        if (user == 'abba-danmusa') {
+            socket.join('admin')
+        }
+
+        // Creats a function to send staus
+        sendStatus = function(s) {
+            socket.emit('status', s)
+        }
+
+        // Limit and emit data from the database
+        Business.find().stream()
+            .on('data', function(doc) {
+                console.log(doc)
+                socket.to('admin').emit('detailsFromServer', {
+                    regNumber: doc.regNumber,
+                    businessName: doc.businessName,
+                    dateOfReg: doc.dateOfReg,
+                    state: doc.state,
+                    natureOfBusiness: doc.natureOfBusiness,
+                    dateEntered: doc.dateEntered,
+                    userName: user
+                })
+            })
+            .on('error', function(err) {
+                throw err
+            })
+
+
+        // stores to the database from the browser
+        socket.on('detailsFromBrowser', (data) => {
+            let regNumber = data.regNumber
+            let userName = user
+            Business.insertMany({ regNumber }, function() {
+                socket.to('admin').emit('detailsFromServer', {
+                    regNumber: data.regNumber,
+                    userName: user
+                })
+
+                // Sends status of success
+                sendStatus({
+                    message: 'Details Saved',
+                    clear: true
+                })
             })
         })
     }
 })
+
 
 module.exports = server

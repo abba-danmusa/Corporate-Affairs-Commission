@@ -38,15 +38,14 @@ const businessSchema = new Schema({
     },
     author: {
         type: mongoose.Schema.ObjectId,
-        ref: 'User',
-        default: this._id
+        ref: 'User'
     }
 })
 
 businessSchema.index({
     regNumber: 'text',
-    businessName: 'text',
-    state: 'text'
+    // businessName: 'text',
+    // state: 'text'
 })
 
 module.exports = mongoose.model('Business', businessSchema)

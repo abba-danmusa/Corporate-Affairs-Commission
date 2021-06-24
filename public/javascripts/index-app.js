@@ -1,7 +1,7 @@
-import Live from './modules/data'
 import { $, $$ } from './modules/bling'
-
-if ($('#live')) {
-    new Live
-
+import Chat from './modules/details'
+// import chat from './modules/test'
+// chat()
+if (document.querySelector("#chat-wrapper")) {
+    new Chat()
 }

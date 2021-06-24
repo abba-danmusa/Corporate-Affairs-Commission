@@ -3,13 +3,62 @@ extends layout
 block content
 
   .inner 
-    form.form(action="/admin/register-user" method="POST")
-      label(for="name") Name
-      input(type="text" name="name" required)
-      label(for="userName") User Name
-      input(type="text" name="userName" required)
-      label(for="password") Password
-      input(type="password" name="password" required)
-      label(for="password-confirm") Confirm Password
-      input(type="password" name="confirm-password" required)
-      input.button(type="submit" value="Register")
+    .signup-form
+      form(action="/admin/register-user" method="post")
+        h2 Register
+        .form-group
+          .row
+            .col-xs-6
+              input(type="text" class="form-control" name="name" placeholder="Name" required="required")
+            .col-xs-6
+              input(type="text" class="form-control" name="userName" placeholder="User Name" required="required")
+
+        .form-group
+          input(type="password" class="form-control" name="password" placeholder="Password" required="required")
+
+        .form-group
+          input(type="password" class="form-control" name="confirm-password" placeholder="Confirm Password" required="required")
+          
+        label(for="select") State:
+        select(id="select" name="state")
+          optgroup(label="SELECT--")
+          option(value="LAGOS") LAGOS
+          option(value="ABUJA") ABUJA
+          option(value="RIVERS") RIVERS
+          option(value="ABIA") ABIA
+          option(value="ADAMAWA") ADAMAWA
+          option(value="ANAMBRA") ANAMBRA
+          option(value="AKWA-IBOM") AKWA-IBOM
+          option(value="BAUCHI") BAUCHI
+          option(value="BAYELSA") BAYELSA
+          option(value="BENUE") BENUE
+          option(value="BORNU") BORNU
+          option(value="CROSS-RIVER") CROSS-RIVER
+          option(value="DELTA") DELTA
+          option(value="EBONYI") EBONYI
+          option(value="EDO") EDO
+          option(value="EKITI") EKITI
+          option(value="ENUGU") ENUGU
+          option(value="GOMBE") GOMBE
+          option(value="IMO") IMO
+          option(value="JIGAWA") JIGAWA
+          option(value="KADUNA") KADUNA
+          option(value="KANO") KANO
+          option(value="KATSINA") KATSINA
+          option(value="KEBBI") KEBBI
+          option(value="KOGI") KOGI
+          option(value="KWARA") KWARA
+          option(value="NASARAWA") NASARAWA
+          option(value="NIGER") NIGER
+          option(value="ONDO") ONDO
+          option(value="OGUN") OGUN
+          option(value="OYO") OYO
+          option(value="OSUN") OSUN
+          option(value="PLATEAU") PLATEAU
+          option(value="SOKOTO") SOKOTO
+          option(value="TARABA") TARABA
+          option(value="YOBE") YOBE
+          option(value="ZAMFARA") ZAMFARA  
+
+        .form-group
+          button(type="submit" class="btn btn-success btn-lg btn-block") Register

@@ -1,6 +1,7 @@
 const User = require("../models/user")
 const { promisify } = require('es6-promisify')
 const { check, validationResult } = require('express-validator')
+const Business = require("../models/business")
 
 
 exports.passwordProtected = (req, res, next) => {
@@ -58,6 +59,8 @@ exports.register = async(req, res) => {
     res.redirect('back')
 }
 
-exports.inComingEntries = (req, res) => {
-    res.render('home', { title: 'Dashbord' })
+exports.inComingEntries = async(req, res) => {
+    res.render('test')
+        // const businesses = await Business.find({})
+        // res.render('businessLog', { title: 'Dashbord', businesses })
 }

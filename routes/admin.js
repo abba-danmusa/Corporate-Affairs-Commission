@@ -4,7 +4,7 @@ const { catchErrors } = require('../handlers/errorHandlers')
 const adminController = require('../controllers/adminController')
 
 // Get routes
-router.get('/admin', adminController.passwordProtected, adminController.inComingEntries)
+router.get('/admin', adminController.passwordProtected, catchErrors(adminController.inComingEntries))
 router.get('/admin/register-user', adminController.passwordProtected, adminController.registerForm)
 
 // Post routes
