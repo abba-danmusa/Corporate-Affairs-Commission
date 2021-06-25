@@ -14,4 +14,8 @@ router.get('/:state/saved-entries', authController.isLoggedIn, catchErrors(userC
 router.post('/', authController.hasSession, authController.login)
 router.post('/new-entry', catchErrors(userController.saveEntry))
 
+// API's
+router.get('/api/search', catchErrors(userController.searchByBusinessName))
+
+
 module.exports = router

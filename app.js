@@ -101,9 +101,19 @@ io.on('connection', function(socket) {
             socket.join('admin')
         }
 
-        socket.to('admin').emit('output', user)
-        Business.find({}).limit(20).then(data => {}).catch(err => {
+        Business.find({}).limit(20).then(data => {
+            socket.emit('output', data)
+
+        }).catch(err => {
             throw err
+        })
+
+        socket.on('input', data => {
+            console.log(data)
+            let business = new Business(data)
+            business.save().then(() => {
+                socket.emit('document', [data])
+            })
         })
 
         // socket.to('admin').emit('detailsFromServer', document)

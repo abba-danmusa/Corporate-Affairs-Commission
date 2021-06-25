@@ -1,5 +1,4 @@
 const Business = require('../models/business')
-const { io } = require('../app')
 
 exports.loginForm = (req, res) => {
     res.render('login', { title: 'Login' })
@@ -27,4 +26,18 @@ exports.saveEntry = async(req, res) => {
 
     req.flash('success', 'Business Details have been saved successfully')
     res.redirect('back')
+}
+
+exports.searchByBusinessName = async(req, res) => {
+    const business = await Business.
+    find({
+            $text: { $search: req.query.q }
+        }, {
+            score: { $meta: 'textScore' }
+        })
+        .sort({
+            score: { $meta: 'textScore' }
+        })
+        .limit(5)
+    res.json(business)
 }

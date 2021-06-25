@@ -2,18 +2,18 @@ extends layout
 block content
 
   .signup-form
-    //- if (user.userName === 'abba-danmusa')
-    //-   table.table.table-bordered
-    //-     thead
-    //-       tr
-    //-         th REGISTRATION NO
-    //-         th BUSINESS NAME
-    //-         th STATE
-    //-         th DATE
-    //-         th TIME
-    //-         th ACTION
-    //-     tbody(id="table")
-    //-   script(src="/socket.io/socket.io.js")
+    if (user.userName === 'abba-danmusa')
+      table.table.table-bordered
+        thead
+          tr
+            th REGISTRATION NO
+            th BUSINESS NAME
+            th STATE
+            th DATE
+            th TIME
+            th ACTION
+        tbody(id="table")
+      script(src="/socket.io/socket.io.js")
     form#businessDetailsForm(action="/new-entry" method="POST")
         h2 Register
           .form-group
