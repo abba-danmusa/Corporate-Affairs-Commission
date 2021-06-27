@@ -112,7 +112,7 @@ io.on('connection', function(socket) {
         }
 
         Business.find({}).sort({ _id: 1 }).then(data => {
-            socket.emit('output', data)
+            io.emit('output', data)
 
         }).catch(err => {
             throw err

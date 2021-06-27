@@ -10,7 +10,7 @@ exports.login = passport.authenticate('local', {
 exports.loginAdmin = passport.authenticate('local', {
     failureRedirect: '/admin',
     failureFlash: 'Invalid user name or password',
-    successRedirect: '/admin',
+    successRedirect: '/admin/saved-history',
     successFlash: 'You\'re now logged in'
 })
 

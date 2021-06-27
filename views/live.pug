@@ -1,0 +1,18 @@
+extends layout
+block content
+
+  .businesses
+    #live
+      a(href='/admin/businesses') Saved History
+      if user.userName && user.userName == 'abba-danmusa'
+        table.table.table-bordered
+          thead
+            tr
+              th REGISTRATION NO
+              th BUSINESS NAME
+              th NATURE OF BUSINESS
+              th STATE
+              th DATE
+          tbody(id="table")
+        
+        script(src="/socket.io/socket.io.js")

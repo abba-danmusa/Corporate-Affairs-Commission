@@ -6,6 +6,9 @@ const authController = require('../controllers/authController')
 
 // Get routes
 router.get('/admin', adminController.loginForm)
+router.get('/admin/live', adminController.live)
+router.get('/admin/businesses', catchErrors(adminController.getBusinesses))
+router.get('/business/page/:page', catchErrors(adminController.getBusinesses))
 router.get('/admin/register-user', adminController.registerForm)
 router.get('/admin/register-admin', adminController.registerAdminForm)
 

@@ -1,19 +1,22 @@
 extends layout
+
+include mixins/_pagination
+
 block content
   .businesses
     //- button.open-btn Open Live Coming Data
     //- div(id="businesses-wrapper")
     //- script(src="/socket.io/socket.io.js")
-
+    a(href='/admin/live') Live Data
     table.table.table-bordered
       thead
         tr
           th REGISTRATION NO
           th BUSINESS NAME
+          th NATURE OF BUSINESS
           th STATE
           th DATE
-          th TIME
-          th ACTION
+  
       tbody(id="myTable")
         each business in businesses
           tr
@@ -22,5 +25,5 @@ block content
             td= business.natureOfBusiness
             td= business.state
             td= business.dateOfReg
-      
+  +pagination(page, pages, total)  
       

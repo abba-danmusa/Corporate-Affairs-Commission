@@ -9,6 +9,8 @@ router.get('/', userController.loginForm)
 router.get('/new-entry', userController.entryForm)
 router.get('/logout', authController.isLoggedIn, authController.logout)
 router.get('/:state/saved-entries', authController.isLoggedIn, catchErrors(userController.getHistory))
+
+
 router.get('/business/:id', catchErrors(userController.getBusinessDetails))
 
 // Post routes

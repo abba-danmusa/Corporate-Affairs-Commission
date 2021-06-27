@@ -90,7 +90,30 @@ exports.registerAdmin = async(req, res) => {
     res.redirect('back')
 }
 
-exports.inComingEntries = async(req, res) => {
-    const businesses = await Business.find({})
-    res.render('businessLog', { title: 'Dashbord', businesses })
+exports.live = (req, res) => {
+    res.render('live', { title: 'Live Data' })
+}
+
+exports.getBusinesses = async(req, res) => {
+    const page = req.params.page || 1
+    const limit = 10
+    const skip = (page * limit) - limit
+
+    const businessesPromise = Business
+        .find()
+        .skip(skip)
+        .limit(limit)
+        .sort({ createdAt: 'desc' })
+
+    const totalBusinessesPromise = Business.countDocuments()
+    const [businesses, total] = await Promise.all([businessesPromise, totalBusinessesPromise])
+    const pages = Math.ceil(total / limit)
+
+    if (!businesses.length && skip) {
+        req.flash('info', `Page ${page} does not exist only page ${pages}`)
+        res.redirect(`/stores/page/${pages}`)
+        return
+    }
+
+    res.render('businesses', { title: 'Businesses', businesses, page, pages, total })
 }
