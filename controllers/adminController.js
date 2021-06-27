@@ -2,6 +2,7 @@ const User = require("../models/user")
 const { promisify } = require('es6-promisify')
 const { check, validationResult } = require('express-validator')
 const Business = require("../models/business")
+const Admin = require("../models/admin")
 
 
 exports.passwordProtected = (req, res, next) => {
@@ -14,11 +15,37 @@ exports.passwordProtected = (req, res, next) => {
 }
 
 exports.loginForm = (req, res) => {
-    res.render('login', { title: 'Admin Login' })
+    res.render('loginAdmin', { title: 'Admin Login' })
+}
+
+exports.registerAdminForm = (req, res) => {
+    res.render('registerAdmin', { title: 'Register new Admin' })
 }
 
 exports.registerForm = (req, res, next) => {
-    res.render('register', { title: 'Register New User' })
+    res.render('registerUser', { title: 'Register New User' })
+}
+
+exports.validateAdminRegister = async(req, res, next) => {
+    await check('name').run(req)
+    await check('name', 'You must supply a name').notEmpty().run(req)
+        // await check('email').normalizeEmail({
+        //     remove_dots: false,
+        //     remove_extension: false,
+        //     gmail_remove_subaddress: false
+        // }).run(req)
+    await check('password', 'Password cannot be blank').notEmpty().run(req)
+    await check('confirm-password', 'Confirm-password cannot be empty').notEmpty().run(req)
+    await check('confirm-password', 'Oops\! passwords must be equal').equals(req.body.password).run(req)
+
+    const errors = validationResult(req)
+
+    if (!errors.isEmpty()) {
+        req.flash('error', errors.array().map(err => err.msg))
+        res.render('registerAdmin', { title: 'Register', body: req.body, flashes: req.flash() })
+        return
+    }
+    next()
 }
 
 exports.validateRegister = async(req, res, next) => {
@@ -48,14 +75,18 @@ exports.validateRegister = async(req, res, next) => {
 }
 
 exports.register = async(req, res) => {
-    const user = new User({
-        name: req.body.name,
-        userName: req.body.userName,
-        state: req.body.state
-    })
+    const user = new User(req.body)
     const register = promisify(User.register.bind(User))
     await register(user, req.body.password)
     req.flash('success', 'A new User Account has been created')
+    res.redirect('back')
+}
+
+exports.registerAdmin = async(req, res) => {
+    const admin = new Admin(req.body)
+    const register = promisify(Admin.register.bind(Admin))
+    await register(admin, req.body.password)
+    req.flash('success', 'A new Admin Account has been created')
     res.redirect('back')
 }
 

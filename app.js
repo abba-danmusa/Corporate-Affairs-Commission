@@ -31,11 +31,13 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // populates req.cookies with any cookies that came along with the request
 app.use(cookieParser())
 
+
 // Sessions allow us to store data on visitors from request to request
 // This keeps users logged in and allows us to send flash messages
 let sessionOptions = session({
-    secret: process.env.SECRET,
     store: new MongoStore({ mongoUrl: process.env.DATABASE }),
+    secret: process.env.SECRET,
+    key: process.env.KEY,
     resave: false,
     saveUninitialized: false,
     cookie: { maxAge: 1000 * 60 * 60 * 24, httpOnly: true }
@@ -43,7 +45,7 @@ let sessionOptions = session({
 
 app.use(sessionOptions)
 
-// // Passport JS is what we use to handle our logins
+// Passport JS is what we use to handle our logins
 app.use(passport.initialize())
 app.use(passport.session())
 
@@ -90,18 +92,26 @@ io.use(function(socket, next) {
 })
 
 io.on('connection', function(socket) {
+
+    console.log(socket.request.session)
+
     if (socket.request.session.passport.user) {
         console.log('connected')
 
         let user = socket.request.session.passport.user
         console.log(user)
 
+        // Creats a function to send staus
+        sendStatus = function(s) {
+            socket.emit('status', s)
+        }
+
         socket.emit('welcome', { userName: user })
         if (user == 'abba-danmusa') {
             socket.join('admin')
         }
 
-        Business.find({}).limit(20).then(data => {
+        Business.find({}).sort({ _id: 1 }).then(data => {
             socket.emit('output', data)
 
         }).catch(err => {
@@ -112,53 +122,18 @@ io.on('connection', function(socket) {
             console.log(data)
             let business = new Business(data)
             business.save().then(() => {
-                socket.emit('document', [data])
+                socket.to('admin').emit('document', [data])
+
+                // Send status object
+                // sendStatus({
+                //     message: 'Details saved successfully',
+                //     clear: true
+                // })
+            }).catch(err => {
+                console.log(err)
+                    // socket.emit('error', err)
             })
         })
-
-        // socket.to('admin').emit('detailsFromServer', document)
-
-        // // Creats a function to send staus
-        // sendStatus = function(s) {
-        //     socket.emit('status', s)
-        // }
-
-        // // Limit and emit data from the database
-        // Business.find().stream()
-        //     .on('data', function(doc) {
-        //         console.log(doc)
-        //         socket.to('admin').emit('detailsFromServer', {
-        //             regNumber: doc.regNumber,
-        //             businessName: doc.businessName,
-        //             dateOfReg: doc.dateOfReg,
-        //             state: doc.state,
-        //             natureOfBusiness: doc.natureOfBusiness,
-        //             dateEntered: doc.dateEntered,
-        //             userName: user
-        //         })
-        //     })
-        //     .on('error', function(err) {
-        //         throw err
-        //     })
-
-
-        // // stores to the database from the browser
-        // socket.on('detailsFromBrowser', (data) => {
-        //     let regNumber = data.regNumber
-        //     let userName = user
-        //     Business.insertMany({ regNumber }, function() {
-        //         socket.to('admin').emit('detailsFromServer', {
-        //             regNumber: data.regNumber,
-        //             userName: user
-        //         })
-
-        //         // Sends status of success
-        //         sendStatus({
-        //             message: 'Details Saved',
-        //             clear: true
-        //         })
-        //     })
-        // })
     }
 })
 

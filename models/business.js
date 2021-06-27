@@ -48,4 +48,20 @@ businessSchema.index({
     state: 'text'
 })
 
+businessSchema.pre('save', async function(next) {
+    if (!this.isModified('name')) {
+        next()
+        return
+    }
+    this.slug = slug(this.businessName)
+
+    const slugRegEx = new RegExp(`^(${this.slug})((-[0-9]*$)?)$`, 'i')
+    const storeWithSlug = await this.constructor.find({ slug: slugRegEx })
+    if (storeWithSlug.length) {
+        this.slug = `${this.slug}-${storeWithSlug.length + 1}`
+    }
+
+    next()
+})
+
 module.exports = mongoose.model('Business', businessSchema)

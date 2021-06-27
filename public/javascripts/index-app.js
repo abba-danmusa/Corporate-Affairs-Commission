@@ -1,6 +1,10 @@
 import { $, $$ } from './modules/bling'
 import Socket from './modules/socket.io'
+import typeAhead from './modules/typeAhead'
 // import chat from './modules/test'
 // chat()
-if (document.querySelector("#chat-wrapper")) {}
-new Socket()
+if (document.querySelector(".signup-form")) {
+    new Socket()
+
+}
+typeAhead($('.search'))

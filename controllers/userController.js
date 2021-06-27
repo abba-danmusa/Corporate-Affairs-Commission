@@ -11,21 +11,15 @@ exports.entryForm = (req, res) => {
 exports.saveEntry = async(req, res) => {
     // const business = 
     const business = new Business(req.body)
-    await business.save(function(err, document) {
-        if (err) console.log(err)
-        io.on('connection', function(socket) {
-            socket.to('admin').emit({
-                regNumber: document.regNumber,
-                businessName: document.businessName,
-                natureOfBusiness: document.natureOfBusiness,
-                state: document.state,
-                dataOfReg: document.dataOfReg
-            })
-        })
-    })
+    await business.save()
 
     req.flash('success', 'Business Details have been saved successfully')
     res.redirect('back')
+}
+
+exports.getBusinessDetails = async(req, res) => {
+    let business = await Business.findById({ _id: req.params.id })
+    res.render('business', { title: business.businessName, business })
 }
 
 exports.searchByBusinessName = async(req, res) => {

@@ -7,15 +7,20 @@ exports.login = passport.authenticate('local', {
     successFlash: 'You\'re now logged in'
 })
 
+exports.loginAdmin = passport.authenticate('local', {
+    failureRedirect: '/admin',
+    failureFlash: 'Invalid user name or password',
+    successRedirect: '/admin',
+    successFlash: 'You\'re now logged in'
+})
+
 exports.hasSession = (req, res, next) => {
-    if (req.isAuthenticated()) {
-        req.flash('error', 'You\'re already logged in; You can go ahead and logout')
+    if (req.user) {
         res.redirect('/')
     } else {
         next()
     }
 }
-
 
 exports.logout = (req, res) => {
     req.logout()

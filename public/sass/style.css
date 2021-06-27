@@ -464,10 +464,54 @@ template {
   display: none;
 }
 
+.search {
+  position: relative;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.search__results {
+  background: green;
+  position: absolute;
+  width: 100%;
+  top: 100%;
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 5;
+  left: 0;
+}
+
+.search__input {
+  font-size: 30px;
+  background: none;
+  color: white;
+  outline: 0;
+  border: 0;
+}
+
+.search__result {
+  padding: 10px;
+  display: block;
+  border-bottom: 1px solid #ececec;
+}
+
+.search__result--active {
+  background: #f1f1f1;
+}
+
 body {
   font-family: 'Times New Roman', Times, serif;
   font-size: large;
   margin: 0;
+}
+
+.error {
+  margin: 5vh;
+  height: 10vh;
+  display: none;
+  border: 1px ridge red;
 }
 
 /* Style the header */
