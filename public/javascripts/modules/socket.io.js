@@ -83,14 +83,35 @@ export default class Socket {
             }
         })
         this.socket.on('document', data => {
-                if (data.length && this.table) {
-                    data.forEach(item => {
-                        this.displayDetails(item)
-                    })
-                }
-            })
-            // this.socket.on('error', data => {
-            //     if (data.length) {
+            if (data.length && this.table) {
+                data.forEach(item => {
+                    this.displayDetails(item)
+                })
+            }
+        })
+
+        this.socket.on('success', successMessage => {
+            if (this.flashStatus) {
+                this.flashStatus.style.display = 'block'
+                this.flashStatus.innerText = successMessage
+                setTimeout(() => {
+                    this.flashStatus.style.display = 'none'
+                }, 7000)
+            }
+        })
+
+        this.socket.on('error', errorMessage => {
+            if (this.flashStatus) {
+                this.flashStatus.style.display = 'block'
+                this.flashStatus.innerText = errorMessage
+                setTimeout(() => {
+                    this.flashStatus.style.display = 'none'
+                }, 7000)
+            }
+        })
+
+        // this.socket.on('error', data => {
+        //     if (data.length) {
 
         //         data.forEach(error => {
         //             this.displayError(error)

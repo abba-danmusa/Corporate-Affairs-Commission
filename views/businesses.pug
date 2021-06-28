@@ -19,11 +19,12 @@ block content
   
       tbody(id="myTable")
         each business in businesses
-          tr
-            td= business.regNumber
-            td= business.businessName
-            td= business.natureOfBusiness
-            td= business.state
-            td= business.dateOfReg
-  +pagination(page, pages, total)  
+          a(href=`/admin/business/${business.businessName}/${business._id}`)
+            tr
+              td= business.regNumber
+              td= business.businessName
+              td= business.natureOfBusiness
+              td= business.state
+              td= business.dateOfReg
+    +pagination(page, pages, total)  
       

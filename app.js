@@ -95,46 +95,46 @@ io.on('connection', function(socket) {
 
     console.log(socket.request.session)
 
-    if (socket.request.session.passport.user) {
-        console.log('connected')
+    // if (socket.request.session) {
+    //     console.log('connected')
 
-        let user = socket.request.session.passport.user
-        console.log(user)
+    //     let user = socket.request.session.passport.user
+    //     console.log(user)
 
-        // Creats a function to send staus
-        sendStatus = function(s) {
-            socket.emit('status', s)
-        }
+    // Creates a function to send staus
+    sendStatus = function(s) {
+        socket.emit('status', s)
+    }
 
-        socket.emit('welcome', { userName: user })
-        if (user == 'abba-danmusa') {
-            socket.join('admin')
-        }
+    // socket.emit('welcome', { userName: user })
+    // if (user == '') {
+    //     socket.join('admin')
+    // }
 
-        Business.find({}).sort({ _id: 1 }).then(data => {
-            io.emit('output', data)
+    Business.find({}).sort({ _id: 1 }).then(data => {
+        socket.emit('output', data)
 
-        }).catch(err => {
-            throw err
-        })
+    }).catch(err => {
+        throw err
+    })
 
-        socket.on('input', data => {
+    socket.on('input', data => {
             console.log(data)
             let business = new Business(data)
-            business.save().then(() => {
-                socket.to('admin').emit('document', [data])
-
-                // Send status object
-                // sendStatus({
-                //     message: 'Details saved successfully',
-                //     clear: true
-                // })
-            }).catch(err => {
-                console.log(err)
-                    // socket.emit('error', err)
-            })
+            business.save()
+                .then(() => {
+                    io.emit('document', [data])
+                })
+                .then(() => {
+                    // Sends a success message
+                    io.emit('success', 'Details Saved Successfully')
+                })
+                .catch(err => {
+                    // Sends an error message
+                    io.emit('error', 'We found some errors validating your data, please make sure your data is correct')
+                })
         })
-    }
+        // }
 })
 
 

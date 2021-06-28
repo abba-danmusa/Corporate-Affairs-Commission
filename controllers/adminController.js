@@ -117,3 +117,8 @@ exports.getBusinesses = async(req, res) => {
 
     res.render('businesses', { title: 'Businesses', businesses, page, pages, total })
 }
+
+exports.getBusiness = async(req, res) => {
+    const business = await Business.findOne({ _id: req.params.id })
+    res.render('business', { title: business.businessName, business })
+}
