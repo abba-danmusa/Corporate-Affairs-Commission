@@ -3,11 +3,12 @@ extends layout
 include mixins/_pagination
 
 block content
-
+  
+  a(href=`/${user.state}/saved-entries`) History
   .signup-form
     #live
       .status
-      form#businessDetailsForm(action="/new-entry" method="POST")
+      form#businessDetailsForm(action="/" method="POST")
           h2 Register
             .form-group
               input.regNumber(type="text" class="form-control" name="regNumber" placeholder="REGISTRATION NO" required="required")

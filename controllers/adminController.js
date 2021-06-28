@@ -101,6 +101,7 @@ exports.getBusinesses = async(req, res) => {
 
     const businessesPromise = Business
         .find()
+        .sort({ _id: -1 })
         .skip(skip)
         .limit(limit)
         .sort({ createdAt: 'desc' })

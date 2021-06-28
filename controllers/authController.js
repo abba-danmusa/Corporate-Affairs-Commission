@@ -3,7 +3,7 @@ const passport = require('passport')
 exports.login = passport.authenticate('local', {
     failureRedirect: '/',
     failureFlash: 'Invalid user name or password',
-    successRedirect: '/new-entry',
+    successRedirect: '/',
     successFlash: 'You\'re now logged in'
 })
 
@@ -34,5 +34,5 @@ exports.isLoggedIn = (req, res, next) => {
         return
     }
     req.flash('error', 'You must login to Enter any Business Info.')
-    res.redirect('/')
+    res.redirect('/login')
 }

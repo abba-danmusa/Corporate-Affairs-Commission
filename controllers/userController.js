@@ -1,4 +1,5 @@
 const Business = require('../models/business')
+const User = require('../models/user')
 
 exports.loginForm = (req, res) => {
     res.render('login', { title: 'Login' })
@@ -17,9 +18,9 @@ exports.saveEntry = async(req, res) => {
     res.redirect('back')
 }
 
-exports.getBusinessDetails = async(req, res) => {
-    let business = await Business.findById({ _id: req.params.id })
-    res.render('business', { title: business.businessName, business })
+exports.getHistory = async(req, res) => {
+    const businesses = await Business.find({ state: req.params.state })
+    res.render('businesses', { title: `Businesses, ${businesses.state } branch`, businesses })
 }
 
 exports.searchByBusinessName = async(req, res) => {

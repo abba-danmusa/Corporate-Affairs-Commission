@@ -7,7 +7,8 @@ block content
     //- button.open-btn Open Live Coming Data
     //- div(id="businesses-wrapper")
     //- script(src="/socket.io/socket.io.js")
-    a(href='/admin/live') Live Data
+    
+    a(href='/admin') Live Data
     table.table.table-bordered
       thead
         tr
@@ -16,15 +17,18 @@ block content
           th NATURE OF BUSINESS
           th STATE
           th DATE
-  
       tbody(id="myTable")
         each business in businesses
-          a(href=`/admin/business/${business.businessName}/${business._id}`)
-            tr
-              td= business.regNumber
-              td= business.businessName
-              td= business.natureOfBusiness
-              td= business.state
-              td= business.dateOfReg
+          tr
+            td
+              a(href=`/admin/business/${business.businessName}/${business._id}`)=business.regNumber
+            td
+              a(href=`/admin/business/${business.businessName}/${business._id}`)=business.businessName
+            td
+              a(href=`/admin/business/${business.businessName}/${business._id}`)=business.natureOfBusiness
+            td
+              a(href=`/admin/business/${business.businessName}/${business._id}`)=business.state
+            td
+              a(href=`/admin/business/${business.businessName}/${business._id}`)=business.dateOfReg
     +pagination(page, pages, total)  
       
