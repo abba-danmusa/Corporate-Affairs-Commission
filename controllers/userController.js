@@ -19,8 +19,29 @@ exports.saveEntry = async(req, res) => {
 }
 
 exports.getHistory = async(req, res) => {
-    const businesses = await Business.find({ state: req.params.state })
-    res.render('businesses', { title: `Businesses, ${businesses.state } branch`, businesses })
+    const page = req.params.page || 1
+    const limit = 10
+    const skip = (page * limit) - limit
+
+    const businessesPromise = await Business
+        .find({ state: req.params.state })
+        .sort({ _id: -1 })
+        .skip(skip)
+        .limit(limit)
+
+    const totalBusinessesPromise = Business
+        .find({ state: req.params.state })
+        .countDocuments()
+    const [businesses, total] = await Promise.all([businessesPromise, totalBusinessesPromise])
+    const pages = Math.ceil(total / limit)
+
+    if (!businesses.length && skip) {
+        req.flash('info', `Page ${page} does not exist only page ${pages}`)
+        res.redirect(`/stores/page/${pages}`)
+        return
+    }
+
+    res.render('stateBusinesses', { title: `Businesses, ${businesses.state } branch`, businesses, page, pages, total })
 }
 
 exports.searchByBusinessName = async(req, res) => {

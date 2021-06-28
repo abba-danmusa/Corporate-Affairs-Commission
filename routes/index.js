@@ -11,8 +11,8 @@ router.get('/:state/saved-entries', authController.isLoggedIn, catchErrors(userC
 router.get('/logout', authController.isLoggedIn, authController.logout)
 
 // Post routes
-router.post('/login', authController.login)
 router.post('/', catchErrors(userController.saveEntry))
+router.post('/login', authController.login)
 
 // API's
 router.get('/api/search', catchErrors(userController.searchByBusinessName))

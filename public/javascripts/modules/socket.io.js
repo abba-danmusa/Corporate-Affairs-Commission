@@ -93,6 +93,7 @@ export default class Socket {
         this.socket.on('success', successMessage => {
             if (this.flashStatus) {
                 this.flashStatus.style.display = 'block'
+                this.flashStatus.style.borderColor = 'green'
                 this.flashStatus.innerText = successMessage
                 setTimeout(() => {
                     this.flashStatus.style.display = 'none'
@@ -103,6 +104,7 @@ export default class Socket {
         this.socket.on('error', errorMessage => {
             if (this.flashStatus) {
                 this.flashStatus.style.display = 'block'
+                this.flashStatus.style.borderColor = 'red'
                 this.flashStatus.innerText = errorMessage
                 setTimeout(() => {
                     this.flashStatus.style.display = 'none'

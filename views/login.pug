@@ -6,7 +6,7 @@ block content
 
   .inner
     .signup-form
-      form(action="/" method="POST")
+      form(action="/login" method="POST")
         h2 Login
         .form-group
           input(type="text" class="form-control" name="userName" placeholder="User Name" required="required")
@@ -15,4 +15,3 @@ block content
                 
         .form-group
           button(type="submit" class="btn btn-success btn-lg btn-block" id='connectSocket') Submit
-    a(href='/admin') Admin Login
