@@ -1,0 +1,30 @@
+extends layout
+
+include mixins/_pagination
+
+block content
+
+  .inner
+    table.table.table-bordered
+      thead
+        tr
+          th REGISTRATION NO
+          th BUSINESS NAME
+          th NATURE OF BUSINESS
+          th STATE
+          th DATE
+      tbody(id="myTable")
+        each business in businesses
+          tr
+            td
+              a(href=`/business/${business.businessName}/${business._id}`)=business.regNumber
+            td
+              a(href=`/business/${business.businessName}/${business._id}`)=business.businessName
+            td
+              a(href=`/business/${business.businessName}/${business._id}`)=business.natureOfBusiness
+            td
+              a(href=`/business/${business.businessName}/${business._id}`)=business.state
+            td
+              a(href=`/business/${business.businessName}/${business._id}`)=business.dateOfReg
+    +pagination(page, pages, total)
+

@@ -8,8 +8,10 @@ block content
     //- div(id="businesses-wrapper")
     //- script(src="/socket.io/socket.io.js")
     .search
-      input.search__input(type="text" placeholder="Business Reg, Business name..." name="search")
-      .search__results
+      form(action='/search/results' method='GET')
+        input.search__input(type="text" placeholder="Business Reg, Business name..." name="search")
+        input.submit__btn(type='submit')
+      //- .search__results
     a(href='/admin') Live Data
     table.table.table-bordered
       thead

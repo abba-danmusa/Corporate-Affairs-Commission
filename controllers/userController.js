@@ -37,7 +37,7 @@ exports.getHistory = async(req, res) => {
 
     if (!businesses.length && skip) {
         req.flash('info', `Page ${page} does not exist only page ${pages}`)
-        res.redirect(`/stores/page/${pages}`)
+        res.redirect(`/businesses/page/${pages}`)
         return
     }
 
@@ -56,4 +56,39 @@ exports.searchByBusinessName = async(req, res) => {
         })
         .limit(5)
     res.json(business)
+}
+
+exports.getSearchedData = async(req, res) => {
+    const page = req.params.page || 1
+    const limit = 10
+    const skip = (page * limit) - limit
+
+    const businessesPromise = await Business
+        .find({
+            state: req.user.state,
+            $text: { $search: req.query.q }
+        }, {
+            score: { $meta: 'textScore' }
+        })
+        .sort({
+            score: { $meta: 'textScore' }
+        })
+
+    totalBusinessesPromise = await Business
+        .find({
+            state: req.user.state,
+            $text: { $search: req.query.q }
+        })
+        .countDocuments()
+
+    const [businesses, total] = await Promise.all([businessesPromise, totalBusinessesPromise])
+    const pages = Math.ceil(total / limit)
+
+    if (!businesses.length && skip) {
+        req.flash('info', `Page ${page} does not exist only page ${pages}`)
+        res.redirect(`/businesses/page/${pages}`)
+        return
+    }
+
+    res.render('searchedResult', { title: 'Result', businesses, page, pages, total })
 }
