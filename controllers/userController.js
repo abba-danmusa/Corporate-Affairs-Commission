@@ -66,7 +66,7 @@ exports.getSearchedData = async(req, res) => {
     const businessesPromise = await Business
         .find({
             state: req.user.state,
-            $text: { $search: req.query.q }
+            $text: { $search: req.query.search }
         }, {
             score: { $meta: 'textScore' }
         })
@@ -77,7 +77,7 @@ exports.getSearchedData = async(req, res) => {
     totalBusinessesPromise = await Business
         .find({
             state: req.user.state,
-            $text: { $search: req.query.q }
+            $text: { $search: req.query.search }
         })
         .countDocuments()
 
