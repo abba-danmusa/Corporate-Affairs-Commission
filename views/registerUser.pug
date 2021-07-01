@@ -1,17 +1,15 @@
 extends layout
 
 block content
-
   .inner 
     .signup-form
+      a.link__button(href='/admin/businesses') BACK
       form(action="/admin/register-user" method="post")
         h2 Register
         .form-group
-          .row
-            .col-xs-6
-              input(type="text" class="form-control" name="name" placeholder="Name" required="required")
-            .col-xs-6
-              input(type="text" class="form-control" name="userName" placeholder="User Name" required="required")
+          input(type="text" class="form-control" name="name" placeholder="Name" required="required")
+        .form-group
+          input(type="text" class="form-control" name="userName" placeholder="User Name" required="required")
 
         .form-group
           input(type="password" class="form-control" name="password" placeholder="Password" required="required")

@@ -7,13 +7,13 @@ block content
     //- button.open-btn Open Live Coming Data
     //- div(id="businesses-wrapper")
     //- script(src="/socket.io/socket.io.js")
-    .search
-      form(action='/admin/search/results' method='GET')
-        input.search__input(type="text" placeholder="Business Reg, Business name..." name="search")
-        input.submit__btn(type='submit')
       //- .search__results
-    a(href='/admin') Live Data
-    table.table.table-bordered
+    a.link__button(href='/admin') HOME
+    form.search(action='/admin/search/results' method='GET')
+      input.search__input(type="text" placeholder="Business Reg, Business name..." name="search")
+      button(type='submit')
+        i.fa.fa-search
+    table.table
       thead
         tr
           th REGISTRATION NO

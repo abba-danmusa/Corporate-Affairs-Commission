@@ -7,10 +7,10 @@ block content
     //- button.open-btn Open Live Coming Data
     //- div(id="businesses-wrapper")
     //- script(src="/socket.io/socket.io.js")
-    .search
-      form(action='/search/results' method='GET')
-        input.search__input(type="text" placeholder="Business Reg, Business name..." name="search")
-        input.submit__btn(type='submit')
+    form.search(action='/search/results' method='GET')
+      input.search__input(type="text" placeholder="Business Reg, Business name..." name="search")
+      button(type='submit')
+        i.fa.fa-search
       //- .search__results
     table.table.table-bordered
       thead

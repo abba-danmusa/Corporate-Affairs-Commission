@@ -1,0 +1,25 @@
+.entry-form {
+    background-color: #D7DAD5;
+    width: 80vw;
+    margin-left: 10vw;
+    align-items: center;
+    color: #1c330d;
+    h2 {
+        margin-left: 3vw;
+    }
+    form {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        .left {
+            display: flex;
+            flex-direction: column;
+            width: 40%;
+        }
+        .right {
+            display: flex;
+            flex-direction: column;
+            width: 40%;
+        }
+    }
+}

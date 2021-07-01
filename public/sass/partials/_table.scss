@@ -1,3 +1,10 @@
+.error {
+    margin: 5vh;
+    height: 10vh;
+    display: none;
+    border: 1px ridge red;
+}
+
 .table {
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
@@ -16,6 +23,11 @@
     text-transform: uppercase;
     font-size: 18px;
     font-weight: 300;
+    color: #1c330d;
+    a {
+        text-decoration: none;
+        color: #1c330d;
+    }
 }
 
 .table tr:nth-child(even) {

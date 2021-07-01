@@ -10,10 +10,12 @@ html
     
   body
     block header
-      header.header
+      nav
         .site-identity
-          a(href="#")
-            img(src="/images/logos.png" alt="Site Name")
+          a(href="/")
+            img(src="/images/logos.png" alt="Site logo")
+    //- .coatOfArm
+    //-   !=h.icon('coatOfArm')
     block messages
       if locals.flashes
         .inner

@@ -1,10 +1,10 @@
 extends layout
 block content
+  a.link__button(href="/admin/businesses") BACK
   .business
-    h1=business.businessName
-    p=business.regNumber
-    p=business.natureOfBusiness
-    p=business.dateOfReg
-    p=business.dateEntered
-    p=business.author
-    p=business.proprietors
+    h1= `BUSINESS NAME: ${business.businessName}`
+    h3= `REGISTRATION NO.: ${business.regNumber}` 
+    h4= `NATURE OF BUSINESS: ${business.natureOfBusiness}`
+    h4= `REGISTRATION DATE: ${business.dateOfReg}`
+    h4= `PROPRIETORS: ${business.proprietors}`
+    h6= `SAVED BY: ${business.author}`

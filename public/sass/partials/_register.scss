@@ -1,0 +1,30 @@
+.signup-form {
+    display: flex;
+    flex-direction: column;
+    width: 40vw;
+    height: fit-content;
+    margin: 5vh 30vw;
+    background-color: #aed495;
+    align-items: center;
+    color: #1c330d;
+}
+
+.form-group {
+    button {
+        margin-top: 7vh;
+        background-color: #1c330d;
+        color: white;
+    }
+}
+
+input[type=text],
+input[type=password],
+input[type=date],
+select {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+}
