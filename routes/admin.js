@@ -13,6 +13,8 @@ router.get('/admin/businesses/page/:page', adminController.passwordProtected, ca
 router.get('/admin/business/:name/:id', adminController.passwordProtected, catchErrors(adminController.getBusiness))
 router.get('/admin/register-user', adminController.passwordProtected, adminController.registerForm)
 router.get('/admin/register-admin', adminController.passwordProtected, adminController.registerAdminForm)
+router.get('/admin/search/results', adminController.getSearchedData)
+    // router.param('/admin/search/results?search=q/page/:page', adminController.getSearchedData)
 
 // Post routes
 router.post('/admin', authController.loginAdmin)

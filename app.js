@@ -93,48 +93,33 @@ io.use(function(socket, next) {
 
 io.on('connection', function(socket) {
 
-    console.log(socket.request.session)
-
-    // if (socket.request.session) {
-    //     console.log('connected')
-
-    //     let user = socket.request.session.passport.user
-    //     console.log(user)
-
     // Creates a function to send staus
     sendStatus = function(s) {
         socket.emit('status', s)
     }
 
-    // socket.emit('welcome', { userName: user })
-    // if (user == '') {
-    //     socket.join('admin')
-    // }
-
-    Business.find({}).sort({ _id: 1 }).then(data => {
+    Business.find({ dateEntered: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) } }).sort({ _id: 1 }).then(data => {
         socket.emit('output', data)
 
     }).catch(err => {
-        throw err
+        socket.emit('error', err)
     })
 
     socket.on('input', data => {
-            console.log(data)
-            let business = new Business(data)
-            business.save()
-                .then(() => {
-                    io.emit('document', [data])
-                })
-                .then(() => {
-                    // Sends a success message
-                    io.emit('success', 'Details Saved Successfully')
-                })
-                .catch(err => {
-                    // Sends an error message
-                    io.emit('error', 'We found some errors validating your data, please make sure your data is correct')
-                })
-        })
-        // }
+        let business = new Business(data)
+        business.save()
+            .then(() => {
+                io.emit('document', [data])
+            })
+            .then(() => {
+                // Sends a success message
+                io.emit('success', 'Details Saved Successfully')
+            })
+            .catch(errors => {
+                // Sends an error message
+                io.emit('error', errors)
+            })
+    })
 })
 
 

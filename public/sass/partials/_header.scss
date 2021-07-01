@@ -1,8 +1,9 @@
-.site-header {
+.layer {
     width: 100%;
-    height: 12vh;
-    display: flex;
-    align-items: center;
+    height: 20vh;
+    // display: flex;
+    // align-items: center;
+    background-color: #1c330d;
 }
 
 .site-navigation {
@@ -11,7 +12,6 @@
     flex-direction: row;
     align-items: flex-end;
     justify-content: space-around;
-    background-color: black;
     height: auto;
     width: 20vw;
 }

@@ -5,6 +5,7 @@ include mixins/_pagination
 block content
   
   a(href=`/${user.state}/saved-entries`) History
+
   .signup-form
     #live
       .status
@@ -15,15 +16,7 @@ block content
             .form-group
               input.businessName(type="text" class="form-control" name="businessName" placeholder="BUSINESS NAME" required="required")
             .form-group
-              input.dateOfReg(type="date" name='dateOfReg' required='required')
-            .form-group
-              input.natureOfBusiness(type="text" class="form-control" name="natureOfBusiness" placeholder="NATURE OF BUSINESS" required="required")
-            .form-group
-              input.proprietor(type="text" class="form-control" name="proprietor" placeholder="PROPRIETOR 1" required="required")
-            //- .form-group
-            //-   input.proprietor(type="text" class="form-control" name="proprietor" placeholder="PROPIETOR 2")
-            //- .form-group
-            //-   input.proprietor(type="text" class="form-control" name="proprietor" placeholder="PROPIETOR 3")
+              input.businessAddress(type="text" class="form-control" name="businesAddress" placeholder="BUSINESS ADDRESS" required="required")
             label(for="state") State:
               select.state(id="select" name="state")
                 optgroup(label="SELECT--")
@@ -63,7 +56,24 @@ block content
                 option(value="SOKOTO") SOKOTO
                 option(value="TARABA") TARABA
                 option(value="YOBE") YOBE
-                option(value="ZAMFARA") ZAMFARA  
+                option(value="ZAMFARA") ZAMFARA
+            .form-group
+              label(for="dateOfReg") DATE REGISTERED
+              input.dateOfReg(type="date" name='dateOfReg' required='required' placeholder='DATE REGISTERED')
+            .form-group
+              input.natureOfBusiness(type="text" class="form-control" name="natureOfBusiness" placeholder="NATURE OF BUSINESS" required="required")
+            .form-group
+              input.proprietor1(type="text" class="form-control" name="proprietor" placeholder="PROPRIETOR 1" required="required")
+            .form-group
+              input.proprietor2(type="text" class="form-control" name="proprietor" placeholder="PROPRIETOR 2" )
+            .form-group
+              input.proprietor3(type="text" class="form-control" name="proprietor" placeholder="PROPRIETOR 3" )
+            .form-group
+              input.author(type="text" class="form-control" name="proprietor" placeholder="PROPRIETOR 1" required="required" value=`${user.name}`)
+            //- .form-group
+            //-   input.proprietor(type="text" class="form-control" name="proprietor" placeholder="PROPIETOR 2")
+            //- .form-group
+            //-   input.proprietor(type="text" class="form-control" name="proprietor" placeholder="PROPIETOR 3")  
 
             form-group
               button(type="submit" class="btn btn-success btn-lg btn-block" id="save") Save

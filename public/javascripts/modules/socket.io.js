@@ -7,10 +7,14 @@ export default class Socket {
         this.form = $('#businessDetailsForm')
         this.regNumber = $('.regNumber')
         this.businessName = $('.businessName')
+        this.businessAddress = $('.businessAddress')
         this.state = $('.state')
         this.dateOfReg = $('.dateOfReg')
         this.natureOfBusiness = $('.natureOfBusiness')
-        this.proprietors = $('.proprietor')
+        this.proprietor1 = $('.proprietor1')
+        this.proprietor2 = $('.proprietor2')
+        this.proprietor3 = $('.proprietor3')
+        this.author = $('.author')
         this.events()
         this.openConnection()
     }
@@ -53,19 +57,25 @@ export default class Socket {
     }
 
     sendDetails() {
+
         this.socket.emit('input', {
             regNumber: this.regNumber.value,
             businessName: this.businessName.value,
+            businessAddress: this.businessAddress.value,
             state: this.state.value,
             dateOfReg: this.dateOfReg.value,
             natureOfBusiness: this.natureOfBusiness.value,
-            proprietors: this.proprietors.value
+            proprietors: [this.proprietor1.value, this.proprietor2.value, this.proprietor3.value],
+            author: this.author.value
         })
         this.regNumber.value = ''
         this.businessName.value = ''
         this.natureOfBusiness.value = ''
+        this.businessAddress.value = ''
         this.state.value = ''
-        this.proprietors.value = ''
+        this.proprietor1.value = ''
+        this.proprietor2.value = ''
+        this.proprietor3.value = ''
         this.dateOfReg.value = ''
     }
     openConnection() {
@@ -105,41 +115,17 @@ export default class Socket {
             if (this.flashStatus) {
                 this.flashStatus.style.display = 'block'
                 this.flashStatus.style.borderColor = 'red'
-                this.flashStatus.innerText = errorMessage
+                if (errorMessage.message) {
+                    this.validationErrors = errorMessage.message
+                } else if (errorMessage.keyValue) {
+                    this.duplicateErrors = errorMessage.keyValue.regNumber ? 'Registration Number; ' + errorMessage.keyValue.regNumber + ' already exist' : 'Business Name; ' + errorMessage.keyValue.businessName + ' already exist'
+                }
+                this.flashStatus.innerText = this.validationErrors || this.duplicateErrors
                 setTimeout(() => {
                     this.flashStatus.style.display = 'none'
-                }, 7000)
+                }, 10000)
             }
         })
-
-        // this.socket.on('error', data => {
-        //     if (data.length) {
-
-        //         data.forEach(error => {
-        //             this.displayError(error)
-        //         })
-        //     }
-        // })
-
-        // Sets default status
-        // this.statusDefault = this.flashStatus.textContent
-
-        // this.setStatus = function(s) {
-        //     this.flashStatus = s
-        //     if (s !== this.statusDefault) {
-        //         this.delay = setTimeout(function() {
-        //             this.setStatus(this.statusDefault)
-        //         }, 5000)
-        //     }
-        // }
-
-        // // Get status from server
-        // this.socket.on('status', data => {
-        //     // Get message status
-        //     this.setStatus((typeof data == 'object') ? data.messsage : data)
-
-
-        // })
 
     }
 

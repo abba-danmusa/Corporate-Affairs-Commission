@@ -1,3 +1,4 @@
+const { text } = require('body-parser')
 const mongoose = require('mongoose')
 
 const Schema = mongoose.Schema
@@ -15,6 +16,11 @@ const businessSchema = new Schema({
         required: 'You must enter a business name',
         unique: 'Business Name already exist'
     },
+    businessAddress: {
+        type: String,
+        trim: true,
+        required: 'You must provide an address'
+    },
     dateOfReg: {
         type: Date,
         required: 'You must supply the date of registration'
@@ -29,16 +35,14 @@ const businessSchema = new Schema({
         required: 'You must supply the nature of the business'
     },
     proprietors: [{
-        type: String,
-        required: 'You must atleast supply one proprietor'
+        type: String
     }],
     dateEntered: {
         type: Date,
         default: Date.now()
     },
     author: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User'
+        type: String
     }
 })
 

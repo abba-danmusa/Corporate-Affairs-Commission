@@ -6,27 +6,14 @@ html
     link(rel="shortcut icon" type="image/png" href="/views/logos.png")
     link(href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet")
     meta(charset="utf-8")
-    meta(http-equiv="X-UA-Compatible" content="IE=edge")
-    meta(name="viewport" content="width=device-width, initial-scale=1")
-    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css")
-    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css")
-    script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
-    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js")
     script(defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous")
     
   body
     block header
-      header.site-header
+      header.header
         .site-identity
           a(href="#")
             img(src="/images/logos.png" alt="Site Name")
-        nav.site-navigation
-          //- ul.nav 
-          //-   li
-          a(href='/') HOME
-          a(href='/logout') LOGOUT
-          span(class="text-white mr-2 header-chat-icon" title="Chat" data-toggle="tooltip" data-placement="bottom") 
-            i(class="fas fa-comment")
     block messages
       if locals.flashes
         .inner

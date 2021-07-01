@@ -1,48 +1,56 @@
-#myInput {
-    background-image: url('/css/searchicon.png');
-    /* Add a search icon to input */
-    background-position: 10px 12px;
-    /* Position the search icon */
-    background-repeat: no-repeat;
-    /* Do not repeat the icon image */
-    width: 100%;
-    /* Full-width */
-    font-size: 16px;
-    /* Increase font-size */
-    padding: 12px 20px 12px 40px;
-    /* Add some padding */
-    border: 1px solid #ddd;
-    /* Add a grey border */
-    margin-bottom: 12px;
-    /* Add some space below the input */
-}
-
-#myTable {
+.table {
+    font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
-    /* Collapse borders */
-    width: 100%;
-    /* Full-width */
-    border: 1px solid #ddd;
-    /* Add a grey border */
+    width: 90vw;
+    margin-left: 5vw;
+    margin-top: 7vh;
+}
+
+.table td,
+.table th {
+    border: none;
+    padding: 20px;
+    text-align-last: center;
+    align-self: center;
+    text-align: center;
+    text-transform: uppercase;
     font-size: 18px;
-    /* Increase font-size */
+    font-weight: 300;
 }
 
-#myTable th,
-#myTable td {
-    text-align: left;
-    /* Left-align text */
-    padding: 12px;
-    /* Add padding */
+.table tr:nth-child(even) {
+    background-color: #F2F0F0;
+    text-align-last: center;
 }
 
-#myTable tr {
-    /* Add a bottom border to all table rows */
-    border-bottom: 1px solid #ddd;
+.table tr:nth-child(odd) {
+    background-color: #D7DAD5;
+    text-align-last: center;
 }
 
-#myTable tr.header,
-#myTable tr:hover {
-    /* Add a grey background color to the table header and on hover */
-    background-color: #f1f1f1;
+.table tr:hover {
+    background-color: #ddd;
 }
+
+.table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: #1c330d;
+    color: white;
+    text-align: center;
+}
+
+
+/* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
+
+@media screen and (max-width: 700px) {
+    .row {
+        flex-direction: column;
+    }
+}
+
+
+/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
+
+@media screen and (max-width: 400px) {}

@@ -123,3 +123,38 @@ exports.getBusiness = async(req, res) => {
     const business = await Business.findOne({ _id: req.params.id })
     res.render('business', { title: business.businessName, business })
 }
+exports.getSearchedData = async(req, res) => {
+    const page = req.params.page || 1
+    const limit = 10
+    const skip = (page * limit) - limit
+    const searchQuery = req.query.search
+
+    const businessesPromise = await Business
+        .find({
+
+            $text: { $search: searchQuery }
+        }, {
+            score: { $meta: 'textScore' }
+        })
+        .sort({
+            score: { $meta: 'textScore' }
+        })
+
+    totalBusinessesPromise = await Business
+        .find({
+
+            $text: { $search: searchQuery }
+        })
+        .countDocuments()
+
+    const [businesses, total] = await Promise.all([businessesPromise, totalBusinessesPromise])
+    const pages = Math.ceil(total / limit)
+
+    if (!businesses.length && skip) {
+        req.flash('info', `Page ${page} does not exist only page ${pages}`)
+        res.redirect(`/businesses/page/${pages}`)
+        return
+    }
+
+    res.render('searchedResult', { title: 'Result', businesses, searchQuery, page, pages, total })
+}
