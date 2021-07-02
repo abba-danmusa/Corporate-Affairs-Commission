@@ -3,7 +3,8 @@ block content
   a.link__button(href="/admin/businesses") BACK
   .business
     h1= `BUSINESS NAME: ${business.businessName}`
-    h3= `REGISTRATION NO.: ${business.regNumber}` 
+    h3= `REGISTRATION NO.: ${business.regNumber}`
+    h4= `ADDRESS: ${business.businessAddress}` 
     h4= `NATURE OF BUSINESS: ${business.natureOfBusiness}`
     h4= `REGISTRATION DATE: ${business.dateOfReg}`
     h4= `PROPRIETORS: ${business.proprietors}`

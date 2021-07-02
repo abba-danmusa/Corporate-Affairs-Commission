@@ -135,13 +135,14 @@ export default class Socket {
     }
 
     displayDetails(data) {
+        [this.date] = data.dateOfReg.split('T')
         let tableRow = `
         <tr>
             <td>${data.regNumber}</td>
             <td>${data.businessName}</td>
             <td>${data.natureOfBusiness}</td>
             <td>${data.state}</td>
-            <td>${data.dateOfReg}</td>
+            <td>${this.date}</td>
         </tr>
         `
         this.table.insertAdjacentHTML('afterbegin', tableRow)

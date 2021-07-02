@@ -689,6 +689,12 @@ form.search::after {
   color: #1c330d;
 }
 
+.business h1 {
+  background-color: #1c330d;
+  color: white;
+  padding: 10px;
+}
+
 .signup-form {
   display: -webkit-box;
   display: -ms-flexbox;
