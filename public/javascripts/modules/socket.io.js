@@ -138,6 +138,7 @@ export default class Socket {
         [this.date] = data.dateOfReg.split('T')
         let tableRow = `
         <tr>
+            <td><div class='pointer'></div></td>
             <td>${data.regNumber}</td>
             <td>${data.businessName}</td>
             <td>${data.natureOfBusiness}</td>
@@ -146,5 +147,10 @@ export default class Socket {
         </tr>
         `
         this.table.insertAdjacentHTML('afterbegin', tableRow)
+        setTimeout(() => {
+            this.pointer = $('.pointer')
+            if (this.pointer)
+                this.pointer.style.visibility = 'hidden'
+        }, 90000)
     }
 }
