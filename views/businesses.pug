@@ -1,4 +1,4 @@
-extends layout
+extends layout4
 
 include mixins/_pagination
 
@@ -8,11 +8,11 @@ block content
     //- div(id="businesses-wrapper")
     //- script(src="/socket.io/socket.io.js")
       //- .search__results
-    a.link__button(href='/admin') HOME
+    
     form.search(action='/admin/search/results' method='GET')
       input.search__input(type="text" placeholder="Business Reg, Business name..." name="search")
       button(type='submit')
-        i.fa.fa-search
+         i.fa.fa-search
     table.table
       thead
         tr

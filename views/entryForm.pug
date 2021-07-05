@@ -1,10 +1,11 @@
-extends layout
+extends layout5
 
 include mixins/_pagination
 
 block content
   
-  a.link__button(href=`/${user.state}/saved-entries`) History
+  |
+  br
 
   .entry-form
     #live
@@ -77,6 +78,6 @@ block content
           //- .form-group
           //-   input.proprietor(type="text" class="form-control" name="proprietor" placeholder="PROPIETOR 3")  
 
-          form-group
+          .form-group
             button.link__button(type="submit" class="btn btn-success btn-lg btn-block" id="save") Save
       script(src="/socket.io/socket.io.js")  
