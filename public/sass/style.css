@@ -933,5 +933,9 @@ select {
   }
   H21{
     align-items: center;
+    overflow: hidden;
+  background-color: #f1f1f1;
+  padding: 20px 10px;
   }
+  
 /*# sourceMappingURL=style.css.map */
