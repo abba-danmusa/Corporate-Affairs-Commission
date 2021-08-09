@@ -12,8 +12,9 @@ block content
     table.table.table-bordered
       thead
         tr
-          th Username 
+          th Username
           th name
+          th Account type
           th State 
           th delete    
       tbody(id="myTable")
@@ -21,6 +22,7 @@ block content
           tr
             td=`${user.userName}`
             td=`${user.name}`
+            td=`${user.userType}`
             td=`${user.state}`
             td
               form(action=`/admin/registered-users/delete-user/${user._id}` method='post')

@@ -49,10 +49,13 @@ exports.validateAdminRegister = async(req, res, next) => {
 }
 
 exports.validateRegister = async(req, res, next) => {
+    req.body.userType = 'administrator'
     await check('name').run(req)
     await check('name', 'You must supply a name').notEmpty().run(req)
     await check('userName', 'You must supply a user name').notEmpty().run(req)
     await check('userName').run(req)
+    await check('userType', 'You must supply a user type').notEmpty().run(req)
+    await check('userType').run(req)
     await check('state').run(req)
     await check('state', 'You must supply a state').notEmpty().run(req)
         // await check('email').normalizeEmail({
@@ -68,7 +71,7 @@ exports.validateRegister = async(req, res, next) => {
 
     if (!errors.isEmpty()) {
         req.flash('error', errors.array().map(err => err.msg))
-        res.render('register', { title: 'Register', body: req.body, flashes: req.flash() })
+        res.render('registerUser', { title: 'Register', body: req.body, flashes: req.flash() })
         return
     }
     next()
@@ -88,7 +91,7 @@ exports.getUsers = async(req, res) => {
 }
 
 exports.deleteUser = async(req, res) => {
-    const user = await User.findOneAndDelete({ _id: req.params.id })
+    await User.findOneAndDelete({ _id: req.params.id })
     req.flash('success', 'User Deleted Successfully')
     res.redirect('back')
 }
@@ -170,8 +173,8 @@ exports.getSearchedData = async(req, res) => {
     res.render('searchedResult', { title: 'Result', businesses, searchQuery, page, pages, total })
 }
 
-exports.deleteBusiness = async(req,res) => {
-    const business = await Business.findOneAndDelete({_id: req.params.id})
+exports.deleteBusiness = async(req, res) => {
+    const business = await Business.findOneAndDelete({ _id: req.params.id })
     req.flash('success', 'Business Details Has Been Deleted Successfully')
     res.redirect('/admin/businesses')
 }

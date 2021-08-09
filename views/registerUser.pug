@@ -1,15 +1,21 @@
 extends layout3
 
 block content
-  .inner 
+  .inner
     .signup-form
 
       form(action="/admin/register-user" method="post")
         h2 Register
+
         .form-group
           input(type="text" class="form-control" name="name" placeholder="Name" required="required")
+
         .form-group
           input(type="text" class="form-control" name="userName" placeholder="User Name" required="required")
+
+        .form-group
+          label(for='userType') Account Type
+          input(type="text" class="form-control" name="userType" value="administrator" required="required" readonly)
 
         .form-group
           input(type="password" class="form-control" name="password" placeholder="Password" required="required")
@@ -21,7 +27,7 @@ block content
         select(id="select" name="state")
           optgroup(label="SELECT--")
           option(value="LAGOS") LAGOS
-          option(value="ABUJA") ABUJA
+          option(value="FCT") FCT
           option(value="RIVERS") RIVERS
           option(value="ABIA") ABIA
           option(value="ADAMAWA") ADAMAWA
@@ -56,7 +62,7 @@ block content
           option(value="SOKOTO") SOKOTO
           option(value="TARABA") TARABA
           option(value="YOBE") YOBE
-          option(value="ZAMFARA") ZAMFARA  
+          option(value="ZAMFARA") ZAMFARA
 
         .form-group
           button(type="submit" class="btn btn-success btn-lg btn-block") Register

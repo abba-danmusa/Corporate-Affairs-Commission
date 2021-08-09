@@ -1,7 +1,8 @@
 mixin business(business)
   each item in business
     .business
-      
+      if user.hasPrivilege
+        a.link__button(href='/edit') EDIT
       h1= `BUSINESS NAME: ${item.businessName}`
       h3= `REGISTRATION NO.: ${item.regNumber}`
       h4= `ADDRESS: ${item.businessAddress}` 
@@ -9,5 +10,7 @@ mixin business(business)
       h4= `REGISTRATION DATE: ${item.dateOfReg}`
       h4= `PROPRIETORS: ${item.proprietors}`
       h6= `SAVED BY: ${item.author}`
-      form(action=`/${user.state}/business/${item.id}` method='post')
-        button.link__button(type='submit') DELETE BUSINESS
+      if item.file
+        //- !=h.dump(business.fileSrc)
+        .pdf
+          embed(src=`${item.fileSrc}#toolbar=1` type='application/pdf' width='1000vw' height='600px')

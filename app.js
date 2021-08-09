@@ -13,8 +13,12 @@ const adminRoutes = require('./routes/admin')
 const helpers = require('./helpers')
 const errorHandlers = require('./handlers/errorHandlers')
 const { saveEntry } = require('./controllers/userController')
+const { catchErrors } = require('./handlers/errorHandlers')
 const Business = mongoose.model('Business')
 require('./handlers/passport')
+const multer = require('multer')
+const uuid = require('uuid')
+const jimp = require('jimp')
 
 // create express app 
 const app = express()
@@ -68,6 +72,16 @@ app.use((req, res, next) => {
 })
 
 app.use('/', userRoutes, adminRoutes)
+app.post('/', catchErrors(async(req, res) => {
+    const { regNumber, businessName, businessAddress, state, dateOfReg, natureOfBusiness, proprietor1, proprietor2, proprietor3, author, file } = req.body
+
+    const business = new Business({ regNumber, businessName, businessAddress, state, dateOfReg, natureOfBusiness, proprietor1, proprietor2, proprietor3, author })
+
+    saveImage(business, file)
+    await business.save()
+    io.emit('document', [req.body])
+    res.redirect('/')
+}))
 
 // if that above routes didnt work, 404 them and forward to error handler
 app.use(errorHandlers.notFound)
@@ -87,6 +101,18 @@ app.use(errorHandlers.productionErrors)
 const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 
+const fileMimeType = ['application/pdf']
+
+function saveImage(business, fileEncoded) {
+
+    if (fileEncoded == null || undefined) return
+    const file = JSON.parse(fileEncoded)
+    if (file != null && fileMimeType.includes(file.type)) {
+        business.file = new Buffer.from(file.data, 'base64')
+        business.fileType = file.type
+    }
+}
+
 io.use(function(socket, next) {
     sessionOptions(socket.request, socket.request.res, next)
 })
@@ -98,6 +124,15 @@ io.on('connection', function(socket) {
         socket.emit('status', s)
     }
 
+    app.post('/', async(req, res) => {
+        const { regNumber, businessName, businessAddress, state, dateOfReg, natureOfBusiness, proprietor1, proprietor2, proprietor3, author, file } = req.body
+        const business = new Business({ regNumber, businessName, businessAddress, state, dateOfReg, natureOfBusiness, proprietor1, proprietor2, proprietor3, author })
+        saveImage(business, file)
+        await business.save()
+        io.emit('document', [req.body])
+        res.redirect('/')
+    })
+
     Business.find({ dateEntered: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) } }).sort({ _id: 1 }).then(data => {
         socket.emit('output', data)
 
@@ -106,7 +141,11 @@ io.on('connection', function(socket) {
     })
 
     socket.on('input', data => {
+        // data.file = JSON.parse(data.file)
+        data.file = new Buffer.from(data.file, 'base64')
+        console.log(data.file)
         let business = new Business(data)
+            // saveImage(business, file)
         business.save()
             .then(() => {
                 io.emit('document', [data])
@@ -121,8 +160,6 @@ io.on('connection', function(socket) {
             })
     })
 })
-
-
 
 
 module.exports = server

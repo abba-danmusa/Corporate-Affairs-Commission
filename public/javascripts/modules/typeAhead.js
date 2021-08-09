@@ -1,37 +1,56 @@
 import axios from 'axios'
 import dompurify from 'dompurify'
+import { $ } from './bling'
 
 function searchResultsHTML(businesses) {
     return businesses.map(business => {
         return `
-      <a href="/business/${business._id}" class="search__result">
-        <strong>${business.businessName}</strong>
-      </a>
-    `
+            <tr>
+                <td>
+                    <a href='/admin/business/${business.businessName}/${business._id}'> ${business.regNumber}
+                </td>
+                <td>
+                    <a href='/admin/business/${business.businessName}/${business._id}'> ${business.businessName}
+                </td>
+                <td>
+                    <a href='/admin/business/${business.businessName}/${business._id}'> ${business.natureOfBusiness}
+                </td>
+                <td>
+                    <a href='/admin/business/${business.businessName}/${business._id}'> ${business.state}
+                </td>
+                <td>
+                    <a href='/admin/business/${business.businessName}/${business._id}'> ${business.dateOfReg}
+                </td>
+        `
     }).join('')
 }
 
 function typeAhead(search) {
     if (!search) return
     const searchInput = search.querySelector('input[name="search"]')
-    const searchResults = search.querySelector('.search__results')
+    const searchResults = $('.search__results--table')
+    const hidden = $('.hidden')
+        // const searchResultsTable = $('.search__results--table')
 
     searchInput.on('input', function() {
         if (!this.value) {
             searchResults.style.display = 'none'
+            searchResultsHTML.style.display = 'none'
             return
         }
 
         searchResults.style.display = 'block'
-        searchResults.innerHTML = ''
+        hidden.style.display = 'none'
+            // searchResults.innerHTML = ''
 
-        axios.get(`/api/search?q=${this.value}`)
+        axios.get(`/api/search?search=${this.value}`)
             .then(res => {
                 if (res.data.length) {
-                    searchResults.innerHTML = dompurify.sanitize(searchResultsHTML(res.data))
+                    searchResults.insertAdjacentHTML('afterbegin', searchResultsHTML(res.data))
                     return
+                } else {
+                    searchResults.innerHTML = `<div class="search__result">No results for ${this.value} found</div>`
                 }
-                searchResults.innerHTML = dompurify.sanitize(`<div class="search__result">No results for ${this.value} found</div>`)
             })
             .catch(err => {
                 console.error(err)

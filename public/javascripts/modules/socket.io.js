@@ -1,4 +1,5 @@
 import { $, $$ } from './bling'
+import axios from 'axios'
 
 export default class Socket {
     constructor() {
@@ -15,15 +16,24 @@ export default class Socket {
         this.proprietor2 = $('.proprietor2')
         this.proprietor3 = $('.proprietor3')
         this.author = $('.author')
-        this.events()
+        this.file = $('.file')
+
+        // Calls for the event methods to execute on submit of the form
+        // this.events()
+
+        // Calls for the open connection method
         this.openConnection()
     }
 
     // events
     events() {
+
         if (this.form) {
             this.form.on('submit', (e) => {
                 e.preventDefault()
+                    // this.formData = new FormData()
+                    // this.formData.append('file', this.file.files[0])
+                console.log(file)
                 this.sendDetails()
                     // this.sanitizeData()
             })
@@ -57,7 +67,7 @@ export default class Socket {
     }
 
     sendDetails() {
-
+        // console.log(file)
         this.socket.emit('input', {
             regNumber: this.regNumber.value,
             businessName: this.businessName.value,
@@ -66,17 +76,18 @@ export default class Socket {
             dateOfReg: this.dateOfReg.value,
             natureOfBusiness: this.natureOfBusiness.value,
             proprietors: [this.proprietor1.value, this.proprietor2.value, this.proprietor3.value],
-            author: this.author.value
+            author: this.author.value,
+            file: this.file.files[0].name
         })
         this.regNumber.value = ''
         this.businessName.value = ''
         this.natureOfBusiness.value = ''
         this.businessAddress.value = ''
-        this.state.value = ''
         this.proprietor1.value = ''
         this.proprietor2.value = ''
         this.proprietor3.value = ''
         this.dateOfReg.value = ''
+            // this.file.value = ''
     }
     openConnection() {
         this.socket = io()
@@ -85,7 +96,7 @@ export default class Socket {
         })
 
         this.socket.on('output', data => {
-
+            console.log(data)
             if (data.length && this.table) {
                 data.forEach(item => {
                     this.displayDetails(item)
@@ -147,10 +158,10 @@ export default class Socket {
         </tr>
         `
         this.table.insertAdjacentHTML('afterbegin', tableRow)
-        setTimeout(() => {
-            this.pointer = $('.pointer')
-            if (this.pointer)
-                this.pointer.style.visibility = 'hidden'
-        }, 90000)
+            // setTimeout(() => {
+            //     this.pointer = $('.pointer')
+            //     if (this.pointer)
+            //         this.pointer.style.visibility = 'hidden'
+            // }, 90000)
     }
 }

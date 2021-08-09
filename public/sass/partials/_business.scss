@@ -3,13 +3,17 @@
     flex-direction: column;
     background-color: #aed495;
     width: 80vw;
-    height: 100vh;
+    height: fit-content;
     margin: 2vh 10vw;
     align-items: center;
     color: #1c330d;
+    text-transform: uppercase;
     h1 {
         background-color: #1c330d;
         color: white;
         padding: 10px;
+    }
+    .pdf {
+        padding: 30px;
     }
 }

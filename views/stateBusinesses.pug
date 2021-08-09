@@ -21,18 +21,21 @@ block content
           th NATURE OF BUSINESS
           th STATE
           th DATE
+          th ACTION
       tbody(id="myTable")
         each business in businesses
           tr
             td
-              a(href=`/${user.state}/business/${business._id}`)=business.regNumber
+              =business.regNumber
             td
-              a(href=`/${user.state}/business/${business._id}`)=business.businessName
+              =business.businessName
             td
-              a(href=`/${user.state}/business/${business._id}`)=business.natureOfBusiness
+              =business.natureOfBusiness
             td
-              a(href=`/${user.state}/business/${business._id}`)=business.state
+              =business.state
             td
-              a(href=`/${user.state}/business/${business._id}`)=business.dateOfReg
+              =business.dateOfReg
+            td
+              a.link__button(href=`/${user.state}/business/${business._id}` style='color:white') VIEW
     +pagination(page, pages, total)  
       

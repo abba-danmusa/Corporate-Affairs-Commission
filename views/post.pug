@@ -1,0 +1,8 @@
+extends layout5
+block content
+
+  form(action='/posts' method='GET')
+    input(type='file' name='file')
+    input(type='text' name='name')
+    input(type='number' name='number')
+    button(type='submit') submit

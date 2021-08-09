@@ -7,7 +7,17 @@ html
     link(href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet")
     meta(charset="utf-8")
     script(defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous")
-    
+    link(href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet")
+    script(src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.js")
+    script(src="https://unpkg.com/filepond/dist/filepond.js")
+
+    link(href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
+    rel="stylesheet")
+    script(src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js")
+
+    script(src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js")
+    script(src="https://unpkg.com/filepond-plugin-image-transform/dist/filepond-plugin-image-transform.js")
+
   body
     block header
       .nav
@@ -44,3 +54,4 @@ html
     block scripts
       
       script(src="/dist/App.bundle.js")
+      script(src="https://unpkg.com/filepond@^4/dist/filepond.js")

@@ -1,4 +1,41 @@
 const passport = require('passport')
+const User = require('../models/user')
+
+exports.mustChangePassword = (req, res, next) => {
+    if (req.user.mustChangePassword === false) {
+        return next()
+    } else if (req.user.mustChangePassword === true) {
+        req.flash('success', 'Please go ahead and Change your password to continue')
+        res.redirect('/change-password')
+    }
+}
+
+exports.confirmPasswords = (req, res, next) => {
+    if (req.body['newPassword'] === req.body['confirmNewPassword'] && req.body['newPassword'] !== req.body['oldPassword']) {
+        next()
+        return
+    }
+    req.flash('error', 'Passwords doesn\'t match or is the same with the old password')
+    res.redirect('back')
+}
+
+exports.changePassword = async(req, res) => {
+    const user = await User.findOne({
+        userName: req.body.userName
+    })
+
+    if (!user) {
+        req.flash('error', 'User Name cannot be found')
+        return res.redirect('back')
+    }
+
+    await user.setPassword(req.body.newPassword)
+    user.mustChangePassword = false
+    const updatedUser = await user.save()
+    await req.login(updatedUser)
+    req.flash('success', 'Your password has been changed successfully and you\'re now logged in')
+    res.redirect('/')
+}
 
 exports.login = passport.authenticate('local', {
     failureRedirect: '/login',
@@ -19,7 +56,7 @@ exports.hasSession = (req, res, next) => {
         res.redirect('/')
         return
     }
-        next()
+    next()
 }
 
 exports.logout = (req, res) => {

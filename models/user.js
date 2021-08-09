@@ -16,12 +16,31 @@ const userSchema = new Schema({
         required: 'Please supply a user name',
         trim: true
     },
+    userType: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    hasPrivilege: String,
+    mustChangePassword: {
+        type: Boolean,
+        default: true
+    },
     state: {
         type: String,
         required: 'You must supply a state',
         trim: true
     },
     slug: String,
+})
+
+userSchema.pre('save', async function(next) {
+    if (this.userType == 'administrator') {
+        this.hasPrivilege = this.userType
+    } else {
+        this.hasPrivilege = null
+    }
+    next()
 })
 
 userSchema.pre('save', async function(next) {

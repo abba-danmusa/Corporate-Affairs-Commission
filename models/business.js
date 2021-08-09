@@ -43,13 +43,28 @@ const businessSchema = new Schema({
     },
     author: {
         type: String
-    }
+    },
+    file: {
+        type: Buffer,
+        required: 'You must supply a pdf file'
+    },
+    fileType: {
+        type: String,
+        required: 'Only pdf files are allowed'
+    },
+    slug: String
 })
 
 businessSchema.index({
     regNumber: 'text',
     businessName: 'text',
     state: 'text'
+})
+
+businessSchema.virtual('fileSrc').get(function() {
+    if (this.file != null) {
+        return `data:${this.fileType};charset=utf-8;base64,${this.file.toString('base64')}`
+    }
 })
 
 businessSchema.pre('save', async function(next) {
