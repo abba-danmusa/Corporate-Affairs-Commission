@@ -2,7 +2,9 @@ extends layout2
 block content
 
  h21 Newly Registered
-    #live
+ 
+   
+ #live
       table.table
         thead
           tr
@@ -13,5 +15,6 @@ block content
             th STATE
             th DATE REGISTERED
         tbody(id="table")
-      
+
+  
       script(src="/socket.io/socket.io.js")
