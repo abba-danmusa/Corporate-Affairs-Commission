@@ -1,4 +1,25 @@
-extends layout3
+extends layout
+
+block header
+
+  nav.nav
+    .site-identity
+      a(href="/")
+        img(src="/images/logos.png" alt="Site logo")
+    a.nav__button.button(href='/')
+          !=h.icon('arrow-left-solid')
+          span BACK
+    .nav__buttons
+      if user
+        a.button(href='#')
+          !=h.icon('user-solid') 
+          span=user.userName
+        a.button(href=`/${user.state}/saved-entries`)
+          !=h.icon('history-solid')
+          span History
+        a.button(href='/logout')
+          !=h.icon('sign-out')
+          span Logout
 
 block content
   .inner
@@ -8,7 +29,7 @@ block content
         h2 Register User
 
         .form-group
-          input(type="text" class="form-control" name="name" placeholder="Name" required="required")
+          input(type="text" class="form-control" name="name" placeholder="Full Name" required="required")
 
         .form-group
           input(type="text" class="form-control" name="userName" placeholder="User Name" required="required")
@@ -28,4 +49,4 @@ block content
           input(type="text" class="form-control" name="state" value=user.state readonly required)
 
         .form-group
-          button(type="submit" class="btn btn-success btn-lg btn-block") Register
+          button.button(type="submit" class="btn btn-success btn-lg btn-block") Register

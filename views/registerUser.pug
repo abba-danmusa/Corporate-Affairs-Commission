@@ -1,4 +1,27 @@
-extends layout3
+extends layout
+
+block header
+  nav.nav
+    .site-identity
+      a(href="/admin")
+        img(src="/images/logos.png" alt="Site logo")
+    a.nav__button.button(href='/admin')
+      !=h.icon('arrow-left-solid')
+      span BACK
+    .nav__buttons
+      
+      a.button(href='#')
+        !=h.icon('user-solid') 
+        span admin
+      a.button(href='/admin/register-user')
+        !=h.icon('user-plus-solid')
+        span Register User
+      a.button(href='/admin/registered-users')
+        !=h.icon('users-solid')
+        span Users
+      a.button(href='/admin/businesses')
+        !=h.icon('history-solid')
+        span History
 
 block content
   .inner
@@ -8,7 +31,7 @@ block content
         h2 Register
 
         .form-group
-          input(type="text" class="form-control" name="name" placeholder="Name" required="required")
+          input(type="text" class="form-control" name="name" placeholder="Full Name" required="required")
 
         .form-group
           input(type="text" class="form-control" name="userName" placeholder="User Name" required="required")
@@ -65,4 +88,4 @@ block content
           option(value="ZAMFARA") ZAMFARA
 
         .form-group
-          button(type="submit" class="btn btn-success btn-lg btn-block") Register
+          button.button(type="submit" class="btn btn-success btn-lg btn-block") Register

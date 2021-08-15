@@ -13,6 +13,10 @@ exports.loginForm = (req, res) => {
     res.render('login', { title: 'Login' })
 }
 
+exports.back = (req, res) => {
+    res.redirect('back')
+}
+
 exports.entryForm = (req, res) => {
     res.render('entryForm', { title: 'New Registration Entry' })
 }
@@ -96,15 +100,21 @@ exports.getBusiness = async(req, res) => {
 }
 
 exports.searchByBusinessName = async(req, res) => {
-    const business = await Business.
-    find({
-        businessName: { $regex: req.query.search, $options: "i" }
-    })
-
-    // .sort({
-    //     score: { $meta: 'textScore ' }
-    // })
-    // .limit(5)
+    let regex = new RegExp(req.query.search)
+    const q = {
+        state: req.user.state,
+        $or: [{
+                businessName: { $regex: regex, $options: "gi" }
+            },
+            { regNumber: { $regex: regex, $options: "gi" } }
+        ],
+    }
+    const business = await Business
+        .find(q)
+        .limit(100)
+        // .sort({
+        //     score: { $meta: 'textscore' }
+        // })
     res.json(business)
 }
 
@@ -146,4 +156,45 @@ exports.getSearchedData = async(req, res) => {
 exports.editForm = async(req, res) => {
     const business = await Business.find({ _id: req.params.id })
     res.render('editForm', { title: `edit ${business.businessName}`, business })
+}
+
+function saveImage(business, fileEncoded) {
+
+    if (fileEncoded == null || undefined) return
+    const file = JSON.parse(fileEncoded)
+    if (file != null && fileMimeType.includes(file.type)) {
+        business.file = new Buffer.from(file.data, 'base64')
+        business.fileType = file.type
+    }
+}
+
+exports.edit = async(req, res) => {
+    const fileMimeType = ['application/pdf']
+    if (req.body.file == '' || null || undefined) {
+        const [proprietors] = [req.body.proprietors]
+        const { regNumber, businessName, businessAddress, state, dateOfReg, natureOfBusiness, author } = req.body
+
+        const business = await Business.findOneAndUpdate({ _id: req.params.id }, { regNumber, businessName, businessAddress, state, dateOfReg, natureOfBusiness, proprietors, author }, { new: true, runValidators: true }).exec()
+
+        req.flash('success', `Successfully updated ${business.businessName}`)
+        res.redirect(`/${business.state}/business/${business._id}`)
+    }
+    if (req.body.file !== '' || null || undefined) {
+        let file = req.body.file
+        let fileType = null
+        const fileEncoded = JSON.parse(file)
+        if (fileEncoded != null && fileMimeType.includes(fileEncoded.type)) {
+            file = new Buffer.from(fileEncoded.data, 'base64')
+            fileType = fileEncoded.type
+        }
+
+        const { regNumber, businessName, businessAddress, state, dateOfReg, natureOfBusiness, author } = req.body
+
+        const [proprietors] = [req.body.proprietors]
+
+        const business = await Business.findOneAndUpdate({ _id: req.params.id }, { regNumber, businessName, businessAddress, state, dateOfReg, natureOfBusiness, proprietors, author, file, fileType }, { new: true, runValidators: true }).exec()
+
+        req.flash('success', `Successfully updated ${business.businessName}`)
+        res.redirect(`/${business.state}/business/${business._id}`)
+    }
 }

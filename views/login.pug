@@ -5,7 +5,7 @@ extends layout
 block content
 
   .inner
-    .signup-form
+    .signup-form.login__form
       form(action="/login" method="POST")
         h2 Login
         .form-group
@@ -14,4 +14,4 @@ block content
           input(type="password" class="form-control" name="password" placeholder="password" required="required")
                 
         .form-group
-          button(type="submit" class="btn btn-success btn-lg btn-block" id='connectSocket') Submit
+          button.button(type="submit" class="btn btn-success btn-lg btn-block" id='connectSocket') Login

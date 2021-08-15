@@ -96,7 +96,6 @@ export default class Socket {
         })
 
         this.socket.on('output', data => {
-            console.log(data)
             if (data.length && this.table) {
                 data.forEach(item => {
                     this.displayDetails(item)

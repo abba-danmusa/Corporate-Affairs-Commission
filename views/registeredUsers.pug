@@ -1,4 +1,25 @@
-extends layout7
+extends layout
+
+block header
+  nav.nav
+    .site-identity
+      a(href="/admin")
+        img(src="/images/logos.png" alt="Site logo")
+    a.nav__button.button(href='/admin')
+      !=h.icon('arrow-left-solid')
+      span BACK
+    .nav__buttons
+      
+      a.button(href='#')
+        !=h.icon('user-solid') 
+        span admin
+      a.button(href='/admin/register-user')
+        !=h.icon('user-plus-solid')
+        span Register User
+      a.button(href='/admin/businesses')
+        !=h.icon('history-solid')
+        span History
+
 block content
  .container
   .table-wrapper

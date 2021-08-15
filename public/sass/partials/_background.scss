@@ -1,14 +1,27 @@
-.coatOfArm {
-    position: fixed;
-    top: 10vh;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+body {
+    background-color: #b4d69e;
+    .background {
+        // margin-top: 15vh;
+        // background-color: red;
+        height: 85vh;
+        width: fit-content;
+        position: fixed;
+        width: 60vw;
+        height: 85vh;
+        margin: 0vh 20vw;
+        svg {
+            width: 60vw;
+            height: 85vh;
+        }
+    }
 }
 
-.background {
-    margin: 0;
-    height: 100vh;
-    width: 100vw;
-    z-index: 0;
+@media only screen and (min-width: 2600px) {
+    body {
+        .background {
+            svg {
+                margin-top: 15vh;
+            }
+        }
+    }
 }

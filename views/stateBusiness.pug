@@ -1,8 +1,28 @@
 extends layout
 
+
+block header
+  nav.nav
+    .site-identity
+      a(href="/")
+        img(src="/images/logos.png" alt="Site logo")
+    .nav__buttons
+      if user
+        a.button(href='#')
+          !=h.icon('user-solid') 
+          span=user.userName
+        a.button(href='/register-user')
+          !=h.icon('user-plus-solid')
+          span Register User
+        a.button(href=`/${user.state}/saved-entries`)
+          !=h.icon('history-solid')
+          span History
+        a.button(href='/logout')
+          !=h.icon('sign-out')
+          span Logout
+
 include mixins/_business
 
 block content
   .inner
-    a.link__button(href=`/${user.state}/saved-entries`) BACK
   +business(business)

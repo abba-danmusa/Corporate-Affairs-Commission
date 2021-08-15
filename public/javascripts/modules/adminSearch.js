@@ -1,5 +1,4 @@
 import axios from 'axios'
-import dompurify from 'dompurify'
 import { $ } from './bling'
 
 function searchResultsHTML(businesses) {
@@ -10,14 +9,14 @@ function searchResultsHTML(businesses) {
                 <td>${business.businessName}</td>
                 <td>${business.natureOfBusiness}</td>
                 <td>${business.state}</td>
-                <td>${business.dateOfReg}</td>
-                <td><a class='link__button' style='color:white' href='/${business.state}/business/${business._id}'>VIEW</td>
+                <td>${business.dateOfReg.split('T')[0]}</td>
+                <td><a class='link__button' style='color:white' href='/admin/business/${business.businessName}/${business._id}'>VIEW</td>
             
         `
     }).join('')
 }
 
-function typeAhead(search) {
+function search(search) {
     if (!search) return
     const searchInput = search.querySelector('input[name="search"]')
     const searchResults = $('.search__results--table')
@@ -43,19 +42,19 @@ function typeAhead(search) {
         pagination.style.display = 'none'
             // searchResults.innerHTML = ''
 
-        axios.get(`/api/search?search=${this.value}`)
+        axios.get(`/admin/api/search?search=${this.value}`)
             .then(res => {
                 if (res.data.length) {
-
                     searchResults.innerHTML = searchResultsHTML(res.data)
-                        // searchResults.insertAdjacentHTML('afterbegin', searchResultsHTML(res.data))
+
+                    // searchResults.insertAdjacentHTML('afterbegin', searchResultsHTML(res.data))
                     return
                 } else if (res.data.length == 0) {
                     searchResults.innerHTML = `<h1 class="search__result">No results for <strong>${this.value}</strong> found</h1>`
                 }
             })
             .catch(err => {
-                alert(err)
+                console.error(err)
             })
     })
 
@@ -87,4 +86,4 @@ function typeAhead(search) {
     })
 }
 
-export default typeAhead
+export default search

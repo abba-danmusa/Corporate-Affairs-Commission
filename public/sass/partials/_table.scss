@@ -1,3 +1,15 @@
+.businesses {
+    z-index: 1;
+}
+
+#live {
+    z-index: 1;
+}
+
+.container {
+    z-index: 1;
+}
+
 .error {
     margin: 5vh;
     height: 10vh;
@@ -18,7 +30,8 @@
     border-collapse: collapse;
     width: 90vw;
     margin-left: 5vw;
-    margin-top: 7vh;
+    // margin-top: 7vh;
+    // z-index: 5;
 }
 
 .table td,

@@ -1,21 +1,34 @@
-extends layout4
+extends layout
+
+block header
+  nav.nav
+    .site-identity
+      a(href="/admin")
+        img(src="/images/logos.png" alt="Site logo")
+    a.nav__button.button(href='/admin')
+      !=h.icon('arrow-left-solid')
+      span BACK
+    .nav__buttons
+      
+      a.button(href='#')
+        !=h.icon('user-solid') 
+        span admin
+      a.button(href='/admin/register-user')
+        !=h.icon('user-plus-solid')
+        span Register User
+      a.button(href='/admin/registered-users')
+        !=h.icon('users-solid')
+        span Users
 
 include mixins/_pagination
 
 block content
   .businesses
-    //- button.open-btn Open Live Coming Data
-    //- div(id="businesses-wrapper")
-    //- script(src="/socket.io/socket.io.js")
-      //- .search__results
-    
-    //- form.search(action='/api/search' method='GET')
-    .search
+
+    .search.search__admin
       input.search__input(type="text" placeholder="Business Reg, Business name..." name="search")
-      span
-        i.fas.fa-search
-        //- button(type='submit')
-    table.table
+  
+    table.table.table-bordered.search__results(style='display: none')
       thead
         tr
           th REGISTRATION NO
@@ -24,19 +37,8 @@ block content
           th STATE
           th DATE
           th ACTION
-        tbody.search__results--table(id="myTable")
-    //- <table class="table">
-    //-         <thead>
-    //-             <tr>
-    //-                 <th> REGISTRATION NO </th>
-    //-                 <th> BUSINESS NAME </th>
-    //-                 <th> NATURE OF BUSINESS </th>
-    //-                 <th> STATE </th>
-    //-                 <th> DATE </th>
-    //-             </tr>
-    //-         </thead>
-    
-    table.table.hidden
+      tbody.search__results--table(id="myTable")
+    table.table.table-bordered.hidden
       thead
         tr
           th REGISTRATION NO
@@ -57,8 +59,8 @@ block content
             td
               =business.state
             td
-              =business.dateOfReg
+              =`${business.dateOfReg.getFullYear()}-${business.dateOfReg.getMonth()}-${business.dateOfReg.getDate()}`
             td
-              a.link__button(href=`/admin/business/${business.businessName}/${business._id}` style='color:white') VIEW
+              a.link__button(href=`/admin/business/${business.businessName}/${business._id}` style='color:white;background-color: #1c330d; padding: 4px;') VIEW
     +pagination(page, pages, total)  
       

@@ -26,6 +26,8 @@ html
             img(src="/images/logos.png" alt="Site logo")
           .nav__buttons
            a.link__button(href=`/${user.state}/saved-entries`) HISTORY
+           if user.hasPrivilege
+            a.link__button(href='/register-user') REGISTER-USER
            a.link__button(href='/logout') LOGOUT
            
     .businesses

@@ -73,14 +73,16 @@ app.use((req, res, next) => {
 
 app.use('/', userRoutes, adminRoutes)
 app.post('/', catchErrors(async(req, res) => {
-    const { regNumber, businessName, businessAddress, state, dateOfReg, natureOfBusiness, proprietor1, proprietor2, proprietor3, author, file } = req.body
+    const [proprietors] = [req.body.proprietors]
+    const { regNumber, businessName, businessAddress, state, dateOfReg, natureOfBusiness, author, file } = req.body
 
-    const business = new Business({ regNumber, businessName, businessAddress, state, dateOfReg, natureOfBusiness, proprietor1, proprietor2, proprietor3, author })
+    const business = new Business({ regNumber, businessName, businessAddress, state, dateOfReg, natureOfBusiness, author, proprietors })
 
     saveImage(business, file)
     await business.save()
     io.emit('document', [req.body])
-    res.redirect('/')
+    req.flash('success', 'Sent Successfully')
+    res.redirect('back')
 }))
 
 // if that above routes didnt work, 404 them and forward to error handler
@@ -124,14 +126,14 @@ io.on('connection', function(socket) {
         socket.emit('status', s)
     }
 
-    app.post('/', async(req, res) => {
-        const { regNumber, businessName, businessAddress, state, dateOfReg, natureOfBusiness, proprietor1, proprietor2, proprietor3, author, file } = req.body
-        const business = new Business({ regNumber, businessName, businessAddress, state, dateOfReg, natureOfBusiness, proprietor1, proprietor2, proprietor3, author })
-        saveImage(business, file)
-        await business.save()
-        io.emit('document', [req.body])
-        res.redirect('/')
-    })
+    // app.post('/', async(req, res) => {
+    //     const { regNumber, businessName, businessAddress, state, dateOfReg, natureOfBusiness, proprietor1, proprietor2, proprietor3, author, file } = req.body
+    //     const business = new Business({ regNumber, businessName, businessAddress, state, dateOfReg, natureOfBusiness, proprietor1, proprietor2, proprietor3, author })
+    //     saveImage(business, file)
+    //     await business.save()
+    //     io.emit('document', [req.body])
+    //     res.redirect('/')
+    // })
 
     Business.find({ dateEntered: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) } }).sort({ _id: 1 }).then(data => {
         socket.emit('output', data)

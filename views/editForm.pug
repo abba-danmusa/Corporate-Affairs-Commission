@@ -1,48 +1,72 @@
-extends layout5
+extends layout
+
+block header
+  nav.nav
+    .site-identity
+      a(href="/")
+        img(src="/images/logos.png" alt="Site logo")
+    a.nav__button.button(href='/')
+      !=h.icon('arrow-left-solid')
+      span BACK
+    .nav__buttons
+      if user
+        a.button(href='#')
+          !=h.icon('user-solid') 
+          span=user.userName
+        if user.hasPrivilege
+          a.button(href='/register-user')
+            !=h.icon('user-plus-solid')
+            span Register User
+        a.button(href=`/${user.state}/saved-entries`)
+          !=h.icon('history-solid')
+          span History
+        a.button(href='/logout')
+          !=h.icon('sign-out')
+          span Logout
 
 include mixins/_pagination
 
 block content
-  
-  |
-  br
 
   .entry-form
     #live
       .status
-      h2 Register
-      form#businessDetailsForm(action='/' method="POST" name='entry')
-        .left
-          .form-group
-            input.regNumber(type="text" class="form-control" name="regNumber" placeholder="REGISTRATION NO" required="required" value=`${business.regNumber}`)
-          .form-group
-            input.businessName(type="text" class="form-control" name="businessName" placeholder="BUSINESS NAME" required="required" value= `${business.businessName}`)
-          .form-group
-            input.businessAddress(type="text" class="form-control" name="businessAddress" placeholder="BUSINESS ADDRESS" required="required" value=`${business.businessAddress}`)
-          .form-group
-            input.state(type="text" class="form-control" name="state"  required="required" value=`${user.state}` readonly)
-          .form-group
-            label(for="dateOfReg") DATE REGISTERED
-            input.dateOfReg(type="date" name='dateOfReg' max=`${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}` required='required' placeholder='DATE REGISTERED' value=`${business.dateOfReg}`)
-        .right
-          .form-group
-            input.natureOfBusiness(type="text" class="form-control" name="natureOfBusiness" placeholder="NATURE OF BUSINESS" required="required" value=`${business.natureOfBusiness}`)
-          .form-group
-            input.proprietor1(type="text" class="form-control" name="proprietor1" placeholder="PROPRIETOR 1" required="required" value=`${business.proprietor1}`)
-          .form-group
-            input.proprietor2(type="text" class="form-control" name="proprietor2" placeholder="PROPRIETOR 2" value=`${business.proprietor2}`)
-          .form-group
-            input.proprietor3(type="text" class="form-control" name="proprietor3" placeholder="PROPRIETOR 3" value=`${business.proprietor3}`)
-          .form-group
-            input.author(type="text" class="form-control" name="author"  required="required" value=`${user.name}` readonly)
-          .form-group
-            label(for="file") Upload file
-            input.file(type="file" class="filepond ui file small"  name="file" accept="pdf"  value=`${business.file}`)
-          //- .form-group
-          //-   input.proprietor(type="text" class="form-control" name="proprietor" placeholder="PROPIETOR 2")
-          //- .form-group
-          //-   input.proprietor(type="text" class="form-control" name="proprietor" placeholder="PROPIETOR 3")  
+      h2 Register 
+      each item in business
+        !=h.dump(item.business)
+        form#businessDetailsForm(action=`/edit/${item._id}` method="POST" name='entry')
+          .left
+            .form-group
+              input.regNumber(type="text" class="form-control" name="regNumber" placeholder="REGISTRATION NO" required="required" value=`${item.regNumber}`)
+            .form-group
+              input.businessName(type="text" class="form-control" name="businessName" placeholder="BUSINESS NAME" required="required" value= `${item.businessName}`)
+            .form-group
+              input.businessAddress(type="text" class="form-control" name="businessAddress" placeholder="BUSINESS ADDRESS" required="required" value=`${item.businessAddress}`)
+            .form-group
+              input.state(type="text" class="form-control" name="state"  required="required" value=`${user.state}` readonly)
+            input.button#changeDate(type='submit' style='background-color:green, color:white' value='EDIT DATE')
+            .form-group#hide
+              label(for="dateOfReg") DATE REGISTERED
+              input.dateOfReg(type="text" name='dateOfReg' max=`${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}` value=`${item.dateOfReg.getMonth()}/${item.dateOfReg.getDate()}/${item.dateOfReg.getFullYear()}` readonly)
+            .form-group#editDate(style='display:none')
+              label(for="dateOfReg") DATE REGISTERED
+          .right
+            .form-group
+              input.natureOfBusiness(type="text" class="form-control" name="natureOfBusiness" placeholder="NATURE OF BUSINESS" required="required" value=`${item.natureOfBusiness}`)
+            each proprietor in item.proprietors
+              .form-group
+                input.proprietor1(type="text" class="form-control" name="proprietors" placeholder="PROPRIETOR 1" required="required" value=`${proprietor}`)
+            label(for="author") EDITED BY
+            .form-group
+              input.author(type="text" class="form-control" name="author"  required="required" value=`${user.name}` readonly)
+            .form-group
+              label(for="file") Upload file
+              input.file(type="file" class="filepond small"  name="file" accept="application/pdf")
+            //- .form-group
+            //-   input.proprietor(type="text" class="form-control" name="proprietor" placeholder="PROPIETOR 2")
+            //- .form-group
+            //-   input.proprietor(type="text" class="form-control" name="proprietor" placeholder="PROPIETOR 3")  
 
-          .form-group
-            button.link__button(type="submit" class="btn btn-success btn-lg btn-block" id="save") Save
+            .form-group
+              button.button(type="submit" class="btn btn-success btn-lg btn-block" id="save") Save
       script(src="/socket.io/socket.io.js")  

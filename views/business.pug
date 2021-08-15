@@ -1,16 +1,52 @@
 extends layout
+
+block header
+  nav.nav
+    .site-identity
+      a(href="/admin")
+        img(src="/images/logos.png" alt="Site logo")
+    a.nav__button.button(href='/admin/businesses')
+      !=h.icon('arrow-left-solid')
+      span BACK
+    .nav__buttons
+      
+      a.button(href='#')
+        !=h.icon('user-solid') 
+        span admin
+      a.button(href='/admin/register-user')
+        !=h.icon('user-plus-solid')
+        span Register User
+      a.button(href='/admin/registered-users')
+        !=h.icon('users-solid')
+        span Users
+      a.button(href='/admin/businesses')
+        !=h.icon('history-solid')
+        span History
+
 block content
-  a.link__button(href="/admin/businesses") BACK
   .business
     h1= `BUSINESS NAME: ${business.businessName}`
-    h3= `REGISTRATION NO.: ${business.regNumber}`
-    h4= `ADDRESS: ${business.businessAddress}` 
-    h4= `NATURE OF BUSINESS: ${business.natureOfBusiness}`
-    h4= `REGISTRATION DATE: ${business.dateOfReg}`
-    h4= `PROPRIETORS: ${business.proprietors}`
-    h6= `SAVED BY: ${business.author}`
+    .details
+      .left__side
+        h3
+          strong= 'REGISTRATION NO.:' 
+        h3
+          strong= 'ADDRESS:'
+        h3
+          strong= 'NATURE OF BUSINESS:' 
+        h3
+          strong= 'REGISTRATION DATE:'
+        h3
+          strong= 'PROPRIETORS:'
+        h6
+          strong= 'SAVED BY:'
+      .right__side
+        h3=business.regNumber
+        h3=business.businessAddress
+        h3=business.natureOfBusiness
+        h3=business.dateOfReg
+        h3=business.proprietors
+        h6=business.author
     if business.file
-      //- !=h.dump(business.fileSrc)
       .pdf
         embed(src=`${business.fileSrc}#toolbar=1` type='application/pdf' width='1000vw' height='600px')
-        

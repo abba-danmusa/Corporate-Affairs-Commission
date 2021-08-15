@@ -70,6 +70,6 @@ exports.isLoggedIn = (req, res, next) => {
         next()
         return
     }
-    req.flash('error', 'You must login to Enter any Business Info.')
+    req.flash('info', 'You must login to Enter any Business Info.')
     res.redirect('/login')
 }

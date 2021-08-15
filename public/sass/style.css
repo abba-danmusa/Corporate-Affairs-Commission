@@ -465,32 +465,112 @@ template {
   display: none;
 }
 
-nav {
-  background-color: #1c330d;
+body {
+  background-color: #b4d69e;
 }
 
-.nav {
-  background-color: #1c330d;
+body .background {
+  height: 85vh;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
   position: fixed;
+  width: 60vw;
+  height: 85vh;
+  margin: 0vh 20vw;
+}
+
+body .background svg {
+  width: 60vw;
+  height: 85vh;
+}
+
+@media only screen and (min-width: 2600px) {
+  body .background svg {
+    margin-top: 15vh;
+  }
+}
+
+nav {
+  position: fixed;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  top: 0;
+  margin: 0;
+  background-color: #b4d69e;
+  width: 100%;
+  z-index: 2;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
 }
 
-.nav__buttons {
-  margin-left: 65vw;
+nav .button {
+  color: #1c330d;
 }
 
-.link__button {
-  font-size: 16px;
-  background-color: #1c330d;
-  height: 5vh;
+nav .button svg {
+  width: 25px;
+  height: 25px;
+}
+
+nav .button svg > path {
+  fill: #1c330d;
+}
+
+.nav__button {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
-  color: white;
-  text-decoration: none;
-  padding: 5px 10px;
+  top: 6vh;
+}
+
+.nav__buttons {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 30vw;
+  top: 6vh;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+
+.nav__buttons .button {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
 }
 
 .site-identity {
@@ -505,6 +585,7 @@ nav {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  margin-top: 20vh;
 }
 
 @-webkit-keyframes slideIn {
@@ -537,16 +618,30 @@ nav {
   }
 }
 
+.inner {
+  position: absolute;
+  top: 25vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
 .flash {
+  position: absolute;
+  top: -10vh;
   background: white;
   -webkit-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
           box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
   margin-bottom: 2rem;
-  margin-left: 35%;
-  width: 30%;
+  margin-left: 30vw;
+  width: 40vw;
   padding: 2rem;
   position: relative;
-  z-index: 1;
+  z-index: 3;
   border-radius: 3px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -616,15 +711,8 @@ nav {
   margin: 0;
 }
 
-.status {
-  display: none;
-  border: 5px ridge;
-  margin-bottom: 5rem;
-  padding: 10px;
-}
-
 .search {
-  width: 50vw;
+  width: 40vw;
   margin-left: 50vw;
   margin-bottom: -5px;
 }
@@ -636,6 +724,7 @@ nav {
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
+  border-radius: 20px;
 }
 
 form.search input[type=text] {
@@ -679,23 +768,84 @@ form.search::after {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  background-color: #aed495;
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
+  background-color: rgba(180, 214, 158, 0.7);
+  -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   width: 80vw;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
   margin: 2vh 10vw;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
   color: #1c330d;
   text-transform: uppercase;
+  z-index: 1;
 }
 
 .business h1 {
   background-color: #1c330d;
+  width: 100%;
   color: white;
   padding: 10px;
+  margin: 2vh 0vw;
+  text-align: center;
+}
+
+.business .details {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.business .right__side {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 50vw;
+}
+
+.business .right__side h3,
+.business .right__side h6 {
+  margin-top: 2vh;
+  padding: 4px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  text-align: center;
+}
+
+.business .left__side {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 18vw;
+  margin-left: 10vw;
+}
+
+.business h3,
+.business h6 {
+  border-bottom: 3px ridge #1c330d;
+}
+
+.business a {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
 }
 
 .business .pdf {
@@ -710,16 +860,25 @@ form.search::after {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  width: 40vw;
+  width: 30vw;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
-  margin: 5vh 30vw;
-  background-color: #aed495;
+  margin: 5vh 35vw;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
   color: #1c330d;
+  background-color: rgba(180, 214, 158, 0.5);
+  -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+}
+
+.signup-form .button {
+  margin: 0 0 4vh 0;
+  padding: 4px;
 }
 
 .form-group button {
@@ -731,23 +890,30 @@ form.search::after {
 input[type=text],
 input[type=password],
 input[type=date],
+input[type=file],
 select {
   width: 100%;
   padding: 15px;
   margin: 5px 0 22px 0;
   display: inline-block;
   border: none;
-  background: #f1f1f1;
+  border-bottom: 5px ridge #1c330d;
+  color: #1c330d;
 }
 
 .entry-form {
-  background-color: #D7DAD5;
+  background-color: rgba(180, 214, 158, 0.4);
+  -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-backdrop-filter: blur(2px);
+          backdrop-filter: blur(2px);
   width: 80vw;
   margin-left: 10vw;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
   color: #1c330d;
+  z-index: 1;
 }
 
 .entry-form h2 {
@@ -764,6 +930,12 @@ select {
           flex-direction: row;
   -ms-flex-pack: distribute;
       justify-content: space-around;
+}
+
+.entry-form form .button {
+  padding: 4px;
+  font-size: 16px;
+  margin-top: 2px;
 }
 
 .entry-form form .left {
@@ -1223,6 +1395,18 @@ textarea.tall-textarea {
   font-size: .75rem;
 }
 
+.businesses {
+  z-index: 1;
+}
+
+#live {
+  z-index: 1;
+}
+
+.container {
+  z-index: 1;
+}
+
 .error {
   margin: 5vh;
   height: 10vh;
@@ -1243,7 +1427,6 @@ textarea.tall-textarea {
   border-collapse: collapse;
   width: 90vw;
   margin-left: 5vw;
-  margin-top: 7vh;
 }
 
 .table td,

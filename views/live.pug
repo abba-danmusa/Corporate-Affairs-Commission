@@ -1,20 +1,39 @@
-extends layout2
+extends layout
+
+block header
+  nav.nav
+    .site-identity
+      a(href="/admin")
+        img(src="/images/logos.png" alt="Site logo")
+    .nav__buttons
+      
+      a.button(href='#')
+        !=h.icon('user-solid') 
+        span admin
+      a.button(href='/admin/register-user')
+        !=h.icon('user-plus-solid')
+        span Register User
+      a.button(href='/admin/registered-users')
+        !=h.icon('users-solid')
+        span Users
+      a.button(href='/admin/businesses')
+        !=h.icon('history-solid')
+        span History
+
 block content
 
- h21 Newly Registered
- 
-   
- #live
-      table.table
-        thead
-          tr
-            th 
-            th REGISTRATION NO
-            th BUSINESS NAME
-            th NATURE OF BUSINESS
-            th STATE
-            th DATE REGISTERED
-        tbody(id="table")
 
-  
-      script(src="/socket.io/socket.io.js")
+ #live
+    table.table
+      thead
+        tr
+          th 
+          th REGISTRATION NO
+          th BUSINESS NAME
+          th NATURE OF BUSINESS
+          th STATE
+          th DATE REGISTERED
+      tbody(id="table")
+
+
+    script(src="/socket.io/socket.io.js")

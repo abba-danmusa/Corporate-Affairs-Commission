@@ -178,3 +178,18 @@ exports.deleteBusiness = async(req, res) => {
     req.flash('success', 'Business Details Has Been Deleted Successfully')
     res.redirect('/admin/businesses')
 }
+
+exports.searchByBusinessName = async(req, res) => {
+    let regex = new RegExp(req.query.search)
+    const q = {
+        $or: [{
+                businessName: { $regex: regex, $options: "gi" }
+            },
+            { regNumber: { $regex: regex, $options: "gi" } }
+        ]
+    }
+    const business = await Business
+        .find(q)
+        .limit(100)
+    res.json(business)
+}

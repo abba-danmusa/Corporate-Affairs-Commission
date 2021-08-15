@@ -7,19 +7,43 @@ html
     link(href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet")
     meta(charset="utf-8")
     script(defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous")
+    link(href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet")
+    script(src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.js")
+    script(src="https://unpkg.com/filepond/dist/filepond.js")
+
+    link(href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
+    rel="stylesheet")
+    script(src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js")
+
+    script(src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js")
+    script(src="https://unpkg.com/filepond-plugin-image-transform/dist/filepond-plugin-image-transform.js")
+
+    script(src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js")
+    script(src="https://unpkg.com/filepond/dist/filepond.js")
+
+    script(src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js")
+    script(src="https://unpkg.com/filepond/dist/filepond.js")
     
   body
+    .background  
+      !=h.icon('coatOfArm')
     block header
-      .nav
-       .site-identity
+      nav.nav
+        .site-identity
           a(href="/")
-            img(src="/images/logos.png" alt="Site logo")
+            img(src="/images/logos.png" alt="Site logo") 
+          //- if user
+          //-   a.link__button(href='/logout') LOGOUT
+          //-   a.link__button(href=`/${user.state}/saved-entries`) HISTORY
+          //-   //- a.link__button(href='/back') BACK
+          //-   if user.hasPrivilege
+          //-     a.link__button(href='/register-user') CREATE-USER
           
-           
-    .businesses
- 
-    //- .coatOfArm
-    //-   !=h.icon('coatOfArm')
+          
+    //- .businesses
+
+    //- //- .coatOfArm
+    //- //-   !=h.icon('coatOfArm')
     block messages
       if locals.flashes
         .inner
