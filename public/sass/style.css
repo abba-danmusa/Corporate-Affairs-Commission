@@ -860,11 +860,11 @@ form.search::after {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  width: 30vw;
+  width: 40vw;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
-  margin: 5vh 35vw;
+  margin: 5vh 30vw;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -879,6 +879,46 @@ form.search::after {
 .signup-form .button {
   margin: 0 0 4vh 0;
   padding: 4px;
+}
+
+.signup-form .register__user {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.signup-form .register__user .button {
+  padding: 4px;
+  font-size: 16px;
+  margin-top: 2px;
+}
+
+.signup-form .register__user .left {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 40%;
+}
+
+.signup-form .register__user .right {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 40%;
 }
 
 .form-group button {
@@ -958,6 +998,75 @@ select {
       -ms-flex-direction: column;
           flex-direction: column;
   width: 40%;
+}
+
+.task {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  width: 95vw;
+  margin: 0 2.5vw;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  z-index: 1;
+}
+
+.task .left {
+  width: 10vw;
+}
+
+.task .left .treated,
+.task .left .pendings {
+  background-color: rgba(180, 214, 158, 0.5);
+  -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+  margin-bottom: 5vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
+}
+
+.task .right {
+  width: 10vw;
+}
+
+.task .right .total__treated,
+.task .right .total__pendings {
+  background-color: rgba(180, 214, 158, 0.5);
+  -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+  margin-bottom: 5vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
+}
+
+.users {
+  z-index: 1;
 }
 
 body,
@@ -1407,6 +1516,11 @@ textarea.tall-textarea {
   z-index: 1;
 }
 
+.tasks,
+.user__taskQueue {
+  z-index: 1;
+}
+
 .error {
   margin: 5vh;
   height: 10vh;
@@ -1425,8 +1539,7 @@ textarea.tall-textarea {
 .table {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
-  width: 90vw;
-  margin-left: 5vw;
+  width: 70vw;
 }
 
 .table td,

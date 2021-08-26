@@ -3,25 +3,21 @@ extends layout
 block header
   nav.nav
     .site-identity
-      a(href="/admin")
+      a(href="/")
         img(src="/images/logos.png" alt="Site logo")
     a.nav__button.button(href='/admin/businesses')
       !=h.icon('arrow-left-solid')
       span BACK
     .nav__buttons
-      
       a.button(href='#')
         !=h.icon('user-solid') 
-        span admin
-      a.button(href='/admin/register-user')
+        span=user.userName
+      a.button(href='/register-user')
         !=h.icon('user-plus-solid')
         span Register User
-      a.button(href='/admin/registered-users')
-        !=h.icon('users-solid')
-        span Users
-      a.button(href='/admin/businesses')
-        !=h.icon('history-solid')
-        span History
+      a.button(href='/logout')
+        !=h.icon('sign-out')
+        span Logout
 
 block content
   .business
@@ -49,4 +45,4 @@ block content
         h6=business.author
     if business.file
       .pdf
-        embed(src=`${business.fileSrc}#toolbar=1` type='application/pdf' width='1000vw' height='600px')
+        embed(src=`/uploads/${business.file}#toolbar=1` type='application/pdf' width='1000vw' height='600px')

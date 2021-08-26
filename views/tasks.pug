@@ -1,0 +1,55 @@
+extends layout
+
+block header
+  nav.nav
+    .site-identity
+      a(href="/")
+        img(src="/images/logos.png" alt="Site logo")
+
+    .nav__buttons
+      a.button(href='/logout')
+        !=h.icon('sign-out')
+        span Logout
+
+include mixins/_pagination
+
+block content
+  .tasks
+    
+    .search.search__user
+      input.search__input(type="text" placeholder='Search...' name="search")
+    table.table.table-bordered.search__results(style='display: none')
+      thead
+        tr
+          th REGISTRATION NO
+          th BUSINESS NAME
+          th NATURE OF BUSINESS
+          th STATE
+          th DATE
+          th ACTION
+      tbody.search__results--table(id="myTable")
+    table.table.table-bordered.hidden
+      thead
+        tr
+          th REGISTRATION NO
+          th BUSINESS NAME
+          th NATURE OF BUSINESS
+          th STATE
+          th DATE
+          th ACTION
+      tbody(id="myTable")
+        each business in userTask
+          tr
+            td
+              =business.regNumber
+            td
+              =business.businessName
+            td
+              =business.natureOfBusiness
+            td
+              =business.state
+            td
+              =`${business.dateOfReg.getFullYear()}-${business.dateOfReg.getMonth()}-${business.dateOfReg.getDate()}`
+            td
+              a.button(href=`/${user.state}/business/${business._id}` style='color:white;background-color: #1c330d; padding: 4px;') VIEW
+    +pagination(page, pages, total)

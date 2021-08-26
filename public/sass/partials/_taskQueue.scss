@@ -1,0 +1,37 @@
+.task {
+    display: flex;
+    flex-direction: row;
+    width: 95vw;
+    margin: 0 2.5vw;
+    justify-content: space-around;
+    z-index: 1;
+    .left {
+        width: 10vw;
+        .treated,
+        .pendings {
+            // border: 2px ridge#1c330d;
+            background-color: rgba(180, 214, 158, 0.5);
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            backdrop-filter: blur(6px);
+            margin-bottom: 5vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+    }
+    .right {
+        width: 10vw;
+        .total__treated,
+        .total__pendings {
+            background-color: rgba(180, 214, 158, 0.5);
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            backdrop-filter: blur(6px);
+            margin-bottom: 5vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+    }
+}

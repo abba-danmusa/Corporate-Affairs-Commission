@@ -17,9 +17,8 @@ export default class Socket {
         this.proprietor3 = $('.proprietor3')
         this.author = $('.author')
         this.file = $('.file')
-
-        // Calls for the event methods to execute on submit of the form
-        // this.events()
+            // Calls for the event methods to execute on submit of the form
+            // this.events()
 
         // Calls for the open connection method
         this.openConnection()
@@ -91,10 +90,12 @@ export default class Socket {
     }
     openConnection() {
         this.socket = io()
-        this.socket.on('welcome', data => {
-            this.userName = data.userName
+        this.socket.on('connect', () => {
+            console.log(this.socket.id)
         })
-
+        this.socket.on('welcome', user => {
+            console.log(user)
+        })
         this.socket.on('output', data => {
             if (data.length && this.table) {
                 data.forEach(item => {
@@ -103,11 +104,14 @@ export default class Socket {
             }
         })
         this.socket.on('document', data => {
-            if (data.length && this.table) {
-                data.forEach(item => {
+            console.log(data.user)
+            this.business = data.business[0]
+            console.log(this.business.queuedTo)
+            if (this.table && this.userId === this.socket) {
+                data.business.forEach(item => {
                     this.displayDetails(item)
                 })
-            }
+            } else return
         })
 
         this.socket.on('success', successMessage => {
@@ -147,20 +151,20 @@ export default class Socket {
     displayDetails(data) {
         [this.date] = data.dateOfReg.split('T')
         let tableRow = `
-        <tr>
-            <td><div class='pointer'></div></td>
-            <td>${data.regNumber}</td>
-            <td>${data.businessName}</td>
-            <td>${data.natureOfBusiness}</td>
-            <td>${data.state}</td>
-            <td>${this.date}</td>
-        </tr>
-        `
+                <tr>
+                    <td>${data.regNumber}</td>
+                    <td>${data.businessName}</td>
+                    <td>${data.natureOfBusiness}</td>
+                    <td>${data.state}</td>
+                    <td><a href='/${data.state}/${data.slug}/${data._id}'>VIEW</a></td>
+                </tr>
+            `
         this.table.insertAdjacentHTML('afterbegin', tableRow)
-            // setTimeout(() => {
-            //     this.pointer = $('.pointer')
-            //     if (this.pointer)
-            //         this.pointer.style.visibility = 'hidden'
-            // }, 90000)
+
+        // setTimeout(() => {
+        //     this.pointer = $('.pointer')
+        //     if (this.pointer)
+        //         this.pointer.style.visibility = 'hidden'
+        // }, 90000)
     }
 }

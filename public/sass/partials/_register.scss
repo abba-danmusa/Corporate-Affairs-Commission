@@ -1,9 +1,9 @@
 .signup-form {
     display: flex;
     flex-direction: column;
-    width: 30vw;
+    width: 40vw;
     height: fit-content;
-    margin: 5vh 35vw;
+    margin: 5vh 30vw;
     // background-color: #aed495;
     align-items: center;
     color: #1c330d;
@@ -14,6 +14,26 @@
     .button {
         margin: 0 0 4vh 0;
         padding: 4px;
+    }
+    .register__user {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        .button {
+            padding: 4px;
+            font-size: 16px;
+            margin-top: 2px;
+        }
+        .left {
+            display: flex;
+            flex-direction: column;
+            width: 40%;
+        }
+        .right {
+            display: flex;
+            flex-direction: column;
+            width: 40%;
+        }
     }
 }
 

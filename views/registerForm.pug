@@ -14,9 +14,16 @@ block header
         a.button(href='#')
           !=h.icon('user-solid') 
           span=user.userName
-        a.button(href=`/${user.state}/saved-entries`)
-          !=h.icon('history-solid')
-          span History
+        if user.userType
+          -let privilege = user.userType
+          if privilege == 'admin'
+            a.button(href='/admin/businesses')
+              !=h.icon('history-solid')
+              span History
+          else 
+            a.button(href=`/${user.state}/saved-entries`)
+              !=h.icon('history-solid')
+              span History
         a.button(href='/logout')
           !=h.icon('sign-out')
           span Logout
@@ -34,19 +41,73 @@ block content
         .form-group
           input(type="text" class="form-control" name="userName" placeholder="User Name" required="required")
 
-        .form-group
-          label(for='userType') Account Type
-          input(type="text" class="form-control" name="userType" value="user" required="required" readonly)
+        if user
+          -let privilege = user.userType
+          if privilege == 'admin' 
+            .form-group
+              label(for='userType') Account Type
+              select(id="select" name="userType")
+                option(value="supervisor") SUPERVISOR
+                option(value="user") USER
+
+          if privilege == 'supervisor'
+            .form-group
+              label(for='userType') Account Type
+              select(id="select" name="userType")
+                option(value="user") USER
 
         .form-group
           input(type="password" class="form-control" name="password" placeholder="Password" required="required")
 
         .form-group
           input(type="password" class="form-control" name="confirm-password" placeholder="Confirm Password" required="required")
-          
-        label(for="select") State
-        .form-group
-          input(type="text" class="form-control" name="state" value=user.state readonly required)
-
+        
+        if user
+          -let privilege = user.userType
+          if privilege == 'admin'
+            label(for="select") State:
+            select(id="select" name="state")
+              optgroup(label="SELECT--")
+              option(value="LAGOS") LAGOS
+              option(value="FCT") FCT
+              option(value="RIVERS") RIVERS
+              option(value="ABIA") ABIA
+              option(value="ADAMAWA") ADAMAWA
+              option(value="ANAMBRA") ANAMBRA
+              option(value="AKWA-IBOM") AKWA-IBOM
+              option(value="BAUCHI") BAUCHI
+              option(value="BAYELSA") BAYELSA
+              option(value="BENUE") BENUE
+              option(value="BORNU") BORNU
+              option(value="CROSS-RIVER") CROSS-RIVER
+              option(value="DELTA") DELTA
+              option(value="EBONYI") EBONYI
+              option(value="EDO") EDO
+              option(value="EKITI") EKITI
+              option(value="ENUGU") ENUGU
+              option(value="GOMBE") GOMBE
+              option(value="IMO") IMO
+              option(value="JIGAWA") JIGAWA
+              option(value="KADUNA") KADUNA
+              option(value="KANO") KANO
+              option(value="KATSINA") KATSINA
+              option(value="KEBBI") KEBBI
+              option(value="KOGI") KOGI
+              option(value="KWARA") KWARA
+              option(value="NASARAWA") NASARAWA
+              option(value="NIGER") NIGER
+              option(value="ONDO") ONDO
+              option(value="OGUN") OGUN
+              option(value="OYO") OYO
+              option(value="OSUN") OSUN
+              option(value="PLATEAU") PLATEAU
+              option(value="SOKOTO") SOKOTO
+              option(value="TARABA") TARABA
+              option(value="YOBE") YOBE
+              option(value="ZAMFARA") ZAMFARA
+          else
+            .form-group
+              label(for='userType') Account Type
+              input.state(type='text' name='state' value=`${user.state}` required readonly)
         .form-group
           button.button(type="submit" class="btn btn-success btn-lg btn-block") Register

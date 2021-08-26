@@ -1,0 +1,20 @@
+extends layout
+
+block header
+  nav.nav
+    .site-identity
+      a(href="/")
+        img(src="/images/logos.png" alt="Site logo")
+    .nav__buttons
+      a.nav__button.button(href='/')
+        !=h.icon('arrow-left-solid')
+        span BACK
+      a.button(href='/logout')
+        !=h.icon('sign-out')
+        span Logout
+
+block content
+  .stats
+    each user in users
+      .user
+        h4= user.name

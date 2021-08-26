@@ -2,23 +2,43 @@ extends layout
 
 block header
   nav.nav
-    .site-identity
-      a(href="/admin")
-        img(src="/images/logos.png" alt="Site logo")
-    a.nav__button.button(href='/admin')
-      !=h.icon('arrow-left-solid')
-      span BACK
-    .nav__buttons
-      
-      a.button(href='#')
-        !=h.icon('user-solid') 
-        span admin
-      a.button(href='/admin/register-user')
-        !=h.icon('user-plus-solid')
-        span Register User
-      a.button(href='/admin/registered-users')
-        !=h.icon('users-solid')
-        span Users
+    if user
+      if user.hasPrivilege
+        -let privilege = user.userType
+        if privilege == 'admin'
+          .site-identity
+            a(href="/")
+              img(src="/images/logos.png" alt="Site logo")
+          a.nav__button.button(href='/')
+            !=h.icon('arrow-left-solid')
+            span BACK
+          .nav__buttons
+            a.button(href='#')
+              !=h.icon('user-solid') 
+              span=user.userName
+            a.button(href='/register-user')
+              !=h.icon('user-plus-solid')
+              span Register User
+            a.button(href='/logout')
+              !=h.icon('sign-out')
+              span Logout
+    else
+      .site-identity
+        a(href="/admin")
+          img(src="/images/logos.png" alt="Site logo")
+      a.nav__button.button(href='/admin')
+        !=h.icon('arrow-left-solid')
+        span BACK
+      .nav__buttons
+        a.button(href='#')
+          !=h.icon('user-solid') 
+          span admin
+        a.button(href='/admin/register-user')
+          !=h.icon('user-plus-solid')
+          span Register User
+        a.button(href='/admin/registered-users')
+          !=h.icon('users-solid')
+          span Users
 
 include mixins/_pagination
 

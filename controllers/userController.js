@@ -1,9 +1,7 @@
 const Business = require('../models/business')
 const User = require('../models/user')
-const multer = require('multer')
 const { promisify } = require('es6-promisify')
-const { check, validationResult } = require('express-validator')
-const business = require('../models/business')
+const { find } = require('../models/user')
 
 exports.changePasswordForm = (req, res) => {
     res.render('changePassword', { title: 'Change Password' })
@@ -17,42 +15,23 @@ exports.back = (req, res) => {
     res.redirect('back')
 }
 
-exports.entryForm = (req, res) => {
-    res.render('entryForm', { title: 'New Registration Entry' })
-}
+exports.entryForm = async(req, res) => {
 
-const multerOptions = {
-    storage: multer.memoryStorage(),
-    fileFilter(req, file, next) {
-        const isPDF = file.mimetype.startsWith('application/pdf')
-        if (isPDF) {
-            next(null, true)
-        } else {
-            next({ message: 'That file type isn\'t allowed' }, false)
-        }
+    if (req.user.userType == 'headUser') {
+
+        const userTotalTasks = Business.getUserTotalTasks(req.user._id)
+        const userPendingTasks = Business.getPendingTasks(req.user._id)
+        const userTreatedTasks = Business.getTreatedTasks(req.user._id)
+        const [totalTasks, pendingTasks, treatedTasks] = await Promise.all([userTotalTasks, userPendingTasks, userTreatedTasks])
+
+        res.render('taskQueue', { title: 'Home', totalTasks, pendingTasks, treatedTasks })
+
+    } else if (req.user.userType == 'zonalUser') {
+        res.render('entryForm', { title: 'New Registration Entry' })
+    } else if (req.user.userType == 'headSupervisor') {
+        const users = await User.find({ userType: 'headUser' })
+        res.render('supervisor', { title: 'Home', users })
     }
-}
-
-exports.upload = multer(multerOptions).single('photo')
-
-exports.resize = async(req, res, next) => {
-    if (!req.file) {
-        next()
-        return
-    }
-    // const photo = await jimp.read(req.file.buffer)
-    // await photo.resize(800, jimp.AUTO)
-    // const extension = req.file.mimetype.split('/')[1]
-    // req.body.photo = `${uuid.v4()}.${extension}`
-    // await photo.write(`./public/uploads/${req.body.photo}`)
-    // next()
-}
-
-exports.post = (req, res) => {
-    res.json(req.body)
-}
-exports.view = (req, res) => {
-    res.render('post')
 }
 
 exports.createUserForm = async(req, res) => {
@@ -172,7 +151,8 @@ exports.edit = async(req, res) => {
     const fileMimeType = ['application/pdf']
     if (req.body.file == '' || null || undefined) {
         const [proprietors] = [req.body.proprietors]
-        const { regNumber, businessName, businessAddress, state, dateOfReg, natureOfBusiness, author } = req.body
+        const author = req.user._id
+        const { regNumber, businessName, businessAddress, state, dateOfReg, natureOfBusiness } = req.body
 
         const business = await Business.findOneAndUpdate({ _id: req.params.id }, { regNumber, businessName, businessAddress, state, dateOfReg, natureOfBusiness, proprietors, author }, { new: true, runValidators: true }).exec()
 
@@ -188,13 +168,180 @@ exports.edit = async(req, res) => {
             fileType = fileEncoded.type
         }
 
-        const { regNumber, businessName, businessAddress, state, dateOfReg, natureOfBusiness, author } = req.body
+        const { regNumber, businessName, businessAddress, state, dateOfReg, natureOfBusiness } = req.body
 
         const [proprietors] = [req.body.proprietors]
+        const author = req.user._id
 
         const business = await Business.findOneAndUpdate({ _id: req.params.id }, { regNumber, businessName, businessAddress, state, dateOfReg, natureOfBusiness, proprietors, author, file, fileType }, { new: true, runValidators: true }).exec()
 
         req.flash('success', `Successfully updated ${business.businessName}`)
         res.redirect(`/${business.state}/business/${business._id}`)
+    }
+}
+
+exports.superviseUser = async(req, res) => {
+
+    const userPromise = User.find({ _id: req.params.id })
+
+    const userTotalTasks = Business.getUserTotalTasks(req.params.id)
+    const userPendingTasks = Business.getPendingTasks(req.params.id)
+    const userTreatedTasks = Business.getTreatedTasks(req.params.id)
+    const [
+        [user], totalTasks, pendingTasks, treatedTasks
+    ] = await Promise.all([userPromise, userTotalTasks, userPendingTasks, userTreatedTasks])
+
+    res.render('user', { title: req.params.user, user, totalTasks, pendingTasks, treatedTasks })
+}
+
+exports.deactivateUser = async(req, res) => {
+
+    // deactivate the user
+    await User.findOneAndUpdate({ _id: req.params.id }, { isActive: false }, { runValidators: true, new: true }).exec()
+
+    const [user] = await User.find({ _id: req.params.id })
+
+    // find the next users
+    let nextUser = await User.find({ userType: 'headUser', isActive: true })
+
+    // if no other users, null the current user else take the first user
+    nextUser.length < 1 ? nextUser = null : [nextUser] = nextUser
+
+    // if users and the initial user is task-flagged, task-flag next user and deactivate the initial user
+    if (user.taskFlag === true && nextUser !== null) {
+
+        // untask-flag user
+        await User.findOneAndUpdate({ _id: req.params.id }, { taskFlag: false }, { runValidators: true, new: true }).exec()
+
+        // task-flag next user
+        const serialNumber = nextUser.serialNumber
+        await User.findOneAndUpdate({ serialNumber: serialNumber, isActive: true }, { taskFlag: true }, { runValidators: true, new: true }).exec()
+
+        req.flash('success', 'The User has been deactivated successfully')
+        res.redirect('back')
+    }
+    // if user is not task-flagged and next user is not null
+    else if (user.taskFlag === false && nextUser !== null) {
+        // just task-flag the next user
+        const serialNumber = nextUser.serialNumber
+        await User.findOneAndUpdate({ serialNumber: serialNumber, isActive: true }, { taskFlag: true }, { runValidators: true, new: true }).exec()
+
+        req.flash('success', 'The User has been deactivated successfully')
+        res.redirect('back')
+
+    } else {
+
+        // reactivates the user since no other users
+        await User.findOneAndUpdate({ _id: req.params.id }, { isActive: true }, { runValidators: true, new: true }).exec()
+
+        req.flash('info', 'This is the last active user; cannot be deactivated')
+        res.redirect('back')
+    }
+
+}
+
+exports.activateUser = async(req, res) => {
+
+    await User.findOneAndUpdate({ _id: req.params.id }, { isActive: true }, { runValidators: true, new: true }).exec()
+
+    req.flash('success', 'The User has been activated successfully')
+    res.redirect('back')
+}
+
+exports.shareTaskQueue = async(req, res) => {
+
+    // get all the businesses that are assigned to the user 
+    const usersTaskQueuePromise = Business.find({ queuedTo: req.params.id })
+
+    // get the user
+    const userPromise = User.find({ _id: req.params.id })
+
+    // destructure the resolved promise array
+    const [
+        [user], usersTaskQueue
+    ] = await Promise.all([userPromise, usersTaskQueuePromise])
+
+    if (user.isActive == true) {
+        req.flash('info', 'Please deactivate the user to share his/her task queue')
+        res.redirect('back')
+        return
+    }
+
+    // loop through all the user's task queue and reassign to others
+    for (let i = 0; i < usersTaskQueue.length; i++) {
+
+        // get the task-flagged user and the serial number
+        const [taskFlaggedUser] = await User.getTaskFlaggedUser()
+        const userSerialNumber = taskFlaggedUser.serialNumber
+
+        // get the next users to be task-flagged
+        let nextTaskFlaggedUser = await User.find({ serialNumber: { $gt: userSerialNumber }, isActive: true })
+
+        // if users exist, get the first active user after the task-flagged user, if not, get the first active user before the task-flagged user
+        nextTaskFlaggedUser.length ? nextTaskFlaggedUser = nextTaskFlaggedUser[0] : [nextTaskFlaggedUser] = await User.find({ serialNumber: { $lt: userSerialNumber }, isActive: true })
+
+        // reassign the task to the task-flagged user
+        await Business.findOneAndUpdate({ _id: usersTaskQueue[i]._id }, { queuedTo: taskFlaggedUser._id }, { runValidators: true, new: true }).exec()
+
+        // find the task-flagged user and update the taskFlag field to false 
+        await User.findOneAndUpdate({ _id: taskFlaggedUser._id }, { taskFlag: false }, { new: true, runValidators: true }).exec()
+
+        // if exist, find the next user to be task-flagged and update the taskFlag field to true
+        if (nextTaskFlaggedUser) {
+            await User.findOneAndUpdate({ _id: nextTaskFlaggedUser._id }, { taskFlag: true }, { new: true, runValidators: true }).exec()
+        }
+        // if doesn't exist, task-flag the previous user
+        else {
+            await User.findOneAndUpdate({ _id: taskFlaggedUser._id }, { taskFlag: true }, { new: true, runValidators: true }).exec()
+        }
+    }
+
+    req.flash('success', 'Successfully distributed to other users')
+    res.redirect('back')
+}
+
+exports.userTasks = async(req, res) => {
+
+    const page = req.params.page || 1
+    const limit = 10
+    const skip = (page * limit) - limit
+
+    const userTasks = await Business
+        .find({ queuedTo: req.params.id })
+        .sort({ _id: 1 })
+        .skip(skip)
+        .limit(limit)
+
+    // const businessesPromise = await Business
+    //     .find({ state: req.params.state })
+    //     .sort({ _id: -1 })
+    //     .skip(skip)
+    //     .limit(limit)
+
+    const totalUserTasksPromise = Business
+        .find({ state: req.params.state })
+        .countDocuments()
+
+    const [userTask, total] = await Promise.all([userTasks, totalUserTasksPromise])
+    const pages = Math.ceil(total / limit)
+
+    if (!userTask.length && skip) {
+        req.flash('info', `Page ${page} does not exist only page ${pages}`)
+        res.redirect(`/tasks/${pages}`)
+        return
+    }
+
+    res.render('tasks', { title: 'User Tasks', userTask, page, pages, total })
+}
+
+exports.getStats = async(req, res) => {
+    if (req.user.userType == 'headSupervisor') {
+        const businessesPromise = Business.find({})
+        const usersPromise = User.find({ userType: 'headUser' })
+        const [businesses, users] = await Promise.all([businessesPromise, usersPromise])
+        res.render('stats', { title: 'Stats', businesses, users })
+    } else {
+        req.flash('info', 'You are not privileged to view that page')
+        res.redirect('back')
     }
 }

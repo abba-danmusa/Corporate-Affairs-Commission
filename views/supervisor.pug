@@ -1,0 +1,30 @@
+extends layout
+
+block header
+  nav.nav
+    .site-identity
+      a(href="/")
+        img(src="/images/logos.png" alt="Site logo")
+        
+    .nav__buttons
+      a.button(href='#')
+        !=h.icon('user-solid') 
+        span=user.userName
+      a.button(href='/stats')
+        span Stats
+      a.button(href='/logout')
+        !=h.icon('sign-out')
+        span Logout
+
+block content
+  .users
+    each user in users
+      .user
+        h3= user.name
+        h4= user.userName
+        h4 STATUS:
+          if user && user.isActive == true
+            span  ACTIVE
+          else
+            span  INACTIVE
+        a(href=`/${user.slug}/${user._id}`) VIEW

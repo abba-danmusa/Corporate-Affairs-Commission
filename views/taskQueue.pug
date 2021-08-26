@@ -1,0 +1,46 @@
+extends layout
+block header
+  nav.nav
+    .site-identity
+      a(href="/")
+        img(src="/images/logos.png" alt="Site logo")
+    .nav__buttons
+      a.button(href='#')
+        !=h.icon('user-solid') 
+        span=user.userName
+      a.button(href='/logout')
+        !=h.icon('sign-out')
+        span Logout
+
+block content
+  .task
+    .left
+      .treated
+        h3= treatedTasks.length
+        h4 TREATED
+      .pendings
+        h3= pendingTasks.length
+        h4 PENDINGS
+
+    #live
+      table.table
+        thead
+          tr
+            th REGISTRATION NO
+            th BUSINESS NAME
+            th NATURE OF BUSINESS
+            th STATE
+            th ACTION
+            //- th DATE REGISTERED
+        tbody(id="table")
+
+
+      script(src="/socket.io/socket.io.js")
+
+    .right
+      .total__treated
+        h3= totalTasks.length
+        h4 TOTAL RECEIVED
+      .total__pendings
+        h3= pendingTasks.length
+        h4 TOTAL PENDINGS

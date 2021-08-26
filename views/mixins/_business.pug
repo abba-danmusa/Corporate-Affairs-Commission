@@ -1,7 +1,8 @@
 mixin business(business)
   each item in business
     .business
-      if user.hasPrivilege
+      -let privilege = user.userType
+      if privilege == 'supervisor'
         a.button(href=`/edit/${item._id}` style='background-color: #1c330d; color: white; padding: 4px; margin-top: 8px;') EDIT
       h1= `BUSINESS NAME: ${item.businessName}`
       .details
@@ -26,6 +27,5 @@ mixin business(business)
           h3=item.proprietors
           h6=item.author
       if item.file
-        //- !=h.dump(business.fileSrc)
         .pdf
-          embed(src=`${item.fileSrc}#toolbar=1` type='application/pdf' width='1000vw' height='600px')
+          embed(src=`/uploads/${item.file}` type='application/pdf' width='1000vw' height='600px')

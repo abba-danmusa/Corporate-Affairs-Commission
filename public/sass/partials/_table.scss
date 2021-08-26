@@ -4,9 +4,15 @@
 
 #live {
     z-index: 1;
+    // width: 30vw;
 }
 
 .container {
+    z-index: 1;
+}
+
+.tasks,
+.user__taskQueue {
     z-index: 1;
 }
 
@@ -28,8 +34,8 @@
 .table {
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
-    width: 90vw;
-    margin-left: 5vw;
+    width: 70vw;
+    // margin-left: 5vw;
     // margin-top: 7vh;
     // z-index: 5;
 }

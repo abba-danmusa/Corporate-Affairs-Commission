@@ -14,6 +14,17 @@ exports.passwordProtected = (req, res, next) => {
     }
 }
 
+exports.sharedPasswordProtected = (req, res, next) => {
+    res.set('WWW-Authenticate', 'Basic realm="Corporate Affairs Commission"')
+    if (req.headers.authorization == 'Basic Y2FjYWRtaW46bG92ZQ==') {
+        next()
+    } else if (req.user && req.user.userType == 'admin') {
+        next()
+    } else {
+        res.status(401).send('Authentication Required')
+    }
+}
+
 exports.loginForm = (req, res) => {
     res.render('loginAdmin', { title: 'Admin Login' })
 }
@@ -49,7 +60,6 @@ exports.validateAdminRegister = async(req, res, next) => {
 }
 
 exports.validateRegister = async(req, res, next) => {
-    req.body.userType = 'administrator'
     await check('name').run(req)
     await check('name', 'You must supply a name').notEmpty().run(req)
     await check('userName', 'You must supply a user name').notEmpty().run(req)
@@ -78,9 +88,11 @@ exports.validateRegister = async(req, res, next) => {
 }
 
 exports.register = async(req, res) => {
+
     const user = new User(req.body)
     const register = promisify(User.register.bind(User))
     await register(user, req.body.password)
+
     req.flash('success', 'A new User Account has been created')
     res.redirect('back')
 }

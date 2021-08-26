@@ -8,20 +8,29 @@ block header
       a(href="/")
         img(src="/images/logos.png" alt="Site logo")
     .nav__buttons
-      if user
-        a.button(href='#')
-          !=h.icon('user-solid') 
-          span=user.userName
-        if user.hasPrivilege
-          a.button(href='/register-user')
-            !=h.icon('user-plus-solid')
-            span Register User
-        a.button(href=`/${user.state}/saved-entries`)
+      a.button(href='#')
+        !=h.icon('user-solid') 
+        span=user.userName
+      -let privilege = user.hasPrivilege
+      if privilege == 'admin'
+        a.button(href='/register-user')
+          !=h.icon('user-plus-solid')
+          span Register User
+      if privilege == 'supervisor'
+        a.button(href='/register-user')
+          !=h.icon('user-plus-solid')
+          span Register User
+      if privilege == 'admin'
+        a.button(href='/admin/businesses')
           !=h.icon('history-solid')
           span History
-        a.button(href='/logout')
-          !=h.icon('sign-out')
-          span Logout
+      else if privilege == 'supervisor' || 'user'
+        a.button(href=`${user.state}/saved-entries`)
+          !=h.icon('history-solid')
+          span History
+      a.button(href='/logout')
+        !=h.icon('sign-out')
+        span Logout
     //- .background   
     //-   !=h.icon('coatOfArm')
 
@@ -31,12 +40,12 @@ block header
       //-   a.link__button(href='/register-user') CREATE-USER
 
 block content
-  
+    //- !=h.dump(user.userType)
     .entry-form
       #live
         .status
         h2 Register
-        form#businessDetailsForm(action='/' method="POST" name='entry')
+        form#businessDetailsForm(action='/' method="POST" name='entry' enctype="multipart/form-data")
           .left
             .form-group
               input.regNumber(type="text" class="form-control" name="regNumber" placeholder="REGISTRATION NO" required="required")

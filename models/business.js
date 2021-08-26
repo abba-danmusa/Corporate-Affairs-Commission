@@ -1,5 +1,5 @@
-const { text } = require('body-parser')
 const mongoose = require('mongoose')
+const slug = require('slugs')
 
 const Schema = mongoose.Schema
 
@@ -16,6 +16,7 @@ const businessSchema = new Schema({
         required: 'You must enter a business name',
         unique: 'Business Name already exist'
     },
+    slug: String,
     businessAddress: {
         type: String,
         trim: true,
@@ -42,17 +43,26 @@ const businessSchema = new Schema({
         default: Date.now()
     },
     author: {
-        type: String
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+        required: 'You must supply an Author'
     },
     file: {
-        type: Buffer,
+        type: String,
         required: 'You must supply a pdf file'
     },
-    fileType: {
-        type: String,
-        required: 'Only pdf files are allowed'
+    queuedTo: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+        required: 'You must supply an author'
     },
-    slug: String
+    treated: {
+        type: Boolean,
+        default: false
+    },
+    dateTreated: {
+        type: Date
+    }
 })
 
 businessSchema.index({
@@ -61,14 +71,46 @@ businessSchema.index({
     state: 'text'
 })
 
-businessSchema.virtual('fileSrc').get(function() {
-    if (this.file != null) {
-        return `data:${this.fileType};charset=utf-8;base64,${this.file.toString('base64')}`
-    }
-})
+// businessSchema.virtual('fileSrc').get(function() {
+//     if (this.file != null) {
+//         return `data:${this.fileType};charset=utf-8;base64,${this.file.toString('base64')}`
+//     }
+// })
+
+businessSchema.statics.taskTo = function() {
+    return this.aggregate([
+        {}
+    ])
+}
+
+businessSchema.statics.getUserTotalTasks = function(userID) {
+    return this.find({ queuedTo: userID })
+}
+
+businessSchema.statics.getPendingTasks = function(userID) {
+    return this.find({ queuedTo: userID, treated: false })
+}
+
+businessSchema.statics.getTreatedTasks = function(userID) {
+    return this.find({ queuedTo: userID, treated: true })
+}
+
+// businessSchema.virtual('task', {
+//     ref: 'Task',
+//     localField: '_id',
+//     foreignField: 'business'
+// })
+
+// function autoPopulate(next) {
+//     this.populate('task')
+//     next()
+// }
+
+// businessSchema.pre('find', autoPopulate)
+// businessSchema.pre('findOne', autoPopulate)
 
 businessSchema.pre('save', async function(next) {
-    if (!this.isModified('name')) {
+    if (!this.isModified('businessName')) {
         next()
         return
     }
