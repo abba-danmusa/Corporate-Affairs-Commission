@@ -13,7 +13,7 @@ block header
       a.button(href='#')
         !=h.icon('user-solid') 
         span= user.userName
-      a.button(href=`/${user.state}/history`)
+      a.button(href='/admin/businesses')
         !=h.icon('history-solid')
         span History
       a.button(href='/logout')
@@ -36,8 +36,8 @@ block content
           .form-group
             label(for='userType') Account Type
             select(id="select" name="userType")
-              option(value="zonalSupervisor") SUPERVISOR
-              option(value="zonalUser") USER
+              option(value="headSupervisor") SUPERVISOR, HEAD OFFICE
+              option(value="headUser") USER, HEAD OFFICE
             //- input(type="text" class="form-control" name="userType" value="administrator" required="required" readonly)
         .right
           .form-group
@@ -47,10 +47,9 @@ block content
             input(type="password" class="form-control" name="confirm-password" placeholder="Confirm Password" required="required")
             
           label(for="select") State:
-          input(type='text' name='state' value=`${user.state}` readonly)
-          //- select(id="select" name="state")
-          //-   optgroup(label="SELECT--")
-          //-   option(value="FCT") HEAD OFFICE
+          select(id="select" name="state")
+            optgroup(label="SELECT--")
+            option(value="FCT") HEAD OFFICE
 
           .form-group
             button.button(type="submit" class="btn btn-success btn-lg btn-block") Register

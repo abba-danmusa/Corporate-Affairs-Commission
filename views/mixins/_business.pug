@@ -1,9 +1,14 @@
 mixin business(business)
   each item in business
     .business
-      -let privilege = user.userType
-      if privilege == 'supervisor'
+
+      if user.userType == 'headUser' && item.treated == false
+        form(action=`/${user.state}/${item.businessName}/${item._id}` method='POST' style='background-color: #1c330d; color: white; padding: 4px; margin-top: 8px;')
+          button.button(type=submit) ACKNOWLEDGE
+
+      if user.userType == 'zonalSupervisor'
         a.button(href=`/edit/${item._id}` style='background-color: #1c330d; color: white; padding: 4px; margin-top: 8px;') EDIT
+
       h1= `BUSINESS NAME: ${item.businessName}`
       .details
         .left__side
@@ -25,7 +30,7 @@ mixin business(business)
           h3=item.natureOfBusiness
           h3=item.dateOfReg
           h3=item.proprietors
-          h6=item.author
+          h6=item.author.name
       if item.file
         .pdf
-          embed(src=`/uploads/${item.file}` type='application/pdf' width='1000vw' height='600px')
+          embed(src=`/uploads/${item.file}` type='application/pdf' width='1000vw' height='550vh')

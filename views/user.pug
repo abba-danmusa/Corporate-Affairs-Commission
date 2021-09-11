@@ -17,81 +17,81 @@ block header
 block content
 
   .user__taskQueue
+    .actions
+      if user.isActive == true
+        form(action=`/deactivate/${user.slug}/${user._id}` method='post')
+          button.button(type=submit) DEACTIVATE USER
+      else
+        form(action=`/activate/${user.slug}/${user._id}` method='post')
+          button.button(type=submit) ACTIVATE USER
+      
+      form(action=`/share/${user.slug}/${user._id}` method='post')
+        button.button.share__button(type=submit)= `Share ${user.name.split(' ')[0]}'s Tasks`
 
-    if user.isActive == true
-      form(action=`/deactivate/${user.slug}/${user._id}` method='post')
-        button.button(type=submit) DEACTIVATE USER
-    else
-      form(action=`/activate/${user.slug}/${user._id}` method='post')
-        button.button(type=submit) ACTIVATE USER
-    
-    form(action=`/share/${user.slug}/${user._id}` method='post')
-      button.button.share__button(type=submit)= `Share ${user.name.split(' ')[0]}'s Tasks`
+      //- a.button(href=`/history/tasks/${user.slug}/${user._id}`)= `${user.userName.split(' ')[0]}'s tasks`
 
-    a.button(href=`/history/tasks/${user.slug}/${user._id}`)= `${user.userName.split(' ')[0]}'s tasks`
-
-    button.treated
-        h3= treatedTasks.length
-        h4 TREATED
-    button.pendings
-        h3= pendingTasks.length
-        h4 PENDINGS
-    button.total
-        h3= totalTasks.length
-        h4 TOTAL RECEIVED
+      button.treated
+          h3= treatedTasks.length
+          h6 TREATED
+      button.pendings
+          h3= pendingTasks.length
+          h6 PENDINGS
+      button.total
+          h3= totalTasks.length
+          h6 TOTAL RECEIVED
   
-    .search.search__user
-      input.search__input(type="text" placeholder='Search...' name="search")
-      table.table.table-bordered.search__results(style='display: none')
-        thead
+    //- .search.search__user
+    //-   input.search__input(type="text" placeholder='Search...' name="search")
+    table.table.table-bordered.search__results(style='display: none')
+      thead
+        tr
+          th REGISTRATION NO
+          th BUSINESS NAME
+          th NATURE OF BUSINESS
+          th STATE
+          th DATE
+          th ACTION
+      tbody.search__results--table(id="myTable")
+    table.table.table-bordered.hidden
+      thead
+        tr
+          th REGISTRATION NO
+          th BUSINESS NAME
+          th NATURE OF BUSINESS
+          th STATE
+          th DATE
+          th ACTION
+      tbody.totalTasks(id="myTable")
+        each business in totalTasks
           tr
-            th REGISTRATION NO
-            th BUSINESS NAME
-            th NATURE OF BUSINESS
-            th STATE
-            th DATE
-            th ACTION
-        tbody.search__results--table(id="myTable")
-      table.table.table-bordered.hidden
-        thead
+            td
+              =business.regNumber
+            td
+              =business.businessName
+            td
+              =business.natureOfBusiness
+            td
+              =business.state
+            td
+              =`${business.dateOfReg.getFullYear()}-${business.dateOfReg.getMonth()}-${business.dateOfReg.getDate()}`
+            td
+              a.button(href=`/${user.state}/business/${business._id}` style='color:white;background-color: #1c330d; padding: 4px;') VIEW
+      tbody.treatedTasks(id="myTable" style='display: none')
+        each business in treatedTasks
           tr
-            th REGISTRATION NO
-            th BUSINESS NAME
-            th NATURE OF BUSINESS
-            th STATE
-            th DATE
-            th ACTION
-        tbody.totalTasks(id="myTable")
-          each business in totalTasks
-            tr
-              td
-                =business.regNumber
-              td
-                =business.businessName
-              td
-                =business.natureOfBusiness
-              td
-                =business.state
-              td
-                =`${business.dateOfReg.getFullYear()}-${business.dateOfReg.getMonth()}-${business.dateOfReg.getDate()}`
-              td
-                a.button(href=`/${user.state}/business/${business._id}` style='color:white;background-color: #1c330d; padding: 4px;') VIEW
-        tbody.treatedTasks(id="myTable" style='display: none')
-          each business in treatedTasks
-            tr
-              td
-                =business.regNumber
-              td
-                =business.businessName
-              td
-                =business.natureOfBusiness
-              td
-                =business.state
-              td
-                =`${business.dateOfReg.getFullYear()}-${business.dateOfReg.getMonth()}-${business.dateOfReg.getDate()}`
-              td
-                a.button(href=`/${user.state}/business/${business._id}` style='color:white;background-color: #1c330d; padding: 4px;') VIEW
-        tbody.pendingsTasks(id="myTable" style='display: none')
+            td
+              =business.regNumber
+            td
+              =business.businessName
+            td
+              =business.natureOfBusiness
+            td
+              =business.state
+            td
+              =`${business.dateOfReg.getFullYear()}-${business.dateOfReg.getMonth()}-${business.dateOfReg.getDate()}`
+            td
+              a.button(href=`/${user.state}/business/${business._id}` style='color:white;background-color: #1c330d; padding: 4px;') VIEW
+      tbody.pendingsTasks(id="myTable" style='display: none')
           each business in pendingTasks
             tr
               td

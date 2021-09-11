@@ -10,7 +10,7 @@ function searchResultsHTML(businesses) {
                 <td>${business.natureOfBusiness}</td>
                 <td>${business.state}</td>
                 <td>${business.dateOfReg.split('T')[0]}</td>
-                <td><a class='link__button' style='color:white' href='/admin/business/${business.businessName}/${business._id}'>VIEW</td>
+                <td><a class='link__button' style='color:white;background-color: #1c330d; padding: 4px;' href='/admin/business/${business.businessName}/${business._id}'>VIEW</td>
             
         `
     }).join('')
@@ -28,7 +28,7 @@ function search(search) {
     searchInput.on('input', function() {
         setInterval(() => {
             if (!this.value) {
-                hidden.style.display = 'block'
+                hidden.style.display = ''
                 searchResultsTable.style.display = 'none'
                     // searchResultsHTML.style.display = 'none'
                 return
@@ -36,8 +36,8 @@ function search(search) {
 
         }, 1000);
 
-        searchResultsTable.style.display = 'block'
-        searchResults.style.display = 'block'
+        searchResultsTable.style.display = ''
+        searchResults.style.display = ''
         hidden.style.display = 'none'
         pagination.style.display = 'none'
             // searchResults.innerHTML = ''

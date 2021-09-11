@@ -18,11 +18,19 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
+            &:hover {
+                cursor: pointer;
+            }
         }
+    }
+    .task__queue--table {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 70vw;
     }
     .right {
         width: 10vw;
-        .total__treated,
+        .total__received,
         .total__pendings {
             background-color: rgba(180, 214, 158, 0.5);
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -32,6 +40,9 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
+            &:hover {
+                cursor: pointer;
+            }
         }
     }
 }

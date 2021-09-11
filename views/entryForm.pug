@@ -11,23 +11,9 @@ block header
       a.button(href='#')
         !=h.icon('user-solid') 
         span=user.userName
-      -let privilege = user.hasPrivilege
-      if privilege == 'admin'
-        a.button(href='/register-user')
-          !=h.icon('user-plus-solid')
-          span Register User
-      if privilege == 'supervisor'
-        a.button(href='/register-user')
-          !=h.icon('user-plus-solid')
-          span Register User
-      if privilege == 'admin'
-        a.button(href='/admin/businesses')
-          !=h.icon('history-solid')
-          span History
-      else if privilege == 'supervisor' || 'user'
-        a.button(href=`${user.state}/saved-entries`)
-          !=h.icon('history-solid')
-          span History
+      a.button(href=`/${user.state}/${user.slug}/history/${user._id}`)
+        !=h.icon('history-solid')
+        span History
       a.button(href='/logout')
         !=h.icon('sign-out')
         span Logout

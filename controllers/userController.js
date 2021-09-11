@@ -1,7 +1,6 @@
 const Business = require('../models/business')
 const User = require('../models/user')
 const { promisify } = require('es6-promisify')
-const { find } = require('../models/user')
 
 exports.changePasswordForm = (req, res) => {
     res.render('changePassword', { title: 'Change Password' })
@@ -17,20 +16,80 @@ exports.back = (req, res) => {
 
 exports.entryForm = async(req, res) => {
 
-    if (req.user.userType == 'headUser') {
+    if (req.user.userType == 'headAdmin') {
 
-        const userTotalTasks = Business.getUserTotalTasks(req.user._id)
+        const users = await User.find({ userType: 'headUser' })
+        res.render('headAdmin', { title: 'Admin', users })
+
+    } else if (req.user.userType == 'zonalAdmin') {
+
+        const users = await User.find({ userType: 'zonalUser' })
+        res.redirect(`/${req.user.state}/history`)
+
+    } else if (req.user.userType == 'headUser') {
+
+        const page = req.params.page || 1
+        const limit = 10
+        const skip = (page * limit) - limit
+
+        const businessesPromise = await Business
+            .find({ queuedTo: req.user._id })
+            .sort({ _id: -1 })
+            .skip(skip)
+            .limit(limit)
+
+        const totalBusinessesPromise = Business
+            .find({ queuedTo: req.user._id })
+            .countDocuments()
+
+        const [businesses, total] = await Promise.all([businessesPromise, totalBusinessesPromise])
+
+        const pages = Math.ceil(total / limit)
+
+        if (!businesses.length && skip) {
+            req.flash('info', `Page ${page} does not exist only page ${pages}`)
+            res.redirect(`/businesses/page/${pages}`)
+            return
+        }
+
         const userPendingTasks = Business.getPendingTasks(req.user._id)
         const userTreatedTasks = Business.getTreatedTasks(req.user._id)
-        const [totalTasks, pendingTasks, treatedTasks] = await Promise.all([userTotalTasks, userPendingTasks, userTreatedTasks])
+        const [pendingTasks, treatedTasks] = await Promise.all([userPendingTasks, userTreatedTasks])
 
-        res.render('taskQueue', { title: 'Home', totalTasks, pendingTasks, treatedTasks })
+        res.render('taskQueue', { title: 'Home', businesses, page, pages, total, pendingTasks, treatedTasks })
 
     } else if (req.user.userType == 'zonalUser') {
+
         res.render('entryForm', { title: 'New Registration Entry' })
+
     } else if (req.user.userType == 'headSupervisor') {
-        const users = await User.find({ userType: 'headUser' })
-        res.render('supervisor', { title: 'Home', users })
+
+        const todayTreatsPromise = Business.getTreatedToday()
+        const pendingsTodayPromise = Business.getPendingsToday()
+        const totalTodayPromise = Business.getTotalDailySent()
+
+        const usersPromise = User.find({ userType: 'headUser' })
+
+        const [todayTreats, totalReceived, users, pendingsToday] = await Promise.all([todayTreatsPromise, totalTodayPromise, usersPromise, pendingsTodayPromise])
+
+        res.render('supervisor', { title: 'Home', users, totalReceived, todayTreats, pendingsToday })
+
+    } else if (req.user.userType == 'zonalSupervisor') {
+
+        // get all the users registered in the same state as the supervisor
+        const usersPromise = User.find({ userType: 'zonalUser', state: req.user.state })
+
+        // get the total of data sent by each of the users
+        const businessesPromise = Business.getTotalSentByEachAuthor()
+
+        // get the total sent in 24 hours
+        const dailyPromise = Business.getTotalDailySent()
+
+        // destructure the resolved promise
+        const [users, businesses, daily] = await Promise.all([usersPromise, businessesPromise, dailyPromise])
+
+        res.render('stateSupervisor', { title: 'Home', users, businesses, daily })
+
     }
 }
 
@@ -46,19 +105,47 @@ exports.createUser = async(req, res) => {
     res.redirect('back')
 }
 
+exports.getAllStateHistory = async(req, res) => {
+    const page = req.params.page || 1
+    const limit = 10
+    const skip = (page * limit) - limit
+
+    const businessesPromise = await Business
+        .find({ state: req.user.state })
+        .sort({ _id: -1 })
+        .skip(skip)
+        .limit(limit)
+
+    const totalBusinessesPromise = Business
+        .find({ state: req.user.state })
+        .countDocuments()
+
+    const [businesses, total] = await Promise.all([businessesPromise, totalBusinessesPromise])
+
+    const pages = Math.ceil(total / limit)
+
+    if (!businesses.length && skip) {
+        req.flash('info', `Page ${page} does not exist only page ${pages}`)
+        res.redirect(`/businesses/page/${pages}`)
+        return
+    }
+
+    res.render('TotalStateBusinesses', { title: `Businesses, ${businesses.state } branch`, businesses, page, pages, total })
+}
+
 exports.getHistory = async(req, res) => {
     const page = req.params.page || 1
     const limit = 10
     const skip = (page * limit) - limit
 
     const businessesPromise = await Business
-        .find({ state: req.params.state })
+        .find({ author: req.user })
         .sort({ _id: -1 })
         .skip(skip)
         .limit(limit)
 
     const totalBusinessesPromise = Business
-        .find({ state: req.params.state })
+        .find({ author: req.user })
         .countDocuments()
     const [businesses, total] = await Promise.all([businessesPromise, totalBusinessesPromise])
     const pages = Math.ceil(total / limit)
@@ -79,21 +166,44 @@ exports.getBusiness = async(req, res) => {
 }
 
 exports.searchByBusinessName = async(req, res) => {
+
+    // console.log(req.query.search)
     let regex = new RegExp(req.query.search)
     const q = {
-        state: req.user.state,
-        $or: [{
-                businessName: { $regex: regex, $options: "gi" }
-            },
+        author: req.user,
+        $or: [
+            { businessName: { $regex: regex, $options: "gi" } },
             { regNumber: { $regex: regex, $options: "gi" } }
-        ],
+        ]
     }
     const business = await Business
         .find(q)
-        .limit(100)
         // .sort({
         //     score: { $meta: 'textscore' }
         // })
+        .limit(100)
+
+    res.json(business)
+}
+
+exports.searchByState = async(req, res) => {
+
+    // console.log(req.query.search)
+    let regex = new RegExp(req.query.search)
+    const q = {
+        state: req.user.state,
+        $or: [
+            { businessName: { $regex: regex, $options: "gi" } },
+            { regNumber: { $regex: regex, $options: "gi" } }
+        ]
+    }
+    const business = await Business
+        .find(q)
+        // .sort({
+        //     score: { $meta: 'textscore' }
+        // })
+        .limit(100)
+
     res.json(business)
 }
 
@@ -102,7 +212,7 @@ exports.getSearchedData = async(req, res) => {
     const limit = 10
     const skip = (page * limit) - limit
 
-    const businessesPromise = await Business
+    const businessesPromise = Business
         .find({
             state: req.user.state,
             $text: { $search: req.query.search }
@@ -113,7 +223,7 @@ exports.getSearchedData = async(req, res) => {
             score: { $meta: 'textScore' }
         })
 
-    totalBusinessesPromise = await Business
+    totalBusinessesPromise = Business
         .find({
             state: req.user.state,
             $text: { $search: req.query.search }
@@ -250,8 +360,8 @@ exports.activateUser = async(req, res) => {
 
 exports.shareTaskQueue = async(req, res) => {
 
-    // get all the businesses that are assigned to the user 
-    const usersTaskQueuePromise = Business.find({ queuedTo: req.params.id })
+    // get all the businesses that are assigned to the user and are untreated
+    const usersTaskQueuePromise = Business.find({ queuedTo: req.params.id, treated: false })
 
     // get the user
     const userPromise = User.find({ _id: req.params.id })
@@ -336,12 +446,76 @@ exports.userTasks = async(req, res) => {
 
 exports.getStats = async(req, res) => {
     if (req.user.userType == 'headSupervisor') {
+
         const businessesPromise = Business.find({})
         const usersPromise = User.find({ userType: 'headUser' })
         const [businesses, users] = await Promise.all([businessesPromise, usersPromise])
         res.render('stats', { title: 'Stats', businesses, users })
+
+    } else if (req.user.userType == 'zonalSupervisor') {
+
+        const businessesPromise = Business.getTotalSentByEachState()
+        const dailySentsPromise = Business.getTotalDailySent()
+
+        const [dailySents, businesses] = await Promise.all([dailySentsPromise, businessesPromise])
+
+        res.render('stats', { title: 'Stats', businesses, dailySents })
+
     } else {
         req.flash('info', 'You are not privileged to view that page')
         res.redirect('back')
     }
+}
+
+exports.viewUser = async(req, res) => {
+    const stateUserPromise = User.find({ _id: req.params.id })
+    const authoredByUserPromise = Business.getAuthor(req.params.id)
+    const [stateUser, authoredByUser] = await Promise.all([stateUserPromise, authoredByUserPromise])
+    res.render('viewUser', { title: `${stateUser.userName}`, stateUser, authoredByUser })
+}
+
+exports.acknowledge = async(req, res) => {
+
+    if (req.user.userType != 'headUser') {
+        req.flash('info', 'Your are not allowed to Acknowledge any business')
+        res.redirect('back')
+        return
+    }
+    await Business.findOneAndUpdate({ _id: req.params.id }, { treated: true, dateTreated: Date.now() }, { runValidators: true, new: true })
+    req.flash('success', 'Acknowledged Successfully')
+    res.redirect('back')
+}
+
+exports.getBusinesses = async(req, res) => {
+    if (req.user.userType == 'headSupervisor') {
+        const page = req.params.page || 1
+        const limit = 10
+        const skip = (page * limit) - limit
+
+        const businessesPromise = Business
+            .find({})
+            .sort({ _id: -1 })
+            .skip(skip)
+            .limit(limit)
+
+        const totalBusinessesPromise = Business
+            .find({})
+            .countDocuments()
+
+        const [businesses, total] = await Promise.all([businessesPromise, totalBusinessesPromise])
+
+        const pages = Math.ceil(total / limit)
+
+        if (!businesses.length && skip) {
+            req.flash('info', `Page ${page} does not exist only page ${pages}`)
+            res.redirect(`/businesses/page/${pages}`)
+            return
+        }
+
+        res.render('allBusinesses', { title: `Businesses, ${businesses.state } branch`, businesses, page, pages, total })
+    }
+}
+
+exports.headRegister = (req, res) => {
+    res.render('headAdminRegisterForm', { title: 'Register' })
 }

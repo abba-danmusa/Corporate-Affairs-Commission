@@ -1,5 +1,4 @@
 import axios from 'axios'
-import dompurify from 'dompurify'
 import { $ } from './bling'
 
 function searchResultsHTML(businesses) {
@@ -44,7 +43,7 @@ function typeAhead(search) {
         pagination.style.display = 'none'
             // searchResults.innerHTML = ''
 
-        axios.get(`/api/v1/users/history/search?search=${this.value}`)
+        axios.get(`/api/v1/state/search?search=${this.value}`)
             .then(res => {
                 if (res.data.length) {
 

@@ -1,0 +1,29 @@
+extends layout
+
+block header
+  nav.nav
+    .site-identity
+      a(href="/")
+        img(src="/images/logos.png" alt="Site logo")
+    //- a.nav__button.button(href='/')
+    //-   !=h.icon('arrow-left-solid')
+    //-   span BACK
+    .nav__buttons
+      if user
+        a.button(href='#')
+          !=h.icon('user-solid') 
+          span=user.userName
+        a.button(href=`/${user.state}/history`)
+          !=h.icon('history-solid') 
+          span History
+        a.button(href='/register-user')
+          !=h.icon('user-plus-solid')
+          span Register User
+        a.button(href='/logout')
+          !=h.icon('sign-out')
+          span Logout
+
+block content
+  .users
+    each user in users
+      h4= user.name

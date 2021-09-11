@@ -1,3 +1,18 @@
 .users {
     z-index: 1;
 }
+
+.actions {
+    display: flex;
+    flex-direction: row;
+    .treated,
+    .total,
+    .pendings,
+    button {
+        // background-color: #1c330d;
+        color: #1c330d;
+        background-color: rgba(180, 214, 158, 0.5);
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        backdrop-filter: blur(6px);
+    }
+}

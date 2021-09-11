@@ -10,21 +10,55 @@ block header
       a.button(href='#')
         !=h.icon('user-solid') 
         span=user.userName
-      a.button(href='/stats')
-        span Stats
+      a.button(href='/history')
+        !=h.icon('history-solid')
+        span History
       a.button(href='/logout')
         !=h.icon('sign-out')
         span Logout
 
 block content
   .users
+
     each user in users
       .user
         h3= user.name
         h4= user.userName
-        h4 STATUS:
-          if user && user.isActive == true
-            span  ACTIVE
-          else
-            span  INACTIVE
-        a(href=`/${user.slug}/${user._id}`) VIEW
+        h4 TOTAL TREATED TODAY: 0
+          each treated in todayTreats
+            if treated._id == `${user._id}`
+              span=treated.count
+            
+        h4 TOTAL PENDINGS TODAY: 0
+          each pending in pendingsToday
+            if pending._id == `${user._id}`
+              span=pending.count
+            
+        h4 TOTAL RECEIVED TODAY: 0
+          each received in totalReceived
+            if received._id == `${user._id}`
+              span= received.count
+
+          h4 STATUS:
+            if user && user.isActive == true
+              span  ACTIVE
+            else
+              span  INACTIVE
+          a(href=`/${user.slug}/${user._id}`) VIEW
+
+    //- each user in users
+    //-   .user
+    //-     h3= user.name
+    //-     h4= user.userName
+    //-     h4 STATUS:
+    //-       if user && user.isActive == true
+    //-         span  ACTIVE
+    //-       else
+    //-         span  INACTIVE
+
+    //-       each treat in todayTreats
+    //-         if treat._id == `${user._id}`
+    //-           h4 TOTAL TREATED TODAY: 
+    //-             span=treat.count
+
+          

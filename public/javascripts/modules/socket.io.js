@@ -1,6 +1,4 @@
 import { $, $$ } from './bling'
-import axios from 'axios'
-
 export default class Socket {
     constructor() {
         this.table = $('#table')
@@ -104,11 +102,11 @@ export default class Socket {
             }
         })
         this.socket.on('document', data => {
-            console.log(data.user)
-            this.business = data.business[0]
-            console.log(this.business.queuedTo)
-            if (this.table && this.userId === this.socket) {
-                data.business.forEach(item => {
+            // console.log(data)
+            // this.business = data.business[0]
+            // console.log(this.business.queuedTo)
+            if (this.table) {
+                data.forEach(item => {
                     this.displayDetails(item)
                 })
             } else return
@@ -156,7 +154,7 @@ export default class Socket {
                     <td>${data.businessName}</td>
                     <td>${data.natureOfBusiness}</td>
                     <td>${data.state}</td>
-                    <td><a href='/${data.state}/${data.slug}/${data._id}'>VIEW</a></td>
+                    <td><a href='/${data.state}/${data.slug}/${data._id}' style='color:white;background-color: #1c330d; padding: 4px;'>VIEW</a></td>
                 </tr>
             `
         this.table.insertAdjacentHTML('afterbegin', tableRow)

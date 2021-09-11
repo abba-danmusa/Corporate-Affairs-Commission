@@ -1,0 +1,21 @@
+.users {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 80vw;
+    margin-left: 10vw;
+    justify-content: space-between;
+}
+
+.user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    color: #1c330d;
+    text-transform: uppercase;
+    background-color: rgba(180, 214, 158, 0.5);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    backdrop-filter: blur(6px);
+}

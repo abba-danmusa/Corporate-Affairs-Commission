@@ -95,19 +95,124 @@ businessSchema.statics.getTreatedTasks = function(userID) {
     return this.find({ queuedTo: userID, treated: true })
 }
 
+businessSchema.statics.getTotals = function() {
+    return this.aggregate([
+
+        { $unwind: '$queuedTo' },
+        { $group: { _id: '$queuedTo', count: { $sum: 1 } } },
+        { $sort: { count: -1 } }
+    ])
+}
+
+businessSchema.statics.getTreatedToday = function() {
+    return this.aggregate([
+
+        {
+            '$match': {
+                'dateTreated': { '$gt': new Date(Date.now() - 24 * 60 * 60 * 1000) },
+            }
+        },
+        { $unwind: '$queuedTo' },
+        { $group: { _id: '$queuedTo', count: { $sum: 1 } } },
+
+        { $sort: { count: -1 } }
+
+    ])
+}
+
+businessSchema.statics.getPendingsToday = function() {
+    return this.aggregate([{
+            '$match': {
+                'dateEntered': { '$gt': new Date(Date.now() - 24 * 60 * 60 * 1000) },
+                'treated': false
+            }
+        },
+        { $unwind: '$queuedTo' },
+        { $group: { _id: '$queuedTo', count: { $sum: 1 } } },
+        { $sort: { count: -1 } }
+    ])
+}
+
+businessSchema.statics.getAuthor = function(userID) {
+    return this.find({ author: userID })
+}
+
+businessSchema.statics.getTotalSentByEachAuthor = function() {
+    return this.aggregate([
+        { $unwind: '$author' },
+        { $group: { _id: '$author', count: { $sum: 1 } } },
+        { $sort: { count: -1 } }
+    ])
+}
+
+businessSchema.statics.getTotalDailySent = function() {
+    return this.aggregate([{
+            '$match': {
+                'dateEntered': { '$gt': new Date(Date.now() - 24 * 60 * 60 * 1000) },
+            }
+        },
+        { $unwind: '$author' },
+        { $group: { _id: '$author', count: { $sum: 1 } } },
+        { $sort: { count: -1 } }
+    ])
+}
+
+businessSchema.statics.getTotalSentByEachState = function() {
+    return this.aggregate([
+        { $unwind: '$author' },
+        { $group: { _id: '$state', count: { $sum: 1 } } },
+        { $sort: { count: -1 } }
+    ])
+}
+
+businessSchema.statics.getdailyStatesSents = function() {
+    return this.aggregate([
+        { $unwind: '$author' },
+        {
+            $group: {
+                _id: '$state',
+                count: { $sum: 1 }
+            }
+        },
+        {
+            $sort: {
+                dateEntered: {
+                    $gt: new Date(Date.now() - 24 * 60 * 60 * 1000)
+                }
+            }
+        }
+    ])
+}
+
 // businessSchema.virtual('task', {
 //     ref: 'Task',
 //     localField: '_id',
 //     foreignField: 'business'
 // })
 
-// function autoPopulate(next) {
-//     this.populate('task')
-//     next()
-// }
+function autoPopulateAuthor(next) {
+    this.populate('author')
+    next()
+}
 
-// businessSchema.pre('find', autoPopulate)
-// businessSchema.pre('findOne', autoPopulate)
+function autoPopulate(next) {
+    this.populate('queuedTo')
+    next()
+}
+
+function autoPopulateTreatedBy(next) {
+    this.populate('treatedBy')
+    next()
+}
+
+businessSchema.pre('find', autoPopulateAuthor)
+businessSchema.pre('findOne', autoPopulateAuthor)
+
+businessSchema.pre('find', autoPopulateTreatedBy)
+businessSchema.pre('findOne', autoPopulateTreatedBy)
+
+businessSchema.pre('find', autoPopulate)
+businessSchema.pre('findOne', autoPopulate)
 
 businessSchema.pre('save', async function(next) {
     if (!this.isModified('businessName')) {

@@ -138,9 +138,35 @@ const save = async(req, res) => {
     res.redirect('back')
 }
 
+const edit = async(req, res) => {
+    if (req.body.file == '' || null || undefined) {
+
+        const [proprietors] = [req.body.proprietors]
+
+        const { regNumber, businessName, businessAddress, dateOfReg, natureOfBusiness } = req.body
+
+        const business = await Business.findOneAndUpdate({ _id: req.params.id }, { regNumber, businessName, businessAddress, dateOfReg, natureOfBusiness, proprietors, treated: false }, { new: true }).exec()
+
+        req.flash('success', `Successfully updated ${business.businessName}`)
+        res.redirect(`/${business.state}/business/${business._id}`)
+    }
+    if (req.body.file !== '' || null || undefined) {
+
+        const [proprietors] = [req.body.proprietors]
+
+        const { regNumber, businessName, businessAddress, dateOfReg, natureOfBusiness, file } = req.body
+
+        const business = await Business.findOneAndUpdate({ _id: req.params.id }, { regNumber, businessName, businessAddress, dateOfReg, natureOfBusiness, proprietors, file, treated: false }, { new: true, runValidators: true }).exec()
+
+        req.flash('success', `Successfully updated ${business.businessName}`)
+        res.redirect(`/${business.state}/business/${business._id}`)
+    }
+}
+
 // app.use('/admin', adminRoutes)
 app.use('/', adminRoutes, userRoutes)
 app.post('/', upload, catchErrors(save))
+app.post('/edit/:id', upload, catchErrors(edit))
 
 // if that above routes didnt work, 404 them and forward to error handler
 app.use(errorHandlers.notFound)
@@ -191,7 +217,7 @@ io.on('connection', async function(socket) {
 
         socket.emit('welcome', { user: socket.id })
         if (userID) {
-            Business.find({ dateEntered: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) }, queuedTo: userID._id }).sort({ _id: 1 })
+            Business.find({ queuedTo: userID._id, treated: false }).sort({ _id: 1 })
                 .then(data => {
                     socket.emit('output', data)
 
@@ -229,6 +255,5 @@ io.on('connection', async function(socket) {
             })
     })
 })
-
 
 module.exports = server

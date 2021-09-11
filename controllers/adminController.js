@@ -192,7 +192,9 @@ exports.deleteBusiness = async(req, res) => {
 }
 
 exports.searchByBusinessName = async(req, res) => {
+
     let regex = new RegExp(req.query.search)
+
     const q = {
         $or: [{
                 businessName: { $regex: regex, $options: "gi" }

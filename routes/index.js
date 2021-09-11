@@ -12,7 +12,8 @@ router.get('/login', authController.hasSession, userController.loginForm)
     // router.get('/head-office/login', authController.hasSession, userController.loginForm)
 router.get('/back', userController.back)
 router.get('/change-password', userController.changePasswordForm)
-router.get('/:state/saved-entries', authController.isLoggedIn, catchErrors(userController.getHistory))
+router.get('/:state/:user/history/:id', authController.isLoggedIn, catchErrors(userController.getHistory))
+router.get('/:state/history', authController.isLoggedIn, catchErrors(userController.getAllStateHistory))
 router.get('/:state/:slug/:id', authController.isLoggedIn, catchErrors(userController.getBusiness))
 router.get('/logout', authController.isLoggedIn, authController.logout)
     // router.get('/search/results', authController.isLoggedIn, userController.getSearchedData)
@@ -22,22 +23,27 @@ router.get('/edit/:id', authController.isLoggedIn, catchErrors(userController.ed
 router.get('/:user/:id', authController.isLoggedIn, catchErrors(userController.superviseUser))
 router.get('/history/tasks/:user/:id', authController.isLoggedIn, catchErrors(userController.userTasks))
 router.get('/stats', authController.isLoggedIn, catchErrors(userController.getStats))
+router.get('/:state/stats', authController.isLoggedIn, userController.getStats)
+router.get('/user/:state/:user/:id', authController.isLoggedIn, catchErrors(userController.viewUser))
+router.get('/history', authController.isLoggedIn, catchErrors(userController.getBusinesses))
+router.get('/register', authController.isLoggedIn, userController.headRegister)
     // router.get('/history/total/:user/:id', authController.isLoggedIn, userController.)
 
 // Post routes
-// router.post('/', catchErrors(userController.saveEntry))
-// router.post('/posts', userController.post)
+
 router.post('/register-user', authController.isLoggedIn, catchErrors(adminController.validateAdminRegister), catchErrors(userController.createUser))
 router.post('/login', authController.login)
 router.post('/change-password', authController.confirmPasswords, authController.changePassword)
-router.post('/edit/:id', authController.isLoggedIn, catchErrors(userController.edit))
+    // router.post('/edit/:id', authController.isLoggedIn, catchErrors(userController.edit))
 
 router.post('/deactivate/:user/:id', authController.isLoggedIn, catchErrors(userController.deactivateUser))
 router.post('/activate/:user/:id', authController.isLoggedIn, catchErrors(userController.activateUser))
 router.post('/share/:user/:id', authController.isLoggedIn, catchErrors(userController.shareTaskQueue))
+router.post('/:state/:business/:id', authController.isLoggedIn, catchErrors(userController.acknowledge))
 
 // API's
-router.get('/api/search', catchErrors(userController.searchByBusinessName))
+router.get('/api/v1/users/history/search', catchErrors(userController.searchByBusinessName))
+router.get('/api/v1/state/search', catchErrors(userController.searchByState))
 
 
 module.exports = router

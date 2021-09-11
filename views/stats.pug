@@ -15,6 +15,14 @@ block header
 
 block content
   .stats
-    each user in users
-      .user
-        h4= user.name
+    pre= h.dump(dailySents)
+    pre= h.dump(businessesAuthors)
+    each business in businesses
+      if `${user.state}` == `${business._id}`
+        .total__by--state
+          h4=`TOTAL SENT FROM ${user.state}`
+          h2= business.count
+    each author in dailySents
+      .authored
+        h4= author.author
+

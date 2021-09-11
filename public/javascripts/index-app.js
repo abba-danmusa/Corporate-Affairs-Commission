@@ -2,7 +2,7 @@ import { $, $$ } from './modules/bling'
 import Socket from './modules/socket.io'
 import typeAhead from './modules/typeAhead'
 import search from './modules/adminSearch'
-import post from './modules/post.io'
+import supervisorSearch from './modules/supervisorSearch'
 
 // document.addEventListener('DOMContentLoaded', () => {
 //     FilePond.registerPlugin(
@@ -60,39 +60,52 @@ if (changeDate) {
     })
 }
 
+// supervisor 
 const totalTasks = $('.totalTasks')
 const treatedTasks = $('.treatedTasks')
 const pendingsTasks = $('.pendingsTasks')
 
-const totalButton = $('.total')
+// task queue table
+const totalButton = $('.total__received')
 const treatedButton = $('.treated')
 const pendingButton = $('.pendings')
 
-totalButton.on('click', () => {
-    const block = totalTasks.style.display
-    if (block == '') {
-        return
-    }
-    pendingsTasks.style.display = 'none'
-    treatedTasks.style.display = 'none'
-    totalTasks.style.display = ''
-})
-treatedButton.on('click', () => {
-    totalTasks.style.display = 'none'
-    pendingsTasks.style.display = 'none'
-    treatedTasks.style.display = ''
-})
-pendingButton.on('click', () => {
-    totalTasks.style.display = 'none'
-    treatedTasks.style.display = 'none'
-    pendingsTasks.style.display = ''
-})
+if (totalButton) {
+    totalButton.on('click', () => {
+        totalTasks.style.display = ''
+        pendingsTasks.style.display = 'none'
+        treatedTasks.style.display = 'none'
+    })
+
+}
+
+if (treatedButton) {
+    treatedButton.on('click', () => {
+        treatedTasks.style.display = ''
+        totalTasks.style.display = 'none'
+        pendingsTasks.style.display = 'none'
+    })
+
+}
+
+if (pendingButton) {
+    pendingButton.on('click', () => {
+        pendingsTasks.style.display = ''
+        totalTasks.style.display = 'none'
+        treatedTasks.style.display = 'none'
+    })
+
+}
 
 const shareButton = $('.share__button')
-shareButton.on('click', () => {
-    alert('You are about to distribute this user task queue to all other user. click okay to continue, or cancel to cancel')
-})
+
+if (shareButton) {
+    shareButton.on('click', () => {
+        alert('You are about to distribute this user task queue to all other user. click okay to continue, or cancel to cancel')
+    })
+
+}
 
 typeAhead($('.search__user'))
 search($('.search__admin'))
-post()
+supervisorSearch($('.search__supervisor'))

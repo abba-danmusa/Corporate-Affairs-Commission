@@ -1,0 +1,36 @@
+extends layout
+
+block header
+
+  nav.nav
+    .site-identity
+      a(href="/")
+        img(src="/images/logos.png" alt="Site logo")
+        
+    .nav__buttons
+      a.button(href='#')
+        !=h.icon('user-solid') 
+        span=user.userName
+      a.button(href=`/${user.state}/history`)
+        !=h.icon('history-solid')
+        span History
+      a.button(href='/logout')
+        !=h.icon('sign-out')
+        span Logout
+
+block content
+  .users
+
+    each user in users
+      .user
+        h3= user.name
+        h4= user.userName
+
+        each total in daily
+          if total._id == `${user._id}`
+            h4= `total today: ${total.count}`
+        each business in businesses
+          if `${business._id}` == `${user._id}`
+            h4= `total: ${business.count}`
+        
+        a(href=`/user/${user.state}/${user.slug}/${user._id}`) VIEW
