@@ -24,7 +24,7 @@ exports.entryForm = async(req, res) => {
     } else if (req.user.userType == 'zonalAdmin') {
 
         const users = await User.find({ userType: 'zonalUser' })
-        res.redirect(`/${req.user.state}/history`)
+        res.send('hello world')
 
     } else if (req.user.userType == 'headUser') {
 
@@ -111,13 +111,13 @@ exports.getAllStateHistory = async(req, res) => {
     const skip = (page * limit) - limit
 
     const businessesPromise = await Business
-        .find({ state: req.user.state })
+        .find({})
         .sort({ _id: -1 })
         .skip(skip)
         .limit(limit)
 
     const totalBusinessesPromise = Business
-        .find({ state: req.user.state })
+        .find({})
         .countDocuments()
 
     const [businesses, total] = await Promise.all([businessesPromise, totalBusinessesPromise])
@@ -487,32 +487,31 @@ exports.acknowledge = async(req, res) => {
 }
 
 exports.getBusinesses = async(req, res) => {
-    if (req.user.userType == 'headSupervisor') {
+    if (req.user.userType == 'headSupervisor' || 'headUser') {
         const page = req.params.page || 1
         const limit = 10
         const skip = (page * limit) - limit
 
         const businessesPromise = Business
-            .find({})
+            .find()
             .sort({ _id: -1 })
             .skip(skip)
             .limit(limit)
+            .sort({ createdAt: 'desc' })
 
-        const totalBusinessesPromise = Business
-            .find({})
-            .countDocuments()
-
+        const totalBusinessesPromise = Business.countDocuments()
         const [businesses, total] = await Promise.all([businessesPromise, totalBusinessesPromise])
-
         const pages = Math.ceil(total / limit)
 
         if (!businesses.length && skip) {
             req.flash('info', `Page ${page} does not exist only page ${pages}`)
-            res.redirect(`/businesses/page/${pages}`)
+            res.redirect(`/stores/page/${pages}`)
             return
         }
 
-        res.render('allBusinesses', { title: `Businesses, ${businesses.state } branch`, businesses, page, pages, total })
+        // res.render('businesses', { title: 'Businesses', businesses, page, pages, total })
+
+        res.render('allBusinesses', { title: `Businesses`, businesses, page, pages, total })
     }
 }
 

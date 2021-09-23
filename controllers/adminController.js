@@ -142,7 +142,7 @@ exports.getBusinesses = async(req, res) => {
         return
     }
 
-    res.render('businesses', { title: 'Businesses', businesses, page, pages, total })
+    res.render('allBusinesses', { title: 'Businesses', businesses, page, pages, total })
 }
 
 exports.getBusiness = async(req, res) => {

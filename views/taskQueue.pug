@@ -8,6 +8,9 @@ block header
       a.button(href='#')
         !=h.icon('user-solid') 
         span=user.userName
+      a.button(href=`/admin/businesses`)
+        !=h.icon('history-solid')
+        span History
       a.button(href='/logout')
         !=h.icon('sign-out')
         span Logout

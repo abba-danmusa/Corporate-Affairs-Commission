@@ -30,6 +30,7 @@ function search(search) {
             if (!this.value) {
                 hidden.style.display = ''
                 searchResultsTable.style.display = 'none'
+                pagination.style.display = ''
                     // searchResultsHTML.style.display = 'none'
                 return
             }
