@@ -8,7 +8,7 @@ block header
     //- a.nav__button.button(href='/')
     //-   !=h.icon('arrow-left-solid')
     //-   span BACK
-    .nav__buttons
+    .nav__buttons(style='width: 50vw')
       if user
         a.button(href='#')
           !=h.icon('user-solid') 
@@ -19,11 +19,51 @@ block header
         a.button(href='/register-user')
           !=h.icon('user-plus-solid')
           span Register User
+        a.button(href='/registered-users')
+          !=h.icon('users-solid')
+          span Users
         a.button(href='/logout')
           !=h.icon('sign-out')
           span Logout
 
 block content
-  .users
-    each user in users
-      h4= user.name
+    //- !=h.dump(user.userType)
+    .entry-form
+      #live
+        .status
+        h2 Register
+        form#businessDetailsForm(action='/' method="POST" name='entry' enctype="multipart/form-data")
+          .left
+            .form-group
+              input.regNumber(type="text" class="form-control" name="regNumber" placeholder="REGISTRATION NO" required="required")
+            .form-group
+              input.businessName(type="text" class="form-control" name="businessName" placeholder="BUSINESS NAME" required="required")
+            .form-group
+              input.businessAddress(type="text" class="form-control" name="businessAddress" placeholder="BUSINESS ADDRESS" required="required")
+            .form-group
+              input.state(type="text" class="form-control" name="state"  required="required" value=`${user.state}` readonly)
+            .form-group
+              label(for="dateOfReg") DATE REGISTERED
+              input.dateOfReg(type="date" name='dateOfReg' max=`${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}` required='required' placeholder='DATE REGISTERED')
+            .form-group
+              input.natureOfBusiness(type="text" class="form-control" name="natureOfBusiness" placeholder="NATURE OF BUSINESS" required="required")
+          .right
+            .form-group
+              input.proprietor1(type="text" class="form-control" name="proprietors" placeholder="PROPRIETOR 1" required="required")
+            .form-group
+              input.proprietor2(type="text" class="form-control" name="proprietors" placeholder="PROPRIETOR 2" )
+            .form-group
+              input.proprietor3(type="text" class="form-control" name="proprietors" placeholder="PROPRIETOR 3" )
+            .form-group
+              input.author(type="text" class="form-control" name="author"  required="required" data-id=`${user._id}` placeholder=`${user.name}` readonly)
+            .form-group
+              label(for="file") Upload file
+              input.file(type="file" class="filepond ui file small"  name="filepond" accept="application/pdf" required)
+            //- .form-group
+            //-   input.proprietor(type="text" class="form-control" name="proprietor" placeholder="PROPIETOR 2")
+            //- .form-group
+            //-   input.proprietor(type="text" class="form-control" name="proprietor" placeholder="PROPIETOR 3")  
+            .form-group
+              button.button(type="submit" class="btn btn-success btn-lg btn-block" id="save" style='margin-bottom:4vh;') SEND
+
+        script(src="/socket.io/socket.io.js")

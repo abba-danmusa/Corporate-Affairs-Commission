@@ -13,6 +13,7 @@ router.get('/admin/business/:name/:id', catchErrors(adminController.getBusiness)
 router.get('/admin/register-user', adminController.passwordProtected, adminController.registerForm)
 router.get('/admin/registered-users', adminController.passwordProtected, catchErrors(adminController.getUsers))
 router.get('/admin/register-admin', adminController.passwordProtected, adminController.registerAdminForm)
+router.get('/admin/reset-user/:id', adminController.passwordProtected, catchErrors(adminController.resetUser))
 
 // router.get('/admin/search/results', adminController.getSearchedData)
 // router.param('/admin/search/results?search=q/page/:page', adminController.getSearchedData)
@@ -20,9 +21,10 @@ router.get('/admin/register-admin', adminController.passwordProtected, adminCont
 // Post routes
 router.post('/admin', authController.loginAdmin)
 router.post('/admin/register-user', adminController.passwordProtected, catchErrors(adminController.validateRegister), catchErrors(adminController.register))
-router.post('/admin/registered-users/delete-user/:id', adminController.passwordProtected, catchErrors(adminController.deleteUser))
+    // router.post('/admin/', adminController.passwordProtected, adminController.resetUser)
 router.post('/admin/business/:name/:id', catchErrors(adminController.deleteBusiness))
 router.post('/admin/register-admin', adminController.passwordProtected, catchErrors(adminController.validateAdminRegister), catchErrors(adminController.registerAdmin))
+router.post('/admin/reset-user/:id', adminController.passwordProtected, authController.confirmPasswords, catchErrors(authController.adminResetPassword))
 
 // API's
 router.get('/admin/api/search', catchErrors(adminController.searchByBusinessName))

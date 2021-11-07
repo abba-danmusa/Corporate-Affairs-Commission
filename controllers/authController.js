@@ -19,6 +19,42 @@ exports.confirmPasswords = (req, res, next) => {
     res.redirect('back')
 }
 
+exports.resetPassword = async(req, res) => {
+    const user = await User.findOne({
+        userName: req.body.userName
+    })
+
+    if (!user) {
+        req.flash('error', 'User Name cannot be found')
+        return res.redirect('back')
+    }
+
+    await user.setPassword(req.body.newPassword)
+    user.mustChangePassword = false
+    const updatedUser = await user.save()
+    await req.login(updatedUser)
+    req.flash('success', `${user.userName}'s password has been reset successfully`)
+    res.redirect('/registered-users')
+}
+
+exports.adminResetPassword = async(req, res) => {
+    const user = await User.findOne({
+        userName: req.body.userName
+    })
+
+    if (!user) {
+        req.flash('error', 'User Name cannot be found')
+        return res.redirect('back')
+    }
+
+    await user.setPassword(req.body.newPassword)
+    user.mustChangePassword = false
+    const updatedUser = await user.save()
+    await req.login(updatedUser)
+    req.flash('success', `${user.userName}'s password has been reset successfully`)
+    res.redirect('/admin/registered-users')
+}
+
 exports.changePassword = async(req, res) => {
     const user = await User.findOne({
         userName: req.body.userName

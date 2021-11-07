@@ -6,9 +6,9 @@ import supervisorSearch from './modules/supervisorSearch'
 
 // document.addEventListener('DOMContentLoaded', () => {
 //     FilePond.registerPlugin(
-//         // FilePondPluginImageResize,
-//         // FilePondPluginImagePreview,
 //         FilePondPluginFileEncode,
+//         FilePondPluginImageResize,
+//         FilePondPluginImagePreview,
 //         FilePondPluginFileValidateType,
 //         FilePondPluginFileValidateSize,
 //         FilePondPluginFilePoster
@@ -22,7 +22,7 @@ import supervisorSearch from './modules/supervisorSearch'
 //     FilePond.parse(document.body)
 //     FilePond.maxFileSize = '60kb'
 
-//     FilePond.create($('file'), {
+//     FilePond.create($('.file'), {
 //         acceptedFileTypes: ['application/pdf'],
 //         fileValidateTypeDetectType: (source, type) =>
 //             new Promise((resolve, reject) => {
@@ -36,6 +36,7 @@ import supervisorSearch from './modules/supervisorSearch'
 //     })
 
 // })
+
 if (document.querySelector("#live")) {
     new Socket()
 }

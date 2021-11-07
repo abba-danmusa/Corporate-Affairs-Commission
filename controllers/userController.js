@@ -6,6 +6,11 @@ exports.changePasswordForm = (req, res) => {
     res.render('changePassword', { title: 'Change Password' })
 }
 
+exports.resetPassword = async(req, res) => {
+    const resetUser = await User.findById(req.params.id)
+    res.render('resetPassword', { title: 'Change Password', resetUser })
+}
+
 exports.loginForm = (req, res) => {
     res.render('login', { title: 'Login' })
 }
@@ -24,7 +29,7 @@ exports.entryForm = async(req, res) => {
     } else if (req.user.userType == 'zonalAdmin') {
 
         const users = await User.find({ userType: 'zonalUser' })
-        res.send('hello world')
+        res.render('zonalAdmin')
 
     } else if (req.user.userType == 'headUser') {
 
@@ -56,7 +61,9 @@ exports.entryForm = async(req, res) => {
         const userTreatedTasks = Business.getTreatedTasks(req.user._id)
         const [pendingTasks, treatedTasks] = await Promise.all([userPendingTasks, userTreatedTasks])
 
-        res.render('taskQueue', { title: 'Home', businesses, page, pages, total, pendingTasks, treatedTasks })
+        // res.render('taskQueue', { title: 'Home', businesses, page, pages, total, pendingTasks, treatedTasks })
+
+        res.render('userLive', { title: 'Live Data' })
 
     } else if (req.user.userType == 'zonalUser') {
 
@@ -111,7 +118,7 @@ exports.getAllStateHistory = async(req, res) => {
     const skip = (page * limit) - limit
 
     const businessesPromise = await Business
-        .find({})
+        .find({ state: req.user.state })
         .sort({ _id: -1 })
         .skip(skip)
         .limit(limit)
@@ -163,6 +170,11 @@ exports.getBusiness = async(req, res) => {
     const business = await Business.find({ _id: req.params.id })
 
     res.render('stateBusiness', { business })
+}
+
+exports.registeredUsers = async(req, res) => {
+    const users = await User.find({ state: req.user.state })
+    res.render('zonalUsers', { title: 'Users', users })
 }
 
 exports.searchByBusinessName = async(req, res) => {
@@ -505,13 +517,11 @@ exports.getBusinesses = async(req, res) => {
 
         if (!businesses.length && skip) {
             req.flash('info', `Page ${page} does not exist only page ${pages}`)
-            res.redirect(`/stores/page/${pages}`)
+            res.redirect(`/businesses/page/${pages}`)
             return
         }
 
-        // res.render('businesses', { title: 'Businesses', businesses, page, pages, total })
-
-        res.render('allBusinesses', { title: `Businesses`, businesses, page, pages, total })
+        res.render('businesses', { title: 'Businesses', businesses, page, pages, total })
     }
 }
 

@@ -102,10 +102,9 @@ exports.getUsers = async(req, res) => {
     res.render('registeredUsers', { title: 'Users', users })
 }
 
-exports.deleteUser = async(req, res) => {
-    await User.findOneAndDelete({ _id: req.params.id })
-    req.flash('success', 'User Deleted Successfully')
-    res.redirect('back')
+exports.resetUser = async(req, res) => {
+    const resetUser = await User.findById(req.params.id)
+    res.render('resetPasswordForm', { title: 'Change Password', resetUser })
 }
 
 exports.registerAdmin = async(req, res) => {
@@ -138,10 +137,9 @@ exports.getBusinesses = async(req, res) => {
 
     if (!businesses.length && skip) {
         req.flash('info', `Page ${page} does not exist only page ${pages}`)
-        res.redirect(`/stores/page/${pages}`)
+        res.redirect(`/admin/businesses/page/${pages}`)
         return
     }
-
     res.render('allBusinesses', { title: 'Businesses', businesses, page, pages, total })
 }
 

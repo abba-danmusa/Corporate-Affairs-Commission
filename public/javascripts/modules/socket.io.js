@@ -15,8 +15,9 @@ export default class Socket {
         this.proprietor3 = $('.proprietor3')
         this.author = $('.author')
         this.file = $('.file')
-            // Calls for the event methods to execute on submit of the form
-            // this.events()
+
+        // // Calls for the event methods to execute on submit of the form
+        // this.events()
 
         // Calls for the open connection method
         this.openConnection()
@@ -27,12 +28,16 @@ export default class Socket {
 
         if (this.form) {
             this.form.on('submit', (e) => {
+                // prevents the default submitting of the form data
                 e.preventDefault()
-                    // this.formData = new FormData()
-                    // this.formData.append('file', this.file.files[0])
-                console.log(file)
+
+                // send the details to socket
                 this.sendDetails()
-                    // this.sanitizeData()
+
+                // this.formData = new FormData()
+                // this.formData.append('file', this.file.files[0])
+                // console.log(file)
+                // this.sanitizeData()
             })
         }
     }
@@ -64,7 +69,8 @@ export default class Socket {
     }
 
     sendDetails() {
-        // console.log(file)
+
+        // console.log(this.file.fi)
         this.socket.emit('input', {
             regNumber: this.regNumber.value,
             businessName: this.businessName.value,
@@ -73,8 +79,9 @@ export default class Socket {
             dateOfReg: this.dateOfReg.value,
             natureOfBusiness: this.natureOfBusiness.value,
             proprietors: [this.proprietor1.value, this.proprietor2.value, this.proprietor3.value],
-            author: this.author.value,
-            file: this.file.files[0].name
+            author: this.author.dataset.id,
+
+            // file: this.file.files[0].name
         })
         this.regNumber.value = ''
         this.businessName.value = ''
@@ -154,7 +161,8 @@ export default class Socket {
                     <td>${data.businessName}</td>
                     <td>${data.natureOfBusiness}</td>
                     <td>${data.state}</td>
-                    <td><a href='/${data.state}/${data.slug}/${data._id}' style='color:white;background-color: #1c330d; padding: 4px;'>VIEW</a></td>
+                    <td>${this.date}</td>
+                    <td><a href='/admin/business/${data.slug}/${data._id}' style='color:white;background-color: #1c330d; padding: 4px;'>VIEW</a></td>
                 </tr>
             `
         this.table.insertAdjacentHTML('afterbegin', tableRow)

@@ -1,0 +1,53 @@
+extends layout
+
+block header
+  nav.nav
+    .site-identity
+      a(href="/")
+        img(src="/images/logos.png" alt="Site logo")
+    a.nav__button.button(href='/')
+      !=h.icon('arrow-left-solid')
+      span BACK
+    .nav__buttons
+      if user
+        a.button(href='#')
+          !=h.icon('user-solid') 
+          span=user.userName
+        a.button(href=`/${user.state}/history`)
+          !=h.icon('history-solid') 
+          span History
+        a.button(href='/register-user')
+          !=h.icon('user-plus-solid')
+          span Register User
+        a.button(href='/logout')
+          !=h.icon('sign-out')
+          span Logout
+
+block content
+ .container
+  .table-wrapper
+    .table-title
+      .row
+        .col-sm-8
+          h2
+            | Registered 
+            b Users
+    
+    table.table.table-bordered
+      thead
+        tr
+          th Username
+          th name
+          th Account type
+          th State 
+          th action
+      tbody(id="myTable")
+        each user in users
+          tr
+            td(style='text-transform: lowercase')=`${user.userName}`
+            td=`${user.name}`
+            //- -const userType = user.userType == 'zonalAdmin' ? 'ADMIN, ZONAL OFFICE' : user.userType == 'headUser' ? 'USER, HEAD OFFICE' : 'USER, ZONAL OFFICE'
+            td= `user, ${user.state} office`
+            td=`${user.state}`
+            td
+              a.link__button(href=`/reset-password/${user.id}` style='color:white;background-color: #1c330d; padding: 4px;') Reset Password

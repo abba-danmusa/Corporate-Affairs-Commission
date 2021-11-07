@@ -54,7 +54,7 @@ block content
             .form-group
               input.proprietor3(type="text" class="form-control" name="proprietors" placeholder="PROPRIETOR 3" )
             .form-group
-              input.author(type="text" class="form-control" name="author"  required="required" value=`${user.name}` readonly)
+              input.author(type="text" class="form-control" name="author"  required="required" data-id=`${user._id}` placeholder=`${user.name}` readonly)
             .form-group
               label(for="file") Upload file
               input.file(type="file" class="filepond ui file small"  name="file" accept="application/pdf" required)

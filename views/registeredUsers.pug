@@ -37,17 +37,17 @@ block content
           th name
           th Account type
           th State 
-          th delete    
+          th Action   
       tbody(id="myTable")
         each user in users
           tr
-            td=`${user.userName}`
+            td(style='text-transform: lowercase')=`${user.userName}`
             td=`${user.name}`
-            td=`${user.userType}`
+            -const userType = user.userType == 'zonalAdmin' ? 'ADMIN, ZONAL OFFICE' : user.userType == 'headUser' ? 'USER, HEAD OFFICE' : 'USER, ZONAL OFFICE'
+            td= userType
             td=`${user.state}`
             td
-              form(action=`/admin/registered-users/delete-user/${user._id}` method='post')
-                button.link__button(type='submit') DELETE USER
+              a.link__button(href=`/admin/reset-user/${user._id}` style='color:white;background-color: #1c330d; padding: 4px;') RESET PASSOWORD
          
          
            

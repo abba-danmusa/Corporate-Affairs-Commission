@@ -3,23 +3,21 @@ extends layout
 block header
   nav.nav
     .site-identity
-      a(href='/admin')
+      a(href='/')
         img(src="/images/logos.png" alt="Site logo")
     .nav__buttons
       
       a.button(href='#')
         !=h.icon('user-solid') 
-        span admin
+        span= user.userName
     
-      a.button(href='/admin/register-user')
-        !=h.icon('user-plus-solid')
-        span Register User
-      a.button(href='/admin/registered-users')
-        !=h.icon('users-solid')
-        span Users
-      a.button(href='/admin/businesses')
+      a.button(href='/businesses')
         !=h.icon('history-solid')
         span History
+
+      a.button(href='/logout')
+        !=h.icon('sign-out')
+        span Logout
 
 block content
 

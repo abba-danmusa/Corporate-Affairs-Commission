@@ -6,7 +6,7 @@ mixin business(business)
         form(action=`/${user.state}/${item.businessName}/${item._id}` method='POST' style='background-color: #1c330d; color: white; padding: 4px; margin-top: 8px;')
           button.button(type=submit) ACKNOWLEDGE
 
-      if user.userType == 'zonalSupervisor'
+      if user.userType == 'zonalAdmin'
         a.button(href=`/edit/${item._id}` style='background-color: #1c330d; color: white; padding: 4px; margin-top: 8px;') EDIT
 
       h1= `BUSINESS NAME: ${item.businessName}`

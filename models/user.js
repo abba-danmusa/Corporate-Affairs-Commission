@@ -32,48 +32,49 @@ const userSchema = new Schema({
         required: 'You must supply a state',
         trim: true
     },
-    isActive: Boolean,
-    taskFlag: Boolean,
-    serialNumber: {
-        type: Number,
-        unique: true
-    },
+    // isActive: Boolean,
+    // taskFlag: Boolean,
+    // serialNumber: {
+    //     type: Number,
+    //     unique: true
+    // },
     slug: String,
 })
 
-userSchema.pre('save', async function(next) {
-    if (!this.isModified('userName')) {
-        next()
-        return
-    }
-    if (this.userType === 'headUser') {
-        this.isActive = true
-        const users = await this.constructor.find({ userType: 'headUser' })
-        this.serialNumber = users.length + 1
-        if (this.serialNumber == 1) {
-            this.taskFlag = true
-        } else this.taskFlag = false
-    } else {
-        return next()
-            // this.isActive = false
-            // this.taskFlag = false
-            // this.serialNumber = 0
-    }
-    // next()
-})
+// userSchema.pre('save', async function(next) {
+//     if (!this.isModified('userName')) {
+//         next()
+//         return
+//     }
+//     if (this.userType === 'headUser') {
+//         this.isActive = true
+//         const users = await this.constructor.find({ userType: 'headUser' })
+//         this.serialNumber = users.length + 1
+//         if (this.serialNumber == 1) {
+//             this.taskFlag = true
+//         } else this.taskFlag = false
+//     } else {
+//         return next()
+//             // this.isActive = false
+//             // this.taskFlag = false
+//             // this.serialNumber = 0
+//     }
+//     // next()
+// })
 
-userSchema.statics.getTaskFlaggedUser = function() {
-    return this.aggregate([
-        { $match: { userType: 'headUser', isActive: true, taskFlag: true } }
-    ])
-}
-userSchema.statics.getUser = function() {
-    // this.users = await this.find({userType: 'headUser'})
-    return this.aggregate([
-        { $match: { userType: 'headUser', isActive: true } },
-        { $sort: { userName: 1 } }
-    ])
-}
+// userSchema.statics.getTaskFlaggedUser = function() {
+//     return this.aggregate([
+//         { $match: { userType: 'headUser', isActive: true, taskFlag: true } }
+//     ])
+// }
+
+// userSchema.statics.getUser = function() {
+//     // this.users = await this.find({userType: 'headUser'})
+//     return this.aggregate([
+//         { $match: { userType: 'headUser', isActive: true } },
+//         { $sort: { userName: 1 } }
+//     ])
+// }
 
 // userSchema.pre('save', async function(next) {
 //     if (this.userType == 'admin' || 'supervisor') {
@@ -104,6 +105,7 @@ userSchema.pre('save', async function(next) {
 userSchema.plugin(passportLocalMongoose, {
     usernameField: 'userName'
 })
+
 userSchema.plugin(mongodbErrorHandler)
 
 module.exports = mongoose.model('User', userSchema)

@@ -51,18 +51,18 @@ const businessSchema = new Schema({
         type: String,
         required: 'You must supply a pdf file'
     },
-    queuedTo: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User',
-        required: 'You must supply an author'
-    },
-    treated: {
-        type: Boolean,
-        default: false
-    },
-    dateTreated: {
-        type: Date
-    }
+    // queuedTo: {
+    //     type: mongoose.Schema.ObjectId,
+    //     ref: 'User',
+    //     required: 'You must supply an author'
+    // },
+    // treated: {
+    //     type: Boolean,
+    //     default: false
+    // },
+    // dateTreated: {
+    //     type: Date
+    // }
 })
 
 businessSchema.index({
@@ -195,24 +195,24 @@ function autoPopulateAuthor(next) {
     next()
 }
 
-function autoPopulate(next) {
-    this.populate('queuedTo')
-    next()
-}
+// function autoPopulate(next) {
+//     this.populate('queuedTo')
+//     next()
+// }
 
-function autoPopulateTreatedBy(next) {
-    this.populate('treatedBy')
-    next()
-}
+// function autoPopulateTreatedBy(next) {
+//     this.populate('treatedBy')
+//     next()
+// }
 
 businessSchema.pre('find', autoPopulateAuthor)
 businessSchema.pre('findOne', autoPopulateAuthor)
 
-businessSchema.pre('find', autoPopulateTreatedBy)
-businessSchema.pre('findOne', autoPopulateTreatedBy)
+// businessSchema.pre('find', autoPopulateTreatedBy)
+// businessSchema.pre('findOne', autoPopulateTreatedBy)
 
-businessSchema.pre('find', autoPopulate)
-businessSchema.pre('findOne', autoPopulate)
+// businessSchema.pre('find', autoPopulate)
+// businessSchema.pre('findOne', autoPopulate)
 
 businessSchema.pre('save', async function(next) {
     if (!this.isModified('businessName')) {
