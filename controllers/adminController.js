@@ -7,7 +7,7 @@ const Admin = require("../models/admin")
 
 exports.passwordProtected = (req, res, next) => {
     res.set('WWW-Authenticate', 'Basic realm="Corporate Affairs Commission"')
-    if (req.headers.authorization == 'Basic Y2FjYWRtaW46bG92ZQ==') {
+    if (req.headers.authorization == 'Basic Y2FjYWRtaW46aWN0QDIwMjE=') {
         next()
     } else {
         res.status(401).send('Authentication Required')

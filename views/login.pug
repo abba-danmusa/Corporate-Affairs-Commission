@@ -5,7 +5,7 @@ extends layout
 block content
 
   .inner
-    .signup-form.login__form
+    .signup-form.login__form(style='height:60vh;')
       form(action="/login" method="POST")
         h2 Login
         .form-group
@@ -15,3 +15,6 @@ block content
                 
         .form-group
           button.button(type="submit" class="btn btn-success btn-lg btn-block" id='connectSocket') Login
+
+        .form-group
+          a.link__button(href='/admin' style='color:white') Admin?
