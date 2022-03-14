@@ -211,7 +211,7 @@ io.use(function(socket, next) {
 // })
 
 io.on('connection', async function(socket) {
-    Business.find({ dateEntered: { '$gt': new Date(Date.now() - 24 * 60 * 60 * 1000) } })
+    Business.find({ dateEntered: { '$gt': new Date(Date.now() - 24 * 60 * 60 * 1000) }, isTreated: false || null})
         .then(data => {
             socket.emit('output', data)
 

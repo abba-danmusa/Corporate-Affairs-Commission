@@ -46,18 +46,20 @@ block content
         tr
           th REGISTRATION NO
           th BUSINESS NAME
-          th NATURE OF BUSINESS
+          
           th STATE
           th DATE
+          th STATUS
           th ACTION
       tbody(id="myTable")
         each business in businesses
           tr
             td=business.regNumber
             td=business.businessName
-            td=business.natureOfBusiness
             td=business.state
             td=`${business.dateOfReg.getFullYear()}-${business.dateOfReg.getMonth()}-${business.dateOfReg.getDate()}`
+            -const isTreated = business.isTreated == true ? 'TREATED' : 'UNTREATED'
+            td(style='color: brown; font-size: 12px;')=isTreated
             td
               a.button(href=`/admin/business/${business.slug}/${business._id}` style='color:white;background-color: #1c330d; padding: 4px;') VIEW
     +pagination(page, pages, total)

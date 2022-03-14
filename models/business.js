@@ -56,13 +56,13 @@ const businessSchema = new Schema({
     //     ref: 'User',
     //     required: 'You must supply an author'
     // },
-    // treated: {
-    //     type: Boolean,
-    //     default: false
-    // },
-    // dateTreated: {
-    //     type: Date
-    // }
+    isTreated: {
+        type: Boolean,
+        default: false
+    },
+    dateTreated: {
+        type: Date
+    }
 })
 
 businessSchema.index({

@@ -159,9 +159,10 @@ export default class Socket {
                 <tr>
                     <td>${data.regNumber}</td>
                     <td>${data.businessName}</td>
-                    <td>${data.natureOfBusiness}</td>
+                    
                     <td>${data.state}</td>
                     <td>${this.date}</td>
+                    <td style='font-size: 12px; color: brown;'>UNTREATED</td>
                     <td><a href='/admin/business/${data.slug}/${data._id}' style='color:white;background-color: #1c330d; padding: 4px;'>VIEW</a></td>
                 </tr>
             `
