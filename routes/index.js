@@ -30,6 +30,7 @@ router.get('/history/tasks/:user/:id', authController.isLoggedIn, catchErrors(us
 router.get('/stats', authController.isLoggedIn, catchErrors(userController.getStats))
 router.get('/:state/stats', authController.isLoggedIn, userController.getStats)
 router.get('/user/:state/:user/:id', authController.isLoggedIn, catchErrors(userController.viewUser))
+router.get('/business/:name/:id', authController.isLoggedIn, catchErrors(adminController.getBusiness))
     // router.get('/history', authController.isLoggedIn, catchErrors(userController.getBusinesses))
     // router.get('/history/page/:page', catchErrors(userController.getBusinesses))
 router.get('/register', authController.isLoggedIn, userController.headRegister)

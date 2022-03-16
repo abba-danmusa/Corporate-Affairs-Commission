@@ -3,13 +3,15 @@ import { $ } from './bling'
 
 function searchResultsHTML(businesses) {
     return businesses.map(business => {
+        const isTreated = business.isTreated == true ? 'TREATED' : 'UNTREATED'
         return `
             <tr>
                 <td>${business.regNumber}</td>
                 <td>${business.businessName}</td>
-                <td>${business.natureOfBusiness}</td>
+                
                 <td>${business.state}</td>
                 <td>${business.dateOfReg.split('T')[0]}</td>
+                <td style='color:brown;font-size:12px;'>${isTreated}</td>
                 <td><a class='link__button' style='color:white;background-color: #1c330d; padding: 4px;' href='/admin/business/${business.businessName}/${business._id}'>VIEW</td>
             
         `

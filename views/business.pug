@@ -3,9 +3,11 @@ extends layout
 block header
   nav.nav
     .site-identity
+      //- !=h.dump(user.userType)
       a(href="/")
         img(src="/images/logos.png" alt="Site logo")
-    a.nav__button.button(href='/admin')
+    -const route = user.userType == 'headUser' ? '/' : '/admin'
+    a.nav__button.button(href=route)
       !=h.icon('arrow-left-solid')
       span BACK
     .nav__buttons
@@ -13,9 +15,10 @@ block header
         !=h.icon('user-solid')
         -const userName = user ? user.userName: 'admin'
         span=userName
-      a.button(href='/register-user')
-        !=h.icon('user-plus-solid')
-        span Register User
+      if user.userType !== 'headUser'
+        a.button(href='/register-user')
+          !=h.icon('user-plus-solid')
+          span Register User
       if user && user.userName
         a.button(href='/logout')
           !=h.icon('sign-out')

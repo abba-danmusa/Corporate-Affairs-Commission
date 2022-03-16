@@ -33,9 +33,10 @@ block content
         tr
           th REGISTRATION NO
           th BUSINESS NAME
-          th NATURE OF BUSINESS
+          
           th STATE
           th DATE
+          th STATUS
           th ACTION
       tbody.search__results--table(id="myTable")
     table.table.table-bordered.hidden
@@ -43,9 +44,10 @@ block content
         tr
           th REGISTRATION NO
           th BUSINESS NAME
-          th NATURE OF BUSINESS
+          
           th STATE
           th DATE
+          th STATUS
           th ACTION
       tbody(id="myTable")
         each business in businesses
@@ -54,12 +56,14 @@ block content
               =business.regNumber
             td
               =business.businessName
-            td
-              =business.natureOfBusiness
+            
             td
               =business.state
             td
               =`${business.dateOfReg.getFullYear()}-${business.dateOfReg.getMonth()}-${business.dateOfReg.getDate()}`
+            -const isTreated = business.isTreated == true ? 'TREATED' : 'UNTREATED'
+            td(style='color:brown;font-size:12px;')
+              =isTreated
             td
               a.link__button(href=`/business/${business.businessName}/${business._id}` style='color:white;background-color: #1c330d; padding: 4px;') VIEW
     +pagination(page, pages, total)  
