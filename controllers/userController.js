@@ -501,7 +501,7 @@ exports.acknowledge = async(req, res) => {
 exports.getBusinesses = async(req, res) => {
     if (req.user.userType == 'headSupervisor' || 'headUser') {
         const page = req.params.page || 1
-        const limit = 10
+        const limit = 20
         const skip = (page * limit) - limit
 
         const businessesPromise = Business
@@ -527,4 +527,14 @@ exports.getBusinesses = async(req, res) => {
 
 exports.headRegister = (req, res) => {
     res.render('headAdminRegisterForm', { title: 'Register' })
+}
+
+exports.treat = async(req, res) => {
+    try {
+        // get the business and mark it as treated
+        const updatedBusiness = await Business.findByIdAndUpdate(req.params.id, { isTreated: true })
+        res.status(200).send({ updatedBusiness, status: 'success' })
+    } catch (error) {
+        res.status(500).send({ error, message: 'unsuccessful' })
+    }
 }

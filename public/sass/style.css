@@ -1732,4 +1732,33 @@ textarea.tall-textarea {
   padding: 1rem;
   text-align: center;
 }
+
+.overlay {
+  height: 200px;
+  width: 0;
+  position: fixed;
+  z-index: 10;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  background-color: white;
+  overflow-x: hidden;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+
+.overlay-content {
+  position: relative;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+  -webkit-column-gap: 20px;
+          column-gap: 20px;
+  top: 15%;
+  width: 100%;
+  text-align: center;
+  margin-top: 30px;
+}
 /*# sourceMappingURL=style.css.map */

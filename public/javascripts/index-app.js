@@ -41,6 +41,19 @@ if (document.querySelector("#live")) {
     new Socket()
 }
 
+const markAsTreated = $('.mark')
+if (markAsTreated) {
+    const overlay = $('.overlay')
+    markAsTreated.on('click', () => {
+        overlay.style.width = '200px'
+    })
+    const cancel = $('.cancel')
+    cancel.on('click', (event) => {
+        event.preventDefault()
+        overlay.style.width = '0px'
+    })
+}
+
 const changeDate = $('#changeDate')
 if (changeDate) {
     changeDate.on('click', function(e) {

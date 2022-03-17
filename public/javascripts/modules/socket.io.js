@@ -155,6 +155,7 @@ export default class Socket {
 
     displayDetails(data) {
         [this.date] = data.dateOfReg.split('T')
+
         let tableRow = `
                 <tr>
                     <td>${data.regNumber}</td>
@@ -162,7 +163,7 @@ export default class Socket {
                     
                     <td>${data.state}</td>
                     <td>${this.date}</td>
-                    <td style='font-size: 12px; color: brown;'>UNTREATED</td>
+                    <td style='font-size: 12px; color: brown;'>${data.isTreated == true ? 'TREATED' : 'UNTREATED'}</td>
                     <td><a href='/business/${data.slug}/${data._id}' style='color:white;background-color: #1c330d; padding: 4px;'>VIEW</a></td>
                 </tr>
             `

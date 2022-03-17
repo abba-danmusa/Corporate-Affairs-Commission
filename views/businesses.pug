@@ -62,7 +62,8 @@ block content
             td
               =`${business.dateOfReg.getFullYear()}-${business.dateOfReg.getMonth()}-${business.dateOfReg.getDate()}`
             -const isTreated = business.isTreated == true ? 'TREATED' : 'UNTREATED'
-            td(style='color:brown;font-size:12px;')
+            -const color = business.isTreated == true ? 'green' : 'brown'
+            td(style=`color:${color};font-size:12px;`)
               =isTreated
             td
               a.link__button(href=`/business/${business.businessName}/${business._id}` style='color:white;background-color: #1c330d; padding: 4px;') VIEW
