@@ -12,8 +12,12 @@ block header
         span= user.userName
     
       a.button(href='/businesses')
+        !=h.icon('check-solid')
+        span Treated
+
+      a.button(href='/businesses')
         !=h.icon('history-solid')
-        span History
+        span Untreated
 
       a.button(href='/logout')
         !=h.icon('sign-out')

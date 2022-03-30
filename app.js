@@ -96,40 +96,37 @@ const upload = multer({ storage: multerOptions }).single('file')
 const save = async(req, res) => {
 
     // get the task-flagged user and the serial number
-    // const [taskFlaggedUser] = await User.getTaskFlaggedUser()
-    // const userSerialNumber = taskFlaggedUser.serialNumber
+    const [taskFlaggedUser] = await User.getTaskFlaggedUser()
+    const userSerialNumber = taskFlaggedUser.serialNumber
 
     // get the next users to be task-flagged
-    // let nextTaskFlaggedUser = await User.find({ serialNumber: { $gt: userSerialNumber }, isActive: true })
+    let nextTaskFlaggedUser = await User.find({ serialNumber: { $gt: userSerialNumber }, isActive: true })
 
     // if users exist, get the first active user after the task-flagged user, if not, get the first active user before the task-flagged user
-    // nextTaskFlaggedUser.length ? nextTaskFlaggedUser = nextTaskFlaggedUser[0] : [nextTaskFlaggedUser] = await User.find({ serialNumber: { $lt: userSerialNumber }, isActive: true })
+    nextTaskFlaggedUser.length ? nextTaskFlaggedUser = nextTaskFlaggedUser[0] : [nextTaskFlaggedUser] = await User.find({ serialNumber: { $lt: userSerialNumber }, isActive: true })
 
     // add some necessary properties to the req.body object
     const [proprietors] = [req.body.proprietors]
     const author = req.user._id
     req.body.proprietors = proprietors
     req.body.author = author
-        // req.body.queuedTo = taskFlaggedUser._id
+    req.body.queuedTo = taskFlaggedUser._id
 
     // save to the database
     const business = new Business(req.body)
     await business.save()
 
     // find the task-flagged user and update the taskFlag field to false 
-    // await User.findOneAndUpdate({ _id: taskFlaggedUser._id }, { taskFlag: false }, { new: true, runValidators: true }).exec()
+    await User.findOneAndUpdate({ _id: taskFlaggedUser._id }, { taskFlag: false }, { new: true, runValidators: true }).exec()
 
-    // find the task-flagged user and update the taskFlag field to false 
-    // await User.findOneAndUpdate({ _id: taskFlaggedUser._id }, { taskFlag: false }, { new: true, runValidators: true }).exec()
-
-    // // if exist, find the next user to be task-flagged and update the taskFlag field to true
-    // if (nextTaskFlaggedUser) {
-    //     await User.findOneAndUpdate({ _id: nextTaskFlaggedUser._id }, { taskFlag: true }, { new: true, runValidators: true }).exec()
-    // }
-    // // if doesn't exist, task-flag the previous user
-    // else {
-    //     await User.findOneAndUpdate({ _id: taskFlaggedUser._id }, { taskFlag: true }, { new: true, runValidators: true }).exec()
-    // }
+    // if exist, find the next user to be task-flagged and update the taskFlag field to true
+    if (nextTaskFlaggedUser) {
+        await User.findOneAndUpdate({ _id: nextTaskFlaggedUser._id }, { taskFlag: true }, { new: true, runValidators: true }).exec()
+    }
+    // if doesn't exist, task-flag the previous user
+    else {
+        await User.findOneAndUpdate({ _id: taskFlaggedUser._id }, { taskFlag: true }, { new: true, runValidators: true }).exec()
+    }
 
     // emit the saved data
     io.emit('document', [business])

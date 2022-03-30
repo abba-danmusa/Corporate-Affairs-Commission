@@ -5,8 +5,15 @@ block header
     .site-identity
       a(href="/")
         img(src="/images/logos.png" alt="Site logo")
+    
+    a.nav__button.button(href='/')
+      !=h.icon('arrow-left-solid')
+      span BACK
 
     .nav__buttons
+      a.button(href='#')
+        !=h.icon('user-solid') 
+        span=user.userName
       a.button(href='/logout')
         !=h.icon('sign-out')
         span Logout
@@ -16,16 +23,17 @@ include mixins/_pagination
 block content
   .tasks
     
-    .search.search__user
+    .search.head__user--search
       input.search__input(type="text" placeholder='Search...' name="search")
     table.table.table-bordered.search__results(style='display: none')
       thead
         tr
           th REGISTRATION NO
           th BUSINESS NAME
-          th NATURE OF BUSINESS
+          
           th STATE
           th DATE
+          th STATUS
           th ACTION
       tbody.search__results--table(id="myTable")
     table.table.table-bordered.hidden
@@ -33,23 +41,25 @@ block content
         tr
           th REGISTRATION NO
           th BUSINESS NAME
-          th NATURE OF BUSINESS
+          
           th STATE
           th DATE
+          th STATUS
           th ACTION
       tbody(id="myTable")
-        each business in userTask
+        each business in userTasks
+          -const status = business.isTreated == false ? 'Untreated' : 'Treated'
+          -const color = status == 'Treated' ? 'green' : 'brown'
           tr
             td
               =business.regNumber
             td
               =business.businessName
             td
-              =business.natureOfBusiness
-            td
               =business.state
             td
               =`${business.dateOfReg.getFullYear()}-${business.dateOfReg.getMonth()}-${business.dateOfReg.getDate()}`
+            td(style=`font-size:12px;color:${color};`)=status
             td
               a.button(href=`/${user.state}/business/${business._id}` style='color:white;background-color: #1c330d; padding: 4px;') VIEW
     +pagination(page, pages, total)

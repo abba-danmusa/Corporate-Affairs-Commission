@@ -95,12 +95,12 @@ export default class Socket {
     }
     openConnection() {
         this.socket = io()
-        this.socket.on('connect', () => {
-            console.log(this.socket.id)
-        })
-        this.socket.on('welcome', user => {
-            console.log(user)
-        })
+            // this.socket.on('connect', () => {
+            //     console.log(this.socket.id)
+            // })
+            // this.socket.on('welcome', user => {
+            //     console.log(user)
+            // })
         this.socket.on('output', data => {
             if (data.length && this.table) {
                 data.forEach(item => {
@@ -109,13 +109,17 @@ export default class Socket {
             }
         })
         this.socket.on('document', data => {
-            // console.log(data)
-            // this.business = data.business[0]
-            // console.log(this.business.queuedTo)
-            if (this.table) {
+
+            if (this.table && this.table.dataset.id == data[0].queuedTo) {
                 data.forEach(item => {
                     this.displayDetails(item)
                 })
+                this.untreatedToday = $('.untreatedToday')
+                this.totalReceived = $('.totalReceived')
+                this.totalUntreated = $('.totalUntreated')
+                this.untreatedToday.innerHTML = parseInt(this.untreatedToday.innerHTML) + 1
+                this.totalReceived.innerHTML = parseInt(this.totalReceived.innerHTML) + 1
+                this.totalUntreated.innerHTML = parseInt(this.totalUntreated.innerHTML) + 1
             } else return
         })
 

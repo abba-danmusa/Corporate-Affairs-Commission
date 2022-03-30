@@ -32,6 +32,7 @@ router.get('/:state/stats', authController.isLoggedIn, userController.getStats)
 router.get('/user/:state/:user/:id', authController.isLoggedIn, catchErrors(userController.viewUser))
 router.get('/business/:name/:id', authController.isLoggedIn, catchErrors(adminController.getBusiness))
 router.get('/treat/:slug/:id', authController.isLoggedIn, catchErrors(userController.treat))
+router.get('/businesses/:id', authController.isLoggedIn, catchErrors(userController.userTasks))
     // router.get('/history', authController.isLoggedIn, catchErrors(userController.getBusinesses))
     // router.get('/history/page/:page', catchErrors(userController.getBusinesses))
 router.get('/register', authController.isLoggedIn, userController.headRegister)
@@ -51,7 +52,9 @@ router.post('/:state/:business/:id', authController.isLoggedIn, catchErrors(user
 
 // API's
 router.get('/api/v1/users/history/search', catchErrors(userController.searchByBusinessName))
+router.get('/api/v1/history/search', catchErrors(userController.headUserSearch))
 router.get('/api/v1/state/search', catchErrors(userController.searchByState))
+router.get('/api/v1/task/:id', catchErrors(userController.untreatedToday))
 
 
 module.exports = router

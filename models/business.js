@@ -51,11 +51,11 @@ const businessSchema = new Schema({
         type: String,
         required: 'You must supply a pdf file'
     },
-    // queuedTo: {
-    //     type: mongoose.Schema.ObjectId,
-    //     ref: 'User',
-    //     required: 'You must supply an author'
-    // },
+    queuedTo: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+        required: 'You must supply an author'
+    },
     isTreated: {
         type: Boolean,
         default: false
@@ -87,12 +87,14 @@ businessSchema.statics.getUserTotalTasks = function(userID) {
     return this.find({ queuedTo: userID })
 }
 
+const ObjectId = require('mongodb').ObjectId
 businessSchema.statics.getPendingTasks = function(userID) {
-    return this.find({ queuedTo: userID, treated: false })
+    return this.find({ queuedTo: { '$in': [ObjectId(userID)] }, isTreated: false })
 }
 
 businessSchema.statics.getTreatedTasks = function(userID) {
-    return this.find({ queuedTo: userID, treated: true })
+    return this.find({ queuedTo: ObjectId(userID), isTreated: true })
+        // return this.find({ queuedTo: userID, treated: true })
 }
 
 businessSchema.statics.getTotals = function() {
@@ -195,10 +197,10 @@ function autoPopulateAuthor(next) {
     next()
 }
 
-// function autoPopulate(next) {
-//     this.populate('queuedTo')
-//     next()
-// }
+function autoPopulate(next) {
+    this.populate('queuedTo')
+    next()
+}
 
 // function autoPopulateTreatedBy(next) {
 //     this.populate('treatedBy')
@@ -211,8 +213,8 @@ businessSchema.pre('findOne', autoPopulateAuthor)
 // businessSchema.pre('find', autoPopulateTreatedBy)
 // businessSchema.pre('findOne', autoPopulateTreatedBy)
 
-// businessSchema.pre('find', autoPopulate)
-// businessSchema.pre('findOne', autoPopulate)
+businessSchema.pre('find', autoPopulate)
+businessSchema.pre('findOne', autoPopulate)
 
 businessSchema.pre('save', async function(next) {
     if (!this.isModified('businessName')) {

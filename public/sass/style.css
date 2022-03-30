@@ -1000,6 +1000,46 @@ select {
   width: 40%;
 }
 
+.left {
+  position: fixed;
+  left: 10px;
+  width: 10vw;
+}
+
+.left .treated {
+  border-bottom: 10px ridge #1c330d;
+}
+
+.left .pendings {
+  border-bottom: 10px ridge red;
+}
+
+.left .treated,
+.left .pendings {
+  background-color: rgba(180, 214, 158, 0.5);
+  -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+  margin-bottom: 5vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
+}
+
+.left .treated:hover,
+.left .pendings:hover {
+  cursor: pointer;
+}
+
 .task {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1008,41 +1048,10 @@ select {
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
-  width: 95vw;
-  margin: 0 2.5vw;
+  margin: 0 auto;
   -ms-flex-pack: distribute;
       justify-content: space-around;
   z-index: 1;
-}
-
-.task .left {
-  width: 10vw;
-}
-
-.task .left .treated,
-.task .left .pendings {
-  background-color: rgba(180, 214, 158, 0.5);
-  -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  -webkit-backdrop-filter: blur(6px);
-          backdrop-filter: blur(6px);
-  margin-bottom: 5vh;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  text-align: center;
-}
-
-.task .left .treated:hover,
-.task .left .pendings:hover {
-  cursor: pointer;
 }
 
 .task .task__queue--table {
@@ -1051,12 +1060,22 @@ select {
   width: 70vw;
 }
 
-.task .right {
+.right {
+  position: fixed;
+  right: 10px;
   width: 10vw;
 }
 
-.task .right .total__received,
-.task .right .total__pendings {
+.right .total__received {
+  border-bottom: 10px ridge lightgreen;
+}
+
+.right .total__pendings {
+  border-bottom: 10px ridge red;
+}
+
+.right .total__received,
+.right .total__pendings {
   background-color: rgba(180, 214, 158, 0.5);
   -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
           box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -1076,8 +1095,8 @@ select {
   text-align: center;
 }
 
-.task .right .total__received:hover,
-.task .right .total__pendings:hover {
+.right .total__received:hover,
+.right .total__pendings:hover {
   cursor: pointer;
 }
 

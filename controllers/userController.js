@@ -1,6 +1,7 @@
 const Business = require('../models/business')
 const User = require('../models/user')
 const { promisify } = require('es6-promisify')
+const ObjectId = require('mongodb').ObjectId
 
 exports.changePasswordForm = (req, res) => {
     res.render('changePassword', { title: 'Change Password' })
@@ -34,14 +35,14 @@ exports.entryForm = async(req, res) => {
     } else if (req.user.userType == 'headUser') {
 
         const page = req.params.page || 1
-        const limit = 10
+        const limit = 40
         const skip = (page * limit) - limit
 
         const businessesPromise = await Business
-            .find({ queuedTo: req.user._id })
+            .find({ queuedTo: ObjectId(req.user._id), isTreated: false })
             .sort({ _id: -1 })
-            .skip(skip)
             .limit(limit)
+            .skip(skip)
 
         const totalBusinessesPromise = Business
             .find({ queuedTo: req.user._id })
@@ -61,9 +62,9 @@ exports.entryForm = async(req, res) => {
         const userTreatedTasks = Business.getTreatedTasks(req.user._id)
         const [pendingTasks, treatedTasks] = await Promise.all([userPendingTasks, userTreatedTasks])
 
-        // res.render('taskQueue', { title: 'Home', businesses, page, pages, total, pendingTasks, treatedTasks })
+        res.render('taskQueue', { title: 'Home', businesses, page, pages, total, pendingTasks, treatedTasks })
 
-        res.render('userLive', { title: 'Live Data' })
+        // res.render('userLive', { title: 'Live Data' })
 
     } else if (req.user.userType == 'zonalUser') {
 
@@ -425,11 +426,11 @@ exports.shareTaskQueue = async(req, res) => {
 exports.userTasks = async(req, res) => {
 
     const page = req.params.page || 1
-    const limit = 10
+    const limit = 20
     const skip = (page * limit) - limit
 
-    const userTasks = await Business
-        .find({ queuedTo: req.params.id })
+    const userTasksPromise = Business
+        .find({ queuedTo: ObjectId(req.params.id) })
         .sort({ _id: 1 })
         .skip(skip)
         .limit(limit)
@@ -444,16 +445,16 @@ exports.userTasks = async(req, res) => {
         .find({ state: req.params.state })
         .countDocuments()
 
-    const [userTask, total] = await Promise.all([userTasks, totalUserTasksPromise])
+    const [userTasks, total] = await Promise.all([userTasksPromise, totalUserTasksPromise])
     const pages = Math.ceil(total / limit)
 
-    if (!userTask.length && skip) {
+    if (!userTasks.length && skip) {
         req.flash('info', `Page ${page} does not exist only page ${pages}`)
         res.redirect(`/tasks/${pages}`)
         return
     }
 
-    res.render('tasks', { title: 'User Tasks', userTask, page, pages, total })
+    res.render('tasks', { title: 'User Tasks', userTasks, page, pages, total })
 }
 
 exports.getStats = async(req, res) => {
@@ -532,9 +533,28 @@ exports.headRegister = (req, res) => {
 exports.treat = async(req, res) => {
     try {
         // get the business and mark it as treated
-        const updatedBusiness = await Business.findByIdAndUpdate(req.params.id, { isTreated: true })
-        res.status(200).send({ updatedBusiness, status: 'success' })
+        await Business.findByIdAndUpdate(req.params.id, { isTreated: true }, { new: true, runValidators: true })
+        req.flash('success', 'Success')
+        res.redirect('back')
     } catch (error) {
-        res.status(500).send({ error, message: 'unsuccessful' })
+        req.flash('error', 'Unsuccessful')
+        res.redirect('back')
     }
+}
+
+exports.headUserSearch = async(req, res) => {
+    let regex = new RegExp(req.query.search)
+
+    const q = {
+        queuedTo: ObjectId(req.user.id),
+        $or: [{
+                businessName: { $regex: regex, $options: "gi" }
+            },
+            { regNumber: { $regex: regex, $options: "gi" } }
+        ]
+    }
+    const business = await Business
+        .find(q)
+        .limit(100)
+    res.json(business)
 }

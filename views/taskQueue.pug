@@ -8,7 +8,7 @@ block header
       a.button(href='#')
         !=h.icon('user-solid') 
         span=user.userName
-      a.button(href=`/admin/businesses`)
+      a.button(href=`/history/tasks/${user.userName}/${user._id}`)
         !=h.icon('history-solid')
         span History
       a.button(href='/logout')
@@ -18,63 +18,76 @@ block header
 include mixins/_pagination
 
 block content
+  .left
+    center
+      h3 TODAY
+    .pendings
+      h3.untreatedToday= pendingTasks.length
+      h4 UNTREATED
+      //- h6 TODAY
+    .treated
+      h3= treatedTasks.length
+      h4 TREATED
+      //- h6 TODAY
   .task
-    .left
-      .pendings
-          h3= pendingTasks.length
-          h4 PENDINGS
-      .treated
-        h3= treatedTasks.length
-        h4 TREATED
-      
-      //- .treated
-      //-   h3= treatedTasks.length
-      //-   h4 TREATED
-      //- .pendings
-      //-   h3= pendingTasks.length
-      //-   h4 PENDINGS
+    //- .treated
+    //-   h3= treatedTasks.length
+    //-   h4 TREATED
+    //- .pendings
+    //-   h3= pendingTasks.length
+    //-   h4 PENDINGS
 
     #live
-      table.task__queue--table
+      table.task__queue--table(data-id=user._id)
         thead
           tr
             th REGISTRATION NO
             th BUSINESS NAME
-            th NATURE OF BUSINESS
             th STATE
+            th DATE
+            th STATUS
             th ACTION
             //- th DATE REGISTERED
         //- tbody(id="table")
-        tbody.pendingsTasks(id="table")
-        
-        tbody.totalTasks(id="myTable" style='display: none')
+        tbody.pendingsTasks(id="table" data-id=`${user.id}`)
           each business in businesses
+            -const status = business.isTreated == false ? 'Untreated' : 'Treated'
+            -const color = status == 'Treated' ? 'green' : 'brown'
             tr
               td=business.regNumber
               td=business.businessName
-              td=business.natureOfBusiness
               td=business.state
+              td=`${business.dateOfReg.getFullYear()}-${business.dateOfReg.getMonth()}-${business.dateOfReg.getDate()}`
+              td(style=`font-size:12px;color:${color};`)=status
               td
-                a.button(href=`/${user.state}/business/${business._id}` style='color:white;background-color: #1c330d; padding: 4px;') VIEW
+                a.button(href=`/business/${business.slug}/${business._id}` style='color:white;background-color: #1c330d; padding: 4px;') VIEW
+
+        tbody.totalTasks(id="myTable" style='display: none')
+          
         tbody.treatedTasks(id="myTable" style='display: none')
           each business in treatedTasks
+            -const status = business.isTreated == false ? 'Untreated' : 'Treated'
+            -const color = status == 'Treated' ? 'green' : 'brown'
             tr
-              td= business.regNumber
-              td= business.businessName
-              td= business.natureOfBusiness
-              td= business.state
+              td=business.regNumber
+              td=business.businessName
+              td=business.state
+              td=`${business.dateOfReg.getFullYear()}-${business.dateOfReg.getMonth()}-${business.dateOfReg.getDate()}`
+              td(style=`font-size:12px;color:${color};`)=status
               td
-                a.button(href=`/${user.state}/business/${business._id}` style='color:white;background-color: #1c330d; padding: 4px;') VIEW
+                a.button(href=`/business/${business.slug}/${business._id}` style='color:white;background-color: #1c330d; padding: 4px;') VIEW
 
       script(src="/socket.io/socket.io.js")
 
-    .right
-      .total__received
-        h3= total
-        h4 TOTAL RECEIVED
-      .total__pendings
-        h3= pendingTasks.length
-        h4 PENDINGS
-      //- .total__pendings
-      //-   h3= pendingTasks.length
-      //-   h4 TOTAL PENDINGS
+  .right
+    center
+      h3 TOTAL
+    .total__received
+      h3.totalReceived= total
+      h4 RECEIVED
+    .total__pendings
+      h3.totalUntreated= pendingTasks.length
+      h4 UNTREATED
+    //- .total__pendings
+    //-   h3= pendingTasks.length
+    //-   h4 TOTAL PENDINGS

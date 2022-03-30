@@ -28,11 +28,14 @@ block content
   .overlay
     center
       h3 Mark as treated?
+      //- else
+        h3 Mark as untreated?
     center.overlay-content
       a.cancel(href='/') cancel
       a.confirm(href=`/treat/${business.slug}/${business.id}`) confirm
   .business
-    a.mark(style='cursor:pointer;color:red;') Mark as Treated
+    if business.isTreated == false || null
+      a.mark(style='cursor:pointer;color:red;') Mark as Treated
     h1= `BUSINESS NAME: ${business.businessName}`
     .details
       .left__side

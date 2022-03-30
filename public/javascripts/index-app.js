@@ -2,7 +2,9 @@ import { $, $$ } from './modules/bling'
 import Socket from './modules/socket.io'
 import typeAhead from './modules/typeAhead'
 import search from './modules/adminSearch'
+import headUserSearch from './modules/headUserSearch'
 import supervisorSearch from './modules/supervisorSearch'
+import realTimeStats from './modules/realTimeStats'
 
 // document.addEventListener('DOMContentLoaded', () => {
 //     FilePond.registerPlugin(
@@ -39,6 +41,11 @@ import supervisorSearch from './modules/supervisorSearch'
 
 if (document.querySelector("#live")) {
     new Socket()
+}
+
+const untreatedTable = $('.task__queue--table')
+if (untreatedTable) {
+    realTimeStats($('.task__queue--table').dataset.id)
 }
 
 const markAsTreated = $('.mark')
@@ -123,3 +130,4 @@ if (shareButton) {
 typeAhead($('.search__user'))
 search($('.search__admin'))
 supervisorSearch($('.search__supervisor'))
+headUserSearch($('.head__user--search'))
