@@ -465,6 +465,28 @@ template {
   display: none;
 }
 
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 5px white;
+          box-shadow: inset 0 0 5px white;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #1c330d;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #b30000;
+}
+
 body .background {
   position: fixed;
   top: 10vh;
@@ -833,11 +855,6 @@ form.search::after {
   margin-left: 10vw;
 }
 
-.business h3,
-.business h6 {
-  border-bottom: 3px ridge #1c330d;
-}
-
 .business a {
   width: -webkit-fit-content;
   width: -moz-fit-content;
@@ -849,6 +866,39 @@ form.search::after {
 
 .business .pdf {
   padding: 30px;
+}
+
+.business .business__grid--show {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 4fr;
+      grid-template-columns: 1fr 4fr;
+}
+
+.business .business__grid--show .left__grid {
+  background-color: #1c330d;
+  color: white;
+  border-top-right-radius: 20px;
+  font-size: 12px;
+  font-weight: 800;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+}
+
+.business .business__grid--show h6,
+.business .business__grid--show h3 {
+  border-bottom: 1px dashed #1c330d;
+  padding: 10px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.business .business__grid--show .proprietors {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 1fr;
+      grid-template-rows: 1fr;
 }
 
 .signup-form {
@@ -877,15 +927,13 @@ form.search::after {
 }
 
 .signup-form .register__user {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+  justify-items: center;
+  width: 40vw;
+  height: 30vw;
 }
 
 .signup-form .register__user .button {
@@ -894,18 +942,11 @@ form.search::after {
   margin-top: 2px;
 }
 
-.signup-form .register__user .left {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  width: 40%;
+.signup-form .register__user .button:hover {
+  cursor: pointer;
 }
 
-.signup-form .register__user .right {
+.signup-form .register__user .left__register {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -913,7 +954,18 @@ form.search::after {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  width: 40%;
+  width: 60%;
+}
+
+.signup-form .register__user .right__register {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 60%;
 }
 
 .form-group button {
@@ -933,6 +985,22 @@ select {
   display: inline-block;
   border: none;
   border-bottom: 5px ridge #1c330d;
+  color: #1c330d;
+}
+
+.login__form {
+  margin-top: 0;
+}
+
+.login__form form h2 {
+  margin-top: 50px;
+}
+
+.login__form form .button:hover {
+  cursor: pointer;
+}
+
+.login__form .form-group a {
   color: #1c330d;
 }
 

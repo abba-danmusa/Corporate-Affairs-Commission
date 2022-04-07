@@ -36,28 +36,60 @@ block content
   .business
     if ((business.isTreated == false || null) && (user.userType == 'headUser'))
       a.mark(style='cursor:pointer;color:white;padding:10px;margin-top:10px; background-color:brown;border-radius:6px;') Mark as Treated
-    h1= `BUSINESS NAME: ${business.businessName}`
-    .details
-      .left__side
-        h3
-          strong= 'REGISTRATION NO.:' 
-        h3
-          strong= 'ADDRESS:'
-        h3
-          strong= 'NATURE OF BUSINESS:' 
-        h3
-          strong= 'REGISTRATION DATE:'
-        h3
-          strong= 'PROPRIETORS:'
-        h6
-          strong= 'SENT BY:'
-      .right__side
-        h3=business.regNumber
-        h3=business.businessAddress
-        h3=business.natureOfBusiness
-        h3=business.dateOfReg
-        h3=business.proprietors
-        h6=business.author.name
+
+    .business__grid--show
+      h3.left__grid
+        strong business name:
+      h3
+        strong=business.businessName
+      h3.left__grid
+        strong registration number:
+      h3
+        strong=business.regNumber
+      h3.left__grid
+        strong nature of business:
+      h3
+        strong=business.natureOfBusiness
+      h3.left__grid
+        strong registration date:
+      h3
+        strong=business.dateOfReg
+      h3.left__grid
+        strong sent by:
+      h3
+        strong=business.author.name
+      h3.left__grid
+        strong proprietors
+      .proprietors
+        each proprietor in business.proprietors
+          h3
+            span 
+              .fas.fa-star-solid
+            strong=proprietor
+    center.proprietors
+      
+    //- h1= `BUSINESS NAME: ${business.businessName}`
+    //- .details
+    //-   .left__side
+    //-     h3
+    //-       strong= 'REGISTRATION NO.:' 
+    //-     h3
+    //-       strong= 'ADDRESS:'
+    //-     h3
+    //-       strong= 'NATURE OF BUSINESS:' 
+    //-     h3
+    //-       strong= 'REGISTRATION DATE:'
+    //-     h3
+    //-       strong= 'PROPRIETORS:'
+    //-     h6
+    //-       strong= 'SENT BY:'
+    //-   .right__side
+    //-     h3=business.regNumber
+    //-     h3=business.businessAddress
+    //-     h3=business.natureOfBusiness
+    //-     h3=business.dateOfReg
+    //-     h3=business.proprietors
+    //-     h6=business.author.name
     if business.file
       .pdf
-        embed(src=`/uploads/${business.file}#toolbar=1` type='application/pdf' width='1000vw' height='600px')
+        embed(src=`/uploads/${business.file}#toolbar=1` type='application/pdf' width='1000vw' height='700px')

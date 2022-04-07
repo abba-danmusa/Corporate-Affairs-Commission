@@ -5,11 +5,17 @@ block header
     .site-identity
       a(href="/")
         img(src="/images/logos.png" alt="Site logo")
+    a.nav__button.button(href='/')
+      !=h.icon('arrow-left-solid')
+      span BACK
 
     .nav__buttons
-      a.nav__button.button(href='/')
-        !=h.icon('arrow-left-solid')
-        span BACK
+      a.button(href='#')
+        !=h.icon('user-solid')
+        span=user.userName
+      a.button(href='/businesses')
+        !=h.icon('history-solid')
+        span History
       a.button(href='/logout')
         !=h.icon('sign-out')
         span Logout

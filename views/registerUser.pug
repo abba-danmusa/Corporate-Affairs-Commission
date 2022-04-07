@@ -29,7 +29,7 @@ block content
 
       h2 Register
       form.register__user(action="/admin/register-user" method="post")
-        .left
+        .left__register
           .form-group
             input(type="text" class="form-control" name="name" placeholder="Full Name" required="required")
 
@@ -46,7 +46,7 @@ block content
               option(value="zonalAdmin") ADMIN, ZONAL OFFICE
               option(value="zonalUser") USER, ZONAL OFFICE
             //- input(type="text" class="form-control" name="userType" value="administrator" required="required" readonly)
-        .right
+        .right__register
           .form-group
             input(type="password" class="form-control" name="password" placeholder="Password" required="required")
 

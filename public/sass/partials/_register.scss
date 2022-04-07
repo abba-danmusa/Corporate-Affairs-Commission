@@ -1,63 +1,92 @@
-.signup-form {
-    display: flex;
-    flex-direction: column;
-    width: 40vw;
-    height: 60vh;
-    margin: 5vh 30vw;
-    align-items: center;
-    color: #1c330d;
-    // background-color: rgba(180, 214, 158, 0.5);
-    // box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    // backdrop-filter: blur(6px);
-    border-radius: 20px;
-    .button {
-        margin: 0 0 4vh 0;
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
-    }
-    .register__user {
+    .signup-form {
         display: flex;
-        flex-direction: row;
-        justify-content: space-around;
+        flex-direction: column;
+        width: 40vw;
+        height: 60vh;
+        margin: 5vh 30vw;
+        align-items: center;
+        color: #1c330d;
+        // background-color: rgba(180, 214, 158, 0.5);
+        // box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        // backdrop-filter: blur(6px);
+        border-radius: 20px;
         .button {
-            padding: 4px;
-            font-size: 16px;
-            margin-top: 2px;
+            margin: 0 0 4vh 0;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
         }
-        .left {
-            display: flex;
-            flex-direction: column;
-            width: 40%;
-        }
-        .right {
-            display: flex;
-            flex-direction: column;
-            width: 40%;
+        .register__user {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            justify-items: center;
+            // border: 1px ridge #1c330d;
+            width: 40vw;
+            height: 30vw;
+            // background-color: red;
+            .button {
+                padding: 4px;
+                font-size: 16px;
+                margin-top: 2px;
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+            .left__register {
+                display: flex;
+                flex-direction: column;
+                width: 60%;
+            }
+            .right__register {
+                display: flex;
+                flex-direction: column;
+                width: 60%;
+            }
         }
     }
-}
-
-.form-group {
-    button {
-        margin-top: 7vh;
-        background-color: #1c330d;
-        color: white;
+    
+    .form-group {
+        button {
+            margin-top: 7vh;
+            background-color: #1c330d;
+            color: white;
+        }
     }
-}
-
-input[type=text],
-input[type=password],
-input[type=date],
-input[type=file],
-select {
-    width: 100%;
-    padding: 15px;
-    margin: 5px 0 22px 0;
-    display: inline-block;
-    border: none;
-    border-bottom: 5px ridge #1c330d;
-    color: #1c330d;
-    // background-color: #1c330d;
-    // color: white;
-}
+    
+    input[type=text],
+    input[type=password],
+    input[type=date],
+    input[type=file],
+    select {
+        width: 100%;
+        padding: 15px;
+        margin: 5px 0 22px 0;
+        display: inline-block;
+        border: none;
+        border-bottom: 5px ridge #1c330d;
+        color: #1c330d;
+        // background-color: #1c330d;
+        // color: white;
+    }
+    
+    .login__form {
+        // border-top: 1px ridge #1c330d;
+        // border-radius: 20px;
+        // width: fit-content;
+        margin-top: 0;
+        form {
+            h2 {
+                margin-top: 50px;
+            }
+            .button {
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+        .form-group {
+            a {
+                color: #1c330d;
+            }
+        }
+    }

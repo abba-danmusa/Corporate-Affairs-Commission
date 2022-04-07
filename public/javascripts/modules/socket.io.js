@@ -15,6 +15,7 @@ export default class Socket {
         this.proprietor3 = $('.proprietor3')
         this.author = $('.author')
         this.file = $('.file')
+        this.adminTable = $('.admin__table')
 
         // // Calls for the event methods to execute on submit of the form
         // this.events()
@@ -110,7 +111,7 @@ export default class Socket {
         })
         this.socket.on('document', data => {
 
-            if (this.table && this.table.dataset.id == data[0].queuedTo) {
+            if (this.table && ((this.table.dataset.id == data[0].queuedTo) || (this.adminTable))) {
                 data.forEach(item => {
                     this.displayDetails(item)
                 })

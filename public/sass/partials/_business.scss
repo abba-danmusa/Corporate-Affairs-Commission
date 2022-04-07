@@ -51,20 +51,39 @@
         margin-left: 10vw;
         // background-color: yellow;
     }
-    h3,
-    h6 {
-        border-bottom: 3px ridge #1c330d;
-        // margin: 4vh 10vw;
-        // background-color: #1c330d;
-        // color: white;
-        // padding: 10px;
-        // width: fit-content;
-    }
     a {
         width: fit-content;
         align-self: center;
     }
     .pdf {
         padding: 30px;
+    }
+    .business__grid--show {
+        display: grid;
+        grid-template-columns: 1fr 4fr;
+        .left__grid {
+            background-color: #1c330d;
+            color: white;
+            border-top-right-radius: 20px;
+            font-size: 12px;
+            font-weight: 800;
+            align-self: center;
+        }
+        h6,
+        h3 {
+            border-bottom: 1px dashed #1c330d;
+            padding: 10px;
+            font-size: 12px;
+            font-weight: 800;
+            // margin: 4vh 10vw;
+            // background-color: #1c330d;
+            // color: white;
+            // padding: 10px;
+            // width: fit-content;
+        }
+        .proprietors {
+            display: grid;
+            grid-template-rows: 1fr;
+        }
     }
 }
