@@ -10,7 +10,7 @@ block header
       a.button(href='#')
         !=h.icon('user-solid') 
         span=user.userName
-      a.button(href='/admin/businesses')
+      a.button(href='/businesses')
         !=h.icon('history-solid')
         span History
       a.button(href='/logout')
@@ -18,32 +18,33 @@ block header
         span Logout
 
 block content
+  h3(style='margin-left: 60px;color:#1c330d') TODAY'S STATS
   .users
-
     each user in users
       .user
         h3= user.name
         h4= user.userName
-        h4 TOTAL TREATED TODAY: 0
+        hr(style='color: green; border: 1px ridge green; width: 100%;')
+        h4 TREATED: 
           each treated in todayTreats
-            if treated._id == `${user._id}`
+            if treated._id.id == `${user._id}`
               span=treated.count
             
-        h4 TOTAL PENDINGS TODAY: 0
+        h4(style='color: brown;') UNTREATED: 
           each pending in pendingsToday
-            if pending._id == `${user._id}`
-              span=pending.count
+            if pending._id.id == `${user._id}`
+              span(style='color: brown')=pending.count
             
-        h4 TOTAL RECEIVED TODAY: 0
+        h4(style='color:orange;') RECEIVED: 
           each received in totalReceived
-            if received._id == `${user._id}`
+            if received._id.id == `${user._id}`
               span= received.count
 
           h4 STATUS:
             if user && user.isActive == true
               span  ACTIVE
             else
-              span  INACTIVE
+              span(style='color:brown;')  INACTIVE
           a(href=`/${user.slug}/${user._id}`) VIEW
 
     //- each user in users

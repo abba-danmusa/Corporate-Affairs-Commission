@@ -1,18 +1,20 @@
 body {
-    background-color: #b4d69e;
+    // background-color: #b4d69e;
+    // background-color: white;
     .background {
         // margin-top: 15vh;
         // background-color: red;
-        height: 85vh;
-        width: fit-content;
+        // height: 85vh;
+        // width: fit-content;
         position: fixed;
-        width: 60vw;
-        height: 85vh;
-        margin: 0vh 20vw;
-        svg {
-            width: 60vw;
-            height: 85vh;
-        }
+        top: 10vh;
+        // width: 60vw;
+        // height: 85vh;
+        // margin: 0vh 20vw;
+        // svg {
+        //     width: 60vw;
+        //     height: 85vh;
+        // }
     }
 }
 

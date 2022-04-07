@@ -67,5 +67,5 @@ block content
               =`${business.dateOfReg.getFullYear()}-${business.dateOfReg.getMonth()}-${business.dateOfReg.getDate()}`
             td
               a.button(href=`/${user.state}/business/${business._id}` style='color:white;background-color: #1c330d; padding: 4px;') VIEW
-    +pagination(page, pages, total)  
+    +pagination(page, pages, total, url)  
       

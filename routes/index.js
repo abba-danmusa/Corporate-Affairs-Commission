@@ -17,15 +17,16 @@ router.get('/back', userController.back)
 router.get('/change-password', userController.changePasswordForm)
 router.get('/reset-password/:id', userController.resetPassword)
 router.get('/:state/:user/history/:id', authController.isLoggedIn, catchErrors(userController.getHistory))
+router.get('/:state/:user/history/:id/page/:page', authController.isLoggedIn, catchErrors(userController.getHistory))
 router.get('/:state/history', authController.isLoggedIn, catchErrors(userController.getAllStateHistory))
-
+router.get('/:state/history/page/:page', authController.isLoggedIn, catchErrors(userController.getAllStateHistory))
 router.get('/:state/business/:id', authController.isLoggedIn, catchErrors(userController.getBusiness))
 router.get('/logout', authController.isLoggedIn, authController.logout)
     // router.get('/search/results', authController.isLoggedIn, userController.getSearchedData)
 router.get('/register-user', authController.isLoggedIn, userController.createUserForm)
 router.get('/edit/:id', authController.isLoggedIn, catchErrors(userController.editForm))
-
 router.get('/:user/:id', authController.isLoggedIn, catchErrors(userController.superviseUser))
+
 router.get('/history/tasks/:user/:id', authController.isLoggedIn, catchErrors(userController.userTasks))
 router.get('/stats', authController.isLoggedIn, catchErrors(userController.getStats))
 router.get('/:state/stats', authController.isLoggedIn, userController.getStats)
@@ -54,7 +55,7 @@ router.post('/:state/:business/:id', authController.isLoggedIn, catchErrors(user
 router.get('/api/v1/users/history/search', catchErrors(userController.searchByBusinessName))
 router.get('/api/v1/history/search', catchErrors(userController.headUserSearch))
 router.get('/api/v1/state/search', catchErrors(userController.searchByState))
-router.get('/api/v1/task/:id', catchErrors(userController.untreatedToday))
+router.get('/api/v1/task/:id', catchErrors(userController.taskNumbers))
 
 
 module.exports = router

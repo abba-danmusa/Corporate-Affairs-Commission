@@ -34,9 +34,10 @@ block content
         tr
           th REGISTRATION NO
           th BUSINESS NAME
-          th NATURE OF BUSINESS
+          
           th STATE
           th DATE
+          th SENT BY
           th ACTION
       tbody.search__results--table(id="myTable")
     table.table.table-bordered.hidden
@@ -44,19 +45,24 @@ block content
         tr
           th REGISTRATION NO
           th BUSINESS NAME
-          th NATURE OF BUSINESS
+
           th STATE
           th DATE
+          th SENT BY
           th ACTION
       tbody(id="myTable")
         each business in businesses
+          -const status = business.isTreated == true ? 'TREATED' : 'UNTREATED'
+          -const color = business.isTreated == true ? 'green' : 'brown'
           tr
             td=business.regNumber
             td=business.businessName
-            td=business.natureOfBusiness
+            
             td=business.state
             td=`${business.dateOfReg.getFullYear()}-${business.dateOfReg.getMonth()}-${business.dateOfReg.getDate()}`
+            //- td(style=`font-size:12px;color:${color}`)=status
+            td= business.author.name
             td
               a.button(href=`/${user.state}/business/${business._id}` style='color:white;background-color: #1c330d; padding: 4px;') VIEW
-    +pagination(page, pages, total)  
+    +pagination(page, pages, total, url)  
       

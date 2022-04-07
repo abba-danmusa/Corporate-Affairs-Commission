@@ -84,12 +84,16 @@ businessSchema.statics.taskTo = function() {
 }
 
 businessSchema.statics.getUserTotalTasks = function(userID) {
-    return this.find({ queuedTo: userID })
+    return this.find({ queuedTo: ObjectId(userID) })
 }
 
 const ObjectId = require('mongodb').ObjectId
 businessSchema.statics.getPendingTasks = function(userID) {
     return this.find({ queuedTo: { '$in': [ObjectId(userID)] }, isTreated: false })
+}
+
+businessSchema.statics.getTodaysPendingTasks = function(userID) {
+    return this.find({ dateEntered: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) }, queuedTo: { '$in': [ObjectId(userID)] }, isTreated: false })
 }
 
 businessSchema.statics.getTreatedTasks = function(userID) {
@@ -110,28 +114,78 @@ businessSchema.statics.getTreatedToday = function() {
     return this.aggregate([
 
         {
-            '$match': {
-                'dateTreated': { '$gt': new Date(Date.now() - 24 * 60 * 60 * 1000) },
+
+            $match: {
+                isTreated: true,
+                dateTreated: { '$gt': new Date(Date.now() - 24 * 60 * 60 * 1000) }
             }
         },
-        { $unwind: '$queuedTo' },
-        { $group: { _id: '$queuedTo', count: { $sum: 1 } } },
+        {
+            $group: {
+                _id: { id: '$queuedTo', user: '$queuedTo' },
+                count: { $sum: 1 }
+            }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: '_id.user',
+                foreignField: '_id',
+                as: 'user'
+            }
+        }
+    ])
+}
 
-        { $sort: { count: -1 } }
+businessSchema.statics.getTodaysTotal = function() {
+    return this.aggregate([
 
+        {
+            $match: {
+                dateEntered: { '$gt': new Date(Date.now() - 24 * 60 * 60 * 1000) }
+            }
+        },
+        {
+            $group: {
+                _id: { id: '$queuedTo', user: '$queuedTo' },
+                count: { $sum: 1 }
+            }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: '_id.user',
+                foreignField: '_id',
+                as: 'user'
+            }
+        }
     ])
 }
 
 businessSchema.statics.getPendingsToday = function() {
-    return this.aggregate([{
-            '$match': {
-                'dateEntered': { '$gt': new Date(Date.now() - 24 * 60 * 60 * 1000) },
-                'treated': false
+    return this.aggregate([
+
+        {
+
+            $match: {
+                isTreated: false,
+                dateEntered: { '$gt': new Date(Date.now() - 24 * 60 * 60 * 1000) }
             }
         },
-        { $unwind: '$queuedTo' },
-        { $group: { _id: '$queuedTo', count: { $sum: 1 } } },
-        { $sort: { count: -1 } }
+        {
+            $group: {
+                _id: { id: '$queuedTo', user: '$queuedTo' },
+                count: { $sum: 1 }
+            }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: '_id.user',
+                foreignField: '_id',
+                as: 'user'
+            }
+        }
     ])
 }
 

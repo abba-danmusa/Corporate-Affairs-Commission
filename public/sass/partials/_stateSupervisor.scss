@@ -8,14 +8,19 @@
 }
 
 .user {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 1fr;
+    // max-width: ;
     align-items: center;
     text-align: center;
     padding: 10px;
     color: #1c330d;
     text-transform: uppercase;
-    background-color: rgba(180, 214, 158, 0.5);
+    background-color: white;
+    // background-color: rgba(180, 214, 158, 0.5);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    backdrop-filter: blur(6px);
+    backdrop-filter: blur(1px);
+    border-radius: 15px;
+    margin-bottom: 20px;
+    min-width: 335px;
 }

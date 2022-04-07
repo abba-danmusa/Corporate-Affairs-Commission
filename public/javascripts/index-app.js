@@ -4,7 +4,6 @@ import typeAhead from './modules/typeAhead'
 import search from './modules/adminSearch'
 import headUserSearch from './modules/headUserSearch'
 import supervisorSearch from './modules/supervisorSearch'
-import realTimeStats from './modules/realTimeStats'
 
 // document.addEventListener('DOMContentLoaded', () => {
 //     FilePond.registerPlugin(
@@ -41,11 +40,6 @@ import realTimeStats from './modules/realTimeStats'
 
 if (document.querySelector("#live")) {
     new Socket()
-}
-
-const untreatedTable = $('.task__queue--table')
-if (untreatedTable) {
-    realTimeStats($('.task__queue--table').dataset.id)
 }
 
 const markAsTreated = $('.mark')
@@ -89,7 +83,7 @@ const pendingsTasks = $('.pendingsTasks')
 // task queue table
 const totalButton = $('.total__received')
 const treatedButton = $('.treated')
-const pendingButton = $('.pendings')
+const pendingButton = $('.total__pendings')
 
 if (totalButton) {
     totalButton.on('click', () => {

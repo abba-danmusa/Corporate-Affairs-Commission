@@ -1,9 +1,10 @@
 .entry-form {
-    background-color: rgba(180, 214, 158, 0.4);
-    // background-color: rgba(215, 218, 213, 0.5);
+    // background-color: rgba(180, 214, 158, 0.4);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     backdrop-filter: blur(2px);
+    border-radius: 20px;
     width: 80vw;
+    height: 90vh;
     margin-left: 10vw;
     align-items: center;
     color: #1c330d;
@@ -12,22 +13,26 @@
         margin-left: 3vw;
     }
     form {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
+        // background-color: black;
+        display: grid;
+        grid-auto-rows: 1fr 1fr;
+        gap: 10px;
+        // justify-content: space-between;
         .button {
-            padding: 4px;
+            padding: 10px;
             font-size: 16px;
             margin-top: 2px;
+            border: none;
+            border-radius: 6px;
         }
         .left {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: auto;
             width: 40%;
         }
         .right {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: auto;
             width: 40%;
         }
     }

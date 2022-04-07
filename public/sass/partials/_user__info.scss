@@ -1,0 +1,45 @@
+.user__taskQueue {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.user__info {
+    background-color: white;
+    width: 50vw;
+    border-radius: 10px;
+    .total__stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 10px;
+        margin: 40px;
+        .total__received {
+            // background-color: orange;
+            color: orange;
+        }
+        .total__treated {
+            color: green;
+        }
+        .total__untreated {
+            color: red;
+        }
+    }
+    .total__treated,
+    .total__untreated,
+    .total__received {
+        border: 1px ridge #1c330d;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    .action__links {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        margin-bottom: 20px;
+        button {
+            cursor: pointer;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+        }
+    }
+}

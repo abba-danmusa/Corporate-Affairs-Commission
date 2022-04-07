@@ -11,7 +11,7 @@ block header
       a.button(href='#')
         !=h.icon('user-solid') 
         span=user.userName
-      a.button(href=`/admin/businesses`)
+      a.button(href=`/${user.state}/history`)
         !=h.icon('history-solid')
         span History
       a.button(href='/logout')
@@ -25,12 +25,16 @@ block content
       .user
         h3= user.name
         h4= user.userName
+        hr(style='border:1px ridge green;width:100%;')
 
-        each total in daily
-          if total._id == `${user._id}`
-            h4= `total today: ${total.count}`
-        each business in businesses
-          if `${business._id}` == `${user._id}`
-            h4= `total: ${business.count}`
+        h4(style='color:green;') today:
+          each total in daily
+            if total._id == `${user._id}`
+              span=total.count
+        h4(style='color:orange;') total: 
+          each business in businesses
+            if `${business._id}` == `${user._id}`
+              span= business.count  
+          //- if [business._id].includes(user._id)
         
-        a(href=`/user/${user.state}/${user.slug}/${user._id}`) VIEW
+        //- a(href=`/user/${user.state}/${user.slug}/${user._id}`) VIEW

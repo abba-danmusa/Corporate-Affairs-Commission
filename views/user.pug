@@ -17,32 +17,38 @@ block header
 block content
 
   .user__taskQueue
-    .actions
-      if user.isActive == true
-        form(action=`/deactivate/${user.slug}/${user._id}` method='post')
-          button.button(type=submit) DEACTIVATE USER
-      else
-        form(action=`/activate/${user.slug}/${user._id}` method='post')
-          button.button(type=submit) ACTIVATE USER
-      
-      form(action=`/share/${user.slug}/${user._id}` method='post')
-        button.button.share__button(type=submit)= `Share ${user.name.split(' ')[0]}'s Tasks`
+    center.user__info
+      h1(style='color: #1c330d;')= user.name
+      h3(style='color: #1c330d;')= user.userName
+      hr(style='border:1px ridge green;margin: 10px;')
+      h3(style='color: green;') STATS
+      .total__stats
+        .total__treated
+          h1= treatedTasks.length
+          h5 TREATED
+        .total__untreated
+          h1= pendingTasks.length
+          h5 UNTREATED
+        .total__received
+          h1= totalTasks.length
+          h5 RECEIVED
+      .action__links
+        if user.isActive == true
+          form(action=`/deactivate/${user.slug}/${user._id}` method='post')
+            button.button(type=submit style='background-color:brown; color:white;') DEACTIVATE USER
+        else
+          form(action=`/activate/${user.slug}/${user._id}` method='post')
+            button.button(type=submit style='background-color:green;color:white;') ACTIVATE USER
+        
+        form(action=`/share/${user.slug}/${user._id}` method='post')
+          button.button.share__button(type=submit style='background-color:red;color:white;')= `Share ${user.name.split(' ')[0]}'s Tasks`
 
       //- a.button(href=`/history/tasks/${user.slug}/${user._id}`)= `${user.userName.split(' ')[0]}'s tasks`
 
-      button.treated
-          h3= treatedTasks.length
-          h6 TREATED
-      button.pendings
-          h3= pendingTasks.length
-          h6 PENDINGS
-      button.total
-          h3= totalTasks.length
-          h6 TOTAL RECEIVED
   
     //- .search.search__user
     //-   input.search__input(type="text" placeholder='Search...' name="search")
-    table.table.table-bordered.search__results(style='display: none')
+    //- table.table.table-bordered.search__results(style='display: none')
       thead
         tr
           th REGISTRATION NO
@@ -52,7 +58,7 @@ block content
           th DATE
           th ACTION
       tbody.search__results--table(id="myTable")
-    table.table.table-bordered.hidden
+    //- table.table.table-bordered.hidden
       thead
         tr
           th REGISTRATION NO

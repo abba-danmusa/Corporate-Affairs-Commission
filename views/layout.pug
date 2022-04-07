@@ -32,7 +32,7 @@ html
     
   body
     .background  
-      !=h.icon('coatOfArm')
+      img(src='/images/backimage.png')
     block header
       nav.nav
         .site-identity
@@ -63,12 +63,19 @@ html
     .content
       block content
 
-    .footer
+    footer
       block footer
-
-        div(id="chat-wrapper" class="chat-wrapper shadow border-top border-left border-right")
-        script(src="/socket.io/socket.io.js")
+        .yes
+          h1 ahgilajklja;
+          h3 ajglkhkigjakl;jf
+        .yes
+          h1 ahgilajklja;
+          h3 ajglkhkigjakl;jf
+        .yes
+          h1 ahgilajklja;
+          h3 ajglkhkigjakl;jf  
 
     block scripts
       
+      script(src="/socket.io/socket.io.js")
       script(src="/dist/App.bundle.js")

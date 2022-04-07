@@ -1,12 +1,23 @@
-mixin pagination(page, pages, total)
+mixin pagination(page, pages, total, url)
+  
   .pagination
-    -const nexturl = user && user.userType ? `/businesses/page/${parseFloat(page) + 1}` : `/admin/businesses/page/${parseFloat(page) + 1}`
-    -const prevurl = user && user.userType ? `/businesses/page/${parseFloat(page) - 1}` : `/admin/businesses/page/${parseFloat(page) - 1}`
-    .pagination__prev
-      if page > 1
-        a(href=prevurl) Prev
-    .pagination__text
-      p Page #{page} of #{pages} - #{total} total results 
-    .pagination__next
-      if page < pages
-        a(href=nexturl) Next
+    if !url
+      -const nexturl = user && user.userType ? `/businesses/page/${parseFloat(page) + 1}` : `/admin/businesses/page/${parseFloat(page) + 1}`
+      -const prevurl = user && user.userType ? `/businesses/page/${parseFloat(page) - 1}` : `/admin/businesses/page/${parseFloat(page) - 1}`
+      .pagination__prev
+        if page > 1
+          a(href=prevurl) Prev
+      .pagination__text
+        p Page #{page} of #{pages} - #{total} total results 
+      .pagination__next
+        if page < pages
+          a(href=nexturl) Next
+    else
+      .pagination__prev
+        if page > 1
+          a(href=`${url}/page/${parseFloat(page)-1}`) Prev
+      .pagination__text
+        p Page #{page} of #{pages} - #{total} total results 
+      .pagination__next
+        if page < pages
+          a(href=`${url}/page/${parseFloat(page)+1}`) Next

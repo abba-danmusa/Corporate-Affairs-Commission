@@ -46,20 +46,26 @@ userSchema.pre('save', async function(next) {
         next()
         return
     }
-    if (this.userType === 'headUser') {
-        this.isActive = true
-        const users = await this.constructor.find({ userType: 'headUser' })
-        this.serialNumber = users.length + 1
-        if (this.serialNumber == 1) {
-            this.taskFlag = true
-        } else this.taskFlag = false
-    } else {
+    if (this.userType !== 'headUser') {
+        const users = await this.constructor.find({ userType: { '$in': ['headSupervisor', 'zonalAdmin', 'zonalUser', 'zonalSupervisor'] } })
+        this.serialNumber = users.length * 1000000
         return next()
-            // this.isActive = false
-            // this.taskFlag = false
-            // this.serialNumber = 0
     }
-    // next()
+    // if (this.userType === 'headUser') {
+
+    const users = await this.constructor.find({ userType: 'headUser' })
+    this.isActive = true
+    this.serialNumber = users.length + 1
+    if (this.serialNumber == 1) {
+        this.taskFlag = true
+    } else this.taskFlag = false
+        // } else {
+        // return next()
+        // this.isActive = false
+        // this.taskFlag = false
+        // this.serialNumber = 0
+        // }
+        // next()
 })
 
 userSchema.statics.getTaskFlaggedUser = function() {
@@ -107,6 +113,6 @@ userSchema.plugin(passportLocalMongoose, {
     usernameField: 'userName'
 })
 
-userSchema.plugin(mongodbErrorHandler)
+// userSchema.plugin(mongodbErrorHandler)
 
 module.exports = mongoose.model('User', userSchema)

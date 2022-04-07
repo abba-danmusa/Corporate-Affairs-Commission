@@ -5,7 +5,7 @@ nav {
     justify-content: space-between;
     top: 0;
     margin: 0;
-    background-color: #b4d69e;
+    // background-color: #b4d69e;
     width: 100%;
     z-index: 2;
     height: fit-content;
@@ -33,18 +33,35 @@ nav {
 }
 
 .nav__buttons {
+    background-color: #1c330d;
     position: relative;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    backdrop-filter: blur(2px);
+    gap: 2px;
+    color: white;
+    // justify-content: space-between;
     align-items: center;
-    width: 30vw;
+    width: 50%;
     top: 6vh;
-    // margin-left: 30vw;
+    border-top-left-radius: 10px;
+    // margin-right: 30vw;
     // width: fit-content;
     height: fit-content;
+    font-size: 12px;
     .button {
         width: fit-content;
+        color: white;
+        text-decoration: none;
+        padding: 5px;
+        svg {
+            height: 12px;
+            path {
+                fill: white;
+            }
+        }
+        // background-color: white;
     }
     // margin-top: 0;
     // margin-left: 65vw;
@@ -62,6 +79,9 @@ nav {
 // }
 .site-identity {
     margin-left: 4.5vw;
+    img {
+        height: 8vh;
+    }
 }
 
 // .site-navigation {

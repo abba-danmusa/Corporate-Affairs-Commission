@@ -38,7 +38,7 @@ exports.entryForm = async(req, res) => {
         const limit = 40
         const skip = (page * limit) - limit
 
-        const businessesPromise = await Business
+        const businessesPromise = Business
             .find({ queuedTo: ObjectId(req.user._id), isTreated: false })
             .sort({ _id: -1 })
             .limit(limit)
@@ -46,7 +46,7 @@ exports.entryForm = async(req, res) => {
 
         const totalBusinessesPromise = Business
             .find({ queuedTo: req.user._id })
-            .countDocuments()
+            // .countDocuments()
 
         const [businesses, total] = await Promise.all([businessesPromise, totalBusinessesPromise])
 
@@ -60,9 +60,10 @@ exports.entryForm = async(req, res) => {
 
         const userPendingTasks = Business.getPendingTasks(req.user._id)
         const userTreatedTasks = Business.getTreatedTasks(req.user._id)
-        const [pendingTasks, treatedTasks] = await Promise.all([userPendingTasks, userTreatedTasks])
+        const untreatedTodayPromise = Business.getTodaysPendingTasks(req.user._id)
+        const [pendingTasks, treatedTasks, untreatedToday] = await Promise.all([userPendingTasks, userTreatedTasks, untreatedTodayPromise])
 
-        res.render('taskQueue', { title: 'Home', businesses, page, pages, total, pendingTasks, treatedTasks })
+        res.render('taskQueue', { title: 'Home', businesses, page, pages, total, pendingTasks, treatedTasks, untreatedToday })
 
         // res.render('userLive', { title: 'Live Data' })
 
@@ -74,11 +75,13 @@ exports.entryForm = async(req, res) => {
 
         const todayTreatsPromise = Business.getTreatedToday()
         const pendingsTodayPromise = Business.getPendingsToday()
-        const totalTodayPromise = Business.getTotalDailySent()
+        const totalTodayPromise = Business.getTodaysTotal()
 
         const usersPromise = User.find({ userType: 'headUser' })
 
         const [todayTreats, totalReceived, users, pendingsToday] = await Promise.all([todayTreatsPromise, totalTodayPromise, usersPromise, pendingsTodayPromise])
+
+        // res.json({ totalReceived, todayTreats })
 
         res.render('supervisor', { title: 'Home', users, totalReceived, todayTreats, pendingsToday })
 
@@ -125,20 +128,22 @@ exports.getAllStateHistory = async(req, res) => {
         .limit(limit)
 
     const totalBusinessesPromise = Business
-        .find({})
+        .find({ state: req.user.state })
         .countDocuments()
 
     const [businesses, total] = await Promise.all([businessesPromise, totalBusinessesPromise])
 
     const pages = Math.ceil(total / limit)
 
+    const url = `/${req.user.state}/history`
+
     if (!businesses.length && skip) {
         req.flash('info', `Page ${page} does not exist only page ${pages}`)
-        res.redirect(`/businesses/page/${pages}`)
+        res.redirect(`${url}/page/${pages}`)
         return
     }
 
-    res.render('TotalStateBusinesses', { title: `Businesses, ${businesses.state } branch`, businesses, page, pages, total })
+    res.render('totalStateBusinesses', { title: `Businesses, ${businesses.state } branch`, businesses, page, pages, total, url })
 }
 
 exports.getHistory = async(req, res) => {
@@ -160,11 +165,13 @@ exports.getHistory = async(req, res) => {
 
     if (!businesses.length && skip) {
         req.flash('info', `Page ${page} does not exist only page ${pages}`)
-        res.redirect(`/businesses/page/${pages}`)
+        res.redirect(`/${req.user.state}/${req.user.slug}/history/${req.user._id}/page/${pages}`)
         return
     }
 
-    res.render('stateBusinesses', { title: `Businesses, ${businesses.state } branch`, businesses, page, pages, total })
+    const url = `/${req.user.state}/${req.user.slug}/history/${req.user._id}`
+
+    res.render('stateBusinesses', { title: `Businesses, ${businesses.state } branch`, businesses, page, pages, total, url })
 }
 
 exports.getBusiness = async(req, res) => {
@@ -442,7 +449,7 @@ exports.userTasks = async(req, res) => {
     //     .limit(limit)
 
     const totalUserTasksPromise = Business
-        .find({ state: req.params.state })
+        .find({ queuedTo: req.params.id })
         .countDocuments()
 
     const [userTasks, total] = await Promise.all([userTasksPromise, totalUserTasksPromise])
@@ -533,7 +540,7 @@ exports.headRegister = (req, res) => {
 exports.treat = async(req, res) => {
     try {
         // get the business and mark it as treated
-        await Business.findByIdAndUpdate(req.params.id, { isTreated: true }, { new: true, runValidators: true })
+        await Business.findByIdAndUpdate(req.params.id, { isTreated: true, dateTreated: Date.now() }, { new: true, runValidators: true })
         req.flash('success', 'Success')
         res.redirect('back')
     } catch (error) {

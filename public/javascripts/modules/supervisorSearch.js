@@ -7,9 +7,10 @@ function searchResultsHTML(businesses) {
             <tr>
                 <td>${business.regNumber}</td>
                 <td>${business.businessName}</td>
-                <td>${business.natureOfBusiness}</td>
+                
                 <td>${business.state}</td>
                 <td>${business.dateOfReg.split('T')[0]}</td>
+                <td>${business.author.name}</td>
                 <td><a class='link__button' style='color:white;background-color: #1c330d; padding: 4px;' href='/${business.state}/business/${business._id}'>VIEW</td>
             
         `

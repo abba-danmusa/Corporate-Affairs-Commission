@@ -6,7 +6,7 @@ block header
       //- !=h.dump(user.userType)
       a(href="/")
         img(src="/images/logos.png" alt="Site logo")
-    -const route = user.userType == 'headUser' ? '/' : '/admin'
+    -const route = user.userType ? '/' : '/admin'
     a.nav__button.button(href=route)
       !=h.icon('arrow-left-solid')
       span BACK
@@ -15,7 +15,7 @@ block header
         !=h.icon('user-solid')
         -const userName = user ? user.userName: 'admin'
         span=userName
-      if user.userType !== 'headUser'
+      if !user.userType
         a.button(href='/register-user')
           !=h.icon('user-plus-solid')
           span Register User
@@ -27,15 +27,15 @@ block header
 block content
   .overlay
     center
-      h3 Mark as treated?
+      h3(style='color:red') Are you sure this document is treated?
       //- else
         h3 Mark as untreated?
     center.overlay-content
       a.cancel(href='/') cancel
       a.confirm(href=`/treat/${business.slug}/${business.id}`) confirm
   .business
-    if business.isTreated == false || null
-      a.mark(style='cursor:pointer;color:red;') Mark as Treated
+    if ((business.isTreated == false || null) && (user.userType == 'headUser'))
+      a.mark(style='cursor:pointer;color:white;padding:10px;margin-top:10px; background-color:brown;border-radius:6px;') Mark as Treated
     h1= `BUSINESS NAME: ${business.businessName}`
     .details
       .left__side
@@ -50,7 +50,7 @@ block content
         h3
           strong= 'PROPRIETORS:'
         h6
-          strong= 'SAVED BY:'
+          strong= 'SENT BY:'
       .right__side
         h3=business.regNumber
         h3=business.businessAddress
