@@ -11,19 +11,6 @@ block header
       !=h.icon('arrow-left-solid')
       span BACK
 
-    //- if user.userType == 'headSupervisor'
-    //-   a.nav__button.button(href=`/history`)
-    //-     !=h.icon('arrow-left-solid')
-    //-     span BACK
-    //- if user.userType == 'zonalUser'
-    //-   a.nav__button.button(href=`/${user.state}/${user.slug}/history/${user._id}`)
-    //-     !=h.icon('arrow-left-solid')
-    //-     span BACK
-    //- if user.userType == 'zonalSupervisor'
-    //-   a.nav__button.button(href=`/${user.state}/history`)
-    //-     !=h.icon('arrow-left-solid')
-    //-     span BACK
-
     .nav__buttons
       if user
         a.button(href='#')
@@ -32,22 +19,7 @@ block header
         a.button(href=`/${user.state}/history`)
           !=h.icon('history-solid')
           span History
-        //- -let privilege = user.userType
-        //- if privilege == 'admin'
-        //-   a.button(href='/register-user')
-        //-     !=h.icon('user-plus-solid')
-        //-     span Register User
-        //-   a.button(href='/businesses')
-        //-     !=h.icon('history-solid')
-        //-     span Register User
-        //- if privilege == 'supervisor'
-        //-   a.button(href='/register-user')
-        //-     !=h.icon('user-plus-solid')
-        //-     span Register User
-        //- if privilege == 'supervisor' || 'user'
-        //-   a.button(href=`/${user.state}/saved-entries`)
-        //-     !=h.icon('history-solid')
-        //-     span History
+        
         a.button(href='/logout')
           !=h.icon('sign-out')
           span Logout

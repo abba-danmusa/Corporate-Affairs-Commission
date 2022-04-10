@@ -1923,6 +1923,16 @@ textarea.tall-textarea {
   border-radius: 6px;
 }
 
+#changeDate {
+  background-color: #1c330d;
+  margin-bottom: 12px;
+  color: white;
+}
+
+#changeDate:hover {
+  cursor: pointer;
+}
+
 .footer {
   height: 25%;
   width: 100%;

@@ -7,30 +7,38 @@ mixin business(business)
           button.button(type=submit) ACKNOWLEDGE
 
       if user.userType == 'zonalAdmin'
-        a.button(href=`/edit/${item._id}` style='background-color: #1c330d; color: white; padding: 4px; margin-top: 8px;') EDIT
+        a.button(href=`/edit/${item._id}` style='background-color: #1c330d; color: white; padding: 8px; margin-top: 8px;font-size:12px;border-radius:5px;text-decoration:none') EDIT
 
-      h1= `BUSINESS NAME: ${item.businessName}`
-      .details
-        .left__side
-          h3
-            strong= 'REGISTRATION NO.:' 
-          h3
-            strong= 'ADDRESS:'
-          h3
-            strong= 'NATURE OF BUSINESS:' 
-          h3
-            strong= 'REGISTRATION DATE:'
-          h3
-            strong= 'PROPRIETORS:'
-          h6
-            strong= 'SAVED BY:'
-        .right__side
-          h3=item.regNumber
-          h3=item.businessAddress
-          h3=item.natureOfBusiness
-          h3=item.dateOfReg
-          h3=item.proprietors
-          h6=item.author.name
+      .business__grid--show
+        h3.left__grid
+          strong business name:
+        h3
+          strong=item.businessName
+        h3.left__grid
+          strong registration number:
+        h3
+          strong=item.regNumber
+        h3.left__grid
+          strong nature of business:
+        h3
+          strong=item.natureOfBusiness
+        h3.left__grid
+          strong registration date:
+        h3
+          strong=item.dateOfReg
+        h3.left__grid
+          strong sent by:
+        h3
+          strong=item.author.name
+        h3.left__grid
+          strong proprietors
+        .proprietors
+          each proprietor in item.proprietors
+            h3
+              span 
+                .fas.fa-star-solid
+              strong=proprietor
+      center.proprietors
       if item.file
         .pdf
           embed(src=`/uploads/${item.file}` type='application/pdf' width='1000vw' height='550vh')

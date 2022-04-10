@@ -57,6 +57,7 @@ if (markAsTreated) {
 
 const changeDate = $('#changeDate')
 if (changeDate) {
+
     changeDate.on('click', function(e) {
         e.preventDefault()
         if (this.value == 'EDIT DATE') {
