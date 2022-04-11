@@ -381,15 +381,13 @@ exports.activateUser = async(req, res) => {
 exports.shareTaskQueue = async(req, res) => {
 
     // get all the businesses that are assigned to the user and are untreated
-    const usersTaskQueuePromise = Business.find({ queuedTo: req.params.id, treated: false })
+    const usersTaskQueuePromise = Business.find({ queuedTo: req.params.id, isTreated: false })
 
     // get the user
     const userPromise = User.find({ _id: req.params.id })
 
     // destructure the resolved promise array
-    const [
-        [user], usersTaskQueue
-    ] = await Promise.all([userPromise, usersTaskQueuePromise])
+    const [user, usersTaskQueue] = await Promise.all([userPromise, usersTaskQueuePromise])
 
     if (user.isActive == true) {
         req.flash('info', 'Please deactivate the user to share his/her task queue')

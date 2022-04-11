@@ -89,6 +89,13 @@ exports.validateRegister = async(req, res, next) => {
 
 exports.register = async(req, res) => {
 
+    const isUser = await User.find({ userName: req.body.userName })
+    if (isUser) {
+        req.flash('error', `${req.body.userName} already exist`)
+        res.redirect('back')
+        return
+    }
+
     const user = new User(req.body)
     const register = promisify(User.register.bind(User))
     await register(user, req.body.password)
@@ -100,6 +107,12 @@ exports.register = async(req, res) => {
 exports.getUsers = async(req, res) => {
     const users = await User.find({})
     res.render('registeredUsers', { title: 'Users', users })
+}
+
+exports.deleteUser = async(req, res) => {
+    const user = await User.findOneAndDelete({ _id: req.params.id })
+    req.flash('success', 'User has been deleted successfully')
+    res.redirect('back')
 }
 
 exports.resetUser = async(req, res) => {

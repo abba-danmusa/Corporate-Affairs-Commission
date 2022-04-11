@@ -37,7 +37,8 @@ block content
           th name
           th Account type
           th State 
-          th Action   
+          th Action
+          th
       tbody(id="myTable")
         each user in users
           tr
@@ -47,7 +48,9 @@ block content
             td= userType
             td=`${user.state}`
             td
-              a.link__button(href=`/admin/reset-user/${user._id}` style='color:white;background-color: #1c330d; padding:8px;') RESET PASSOWORD
+              a.link__button(href=`/admin/reset-user/${user._id}` style='color:white;background-color: #1c330d; padding:8px;font-size:12px') RESET PASSOWORD
+            td
+              a.link__button(href=`/admin/delete-user/${user._id}` style='color:white;background-color: #1c330d; padding:8px;font-size:12px') Delete User
          
          
            

@@ -15,12 +15,17 @@
     text-align: center;
     padding: 10px;
     color: #1c330d;
-    text-transform: uppercase;
+    text-transform: capitalize;
+    font-family: Helvetica, sans-serif;
     background-color: white;
     // background-color: rgba(180, 214, 158, 0.5);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     backdrop-filter: blur(1px);
     border-radius: 15px;
     margin-bottom: 20px;
-    min-width: 335px;
+    min-width: 235px;
+    h4 {
+        font-size: 12px;
+        text-transform: capitalize;
+    }
 }

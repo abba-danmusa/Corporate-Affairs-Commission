@@ -42,19 +42,6 @@ if (document.querySelector("#live")) {
     new Socket()
 }
 
-const markAsTreated = $('.mark')
-if (markAsTreated) {
-    const overlay = $('.overlay')
-    markAsTreated.on('click', () => {
-        overlay.style.width = '200px'
-    })
-    const cancel = $('.cancel')
-    cancel.on('click', (event) => {
-        event.preventDefault()
-        overlay.style.width = '0px'
-    })
-}
-
 const changeDate = $('#changeDate')
 if (changeDate) {
 
@@ -113,11 +100,37 @@ if (pendingButton) {
 
 }
 
-const shareButton = $('.share__button')
+const markAsTreated = $('.mark')
+if (markAsTreated) {
+    const overlay = $('.overlay')
+    markAsTreated.on('click', () => {
+        overlay.style.width = '200px'
+    })
+    const cancel = $('.cancel')
+    cancel.on('click', (event) => {
+        event.preventDefault()
+        overlay.style.width = '0px'
+    })
+}
 
+const loginPage = $('.login__form')
+const footer = $('.footer')
+if (loginPage) {
+    footer.style.display = 'none'
+}
+
+const shareButton = $('.share__button')
 if (shareButton) {
+    const overlay = $('.share__overlay')
+    const cancel = $('.share__cancel')
+
     shareButton.on('click', () => {
-        alert('You are about to distribute this user task queue to all other user. click okay to continue, or cancel to cancel')
+        console.log('clicked')
+        overlay.style.width = '200px'
+    })
+    cancel.on('click', (event) => {
+        event.preventDefault()
+        overlay.style.width = '0px'
     })
 
 }

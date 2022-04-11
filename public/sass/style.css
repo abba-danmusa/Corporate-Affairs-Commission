@@ -4,7 +4,9 @@ html {
           box-sizing: border-box;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   -webkit-box-sizing: inherit;
           box-sizing: inherit;
 }
@@ -23,7 +25,7 @@ img {
 /* Document
    ========================================================================== */
 html {
-  font-family: sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   /* 1 */
   line-height: 1.15;
   /* 2 */
@@ -1217,7 +1219,8 @@ select {
   text-align: center;
   padding: 10px;
   color: #1c330d;
-  text-transform: uppercase;
+  text-transform: capitalize;
+  font-family: Helvetica, sans-serif;
   background-color: white;
   -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
           box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -1225,7 +1228,12 @@ select {
           backdrop-filter: blur(1px);
   border-radius: 15px;
   margin-bottom: 20px;
-  min-width: 335px;
+  min-width: 235px;
+}
+
+.user h4 {
+  font-size: 12px;
+  text-transform: capitalize;
 }
 
 body,
@@ -1830,7 +1838,8 @@ textarea.tall-textarea {
   text-align: center;
 }
 
-.overlay {
+.overlay,
+.share__overlay {
   height: 200px;
   width: 0;
   position: fixed;
@@ -1839,7 +1848,7 @@ textarea.tall-textarea {
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
-  background-color: white;
+  background-color: #6e7c65;
   overflow-x: hidden;
   -webkit-transition: 0.5s;
   transition: 0.5s;
@@ -1858,6 +1867,11 @@ textarea.tall-textarea {
   width: 100%;
   text-align: center;
   margin-top: 30px;
+}
+
+.overlay-content .share__cancel,
+.overlay-content .share__button--submit {
+  color: #fff;
 }
 
 .user__taskQueue {
@@ -1884,7 +1898,7 @@ textarea.tall-textarea {
   display: grid;
   -ms-grid-columns: 1fr 1fr 1fr;
       grid-template-columns: 1fr 1fr 1fr;
-  gap: 10px;
+  gap: 5px;
   margin: 40px;
 }
 
@@ -1934,10 +1948,32 @@ textarea.tall-textarea {
 }
 
 .footer {
-  height: 25%;
-  width: 100%;
-  background-color: white;
-  z-index: 10;
+  background-color: #323232;
   position: relative;
+  bottom: 0;
+  color: white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 13%;
+  width: 100%;
+  z-index: 10;
+  margin-top: 20px;
+}
+
+.footer center {
+  width: 100%;
+  z-index: 10;
+}
+
+.footer center p {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
 }
 /*# sourceMappingURL=style.css.map */

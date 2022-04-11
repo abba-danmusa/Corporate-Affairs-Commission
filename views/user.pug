@@ -21,7 +21,15 @@ block header
         span Logout
 
 block content
-
+  .share__overlay
+    center
+      h3(style='color:white') Are you sure?
+      //- else
+        h3 Mark as untreated?
+    center.overlay-content
+      a.share__cancel(href='/') Cancel
+      form(action=`/share/${user.slug}/${user._id}` method='post')
+        button.button.share__button--submit(type=submit style='border:none;cursor:pointer;background-color:transparent;') Confirm
   .user__taskQueue
     center.user__info
       h1(style='color: #1c330d;')= user.name
@@ -31,13 +39,13 @@ block content
       .total__stats
         .total__treated
           h1= treatedTasks.length
-          h5 TREATED
+          h5(style='font-size:12px') TREATED
         .total__untreated
           h1= pendingTasks.length
-          h5 UNTREATED
+          h5(style='font-size:12px') UNTREATED
         .total__received
           h1= totalTasks.length
-          h5 RECEIVED
+          h5(style='font-size:12px') RECEIVED
       .action__links
         if user.isActive == true
           form(action=`/deactivate/${user.slug}/${user._id}` method='post')
@@ -45,9 +53,8 @@ block content
         else
           form(action=`/activate/${user.slug}/${user._id}` method='post')
             button.button(type=submit style='background-color:green;color:white;') ACTIVATE USER
-        
-        form(action=`/share/${user.slug}/${user._id}` method='post')
-          button.button.share__button(type=submit style='background-color:red;color:white;')= `Share ${user.name.split(' ')[0]}'s Tasks`
+      
+        a.share__button(style='cursor:pointer;color:white;padding:10px; background-color:red;border-radius:6px;width:fit-content;')= `Share ${user.name.split(' ')[0]}'s Tasks`
 
       //- a.button(href=`/history/tasks/${user.slug}/${user._id}`)= `${user.userName.split(' ')[0]}'s tasks`
 
