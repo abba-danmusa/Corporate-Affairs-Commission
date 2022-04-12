@@ -6,8 +6,8 @@ block header
     .site-identity
       a(href="/")
         img(src="/images/logos.png" alt="Site logo")
-    
-    a.nav__button.button(href=`/${user.state}/history`)
+    -const route = user.userType == 'zonalUser' ? `/${user.state}/${user.slug}/history/${user._id}` : `/${user.state}/history`
+    a.nav__button.button(href=route)
       !=h.icon('arrow-left-solid')
       span BACK
 
@@ -16,7 +16,7 @@ block header
         a.button(href='#')
           !=h.icon('user-solid') 
           span=user.userName
-        a.button(href=`/${user.state}/history`)
+        a.button(href=route)
           !=h.icon('history-solid')
           span History
         

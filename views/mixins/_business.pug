@@ -40,5 +40,6 @@ mixin business(business)
               strong=proprietor
       center.proprietors
       if item.file
-        .pdf
-          embed(src=`/uploads/${item.file}` type='application/pdf' width='1000vw' height='550vh')
+      .pdf
+        -const source = item.fileDir ? item.fileDir : `/uploads/${item.file}`
+        embed(src=`${source}#toolbar=1` type='application/pdf' width='1000vw' height='700px')

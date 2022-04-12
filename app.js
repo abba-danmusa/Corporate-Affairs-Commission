@@ -19,6 +19,7 @@ require('./handlers/passport')
 const multer = require('multer')
 const jimp = require('jimp')
 const uuid = require('uuid')
+const fs = require('fs')
 
 
 // create express app 
@@ -74,7 +75,11 @@ app.use((req, res, next) => {
 
 const multerOptions = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, './public/uploads')
+
+        fs.mkdirSync(`./public/uploads/${req.body.regNumber}`, { recursive: true }, (err) => { if (err) throw (err) })
+
+        // save the file to this dir 
+        cb(null, `./public/uploads/${req.body.regNumber}`)
     },
     filename: function(req, file, cb) {
         const extension = file.mimetype.split('/')[1]
@@ -108,9 +113,11 @@ const save = async(req, res) => {
     // add some necessary properties to the req.body object
     const [proprietors] = [req.body.proprietors]
     const author = req.user._id
+    const fileDir = `/uploads/${req.body.regNumber}/${req.body.file}`
     req.body.proprietors = proprietors
     req.body.author = author
     req.body.queuedTo = taskFlaggedUser._id
+    req.body.fileDir = fileDir
 
     // save to the database
     const business = new Business(req.body)
@@ -208,15 +215,16 @@ io.use(function(socket, next) {
 // })
 
 io.on('connection', async function(socket) {
-    Business.find({ isTreated: false || null })
-        .sort({ _id: -1 })
-        .limit(50)
-        .then(data => {
-            socket.emit('output', data)
+    // Business.find({ isTreated: false || null })
+    //     .sort({ _id: -1 })
+    //     .limit(50)
+    //     .then(data => {
+    //         socket.emit('output', data)
 
-        }).catch(err => {
-            socket.emit('error', err)
-        })
+    //     }).catch(err => {
+    //         socket.emit('error', err)
+    //     })
+
     if (socket.request.session.passport) {
         let userName = socket.request.session.passport.user
         let [userID] = await User.find({ userName })

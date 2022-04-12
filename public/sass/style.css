@@ -1098,6 +1098,11 @@ select {
   cursor: pointer;
 }
 
+.left,
+.right {
+  z-index: 2;
+}
+
 .left hr,
 .right hr {
   width: 80%;
@@ -1725,7 +1730,7 @@ textarea.tall-textarea {
 .task__queue--table td,
 .task__queue--table th {
   border: none;
-  padding: 20px;
+  padding: 12px;
   text-align-last: center;
   -ms-flex-item-align: center;
       -ms-grid-row-align: center;
@@ -1963,13 +1968,12 @@ textarea.tall-textarea {
           align-items: center;
   height: 13%;
   width: 100%;
-  z-index: 10;
+  z-index: 0;
   margin-top: 20px;
 }
 
 .footer center {
   width: 100%;
-  z-index: 10;
 }
 
 .footer center p {

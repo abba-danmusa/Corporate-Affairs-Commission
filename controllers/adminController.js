@@ -4,7 +4,18 @@ const { check, validationResult } = require('express-validator')
 const Business = require("../models/business")
 const Admin = require("../models/admin")
 
-
+exports.runOnce = async(req, res) => {
+    try {
+        const users = await User.find({ userType: { $ne: 'headUser' } })
+        for (let i = 0; i < users.length; i++) {
+            await User.findOneAndUpdate({ _id: users[i]._id }, { serialNumber: i + 1 * 1000000 }, { runValidators: true, new: true }).exec()
+        }
+        const updatedUsers = await User.find({ userType: { $ne: 'headUser' } })
+        res.json(users)
+    } catch (err) {
+        console.log(err)
+    }
+}
 exports.passwordProtected = (req, res, next) => {
     res.set('WWW-Authenticate', 'Basic realm="Corporate Affairs Commission"')
     if (req.headers.authorization == 'Basic Y2FjYWRtaW46aWN0QDIwMjE=') {
@@ -89,19 +100,17 @@ exports.validateRegister = async(req, res, next) => {
 
 exports.register = async(req, res) => {
 
-    const isUser = await User.find({ userName: req.body.userName })
-    if (isUser) {
+    try {
+        const user = new User(req.body)
+        const register = promisify(User.register.bind(User))
+        await register(user, req.body.password)
+
+        req.flash('success', 'A new User Account has been created')
+        res.redirect('back')
+    } catch (err) {
         req.flash('error', `${req.body.userName} already exist`)
         res.redirect('back')
-        return
     }
-
-    const user = new User(req.body)
-    const register = promisify(User.register.bind(User))
-    await register(user, req.body.password)
-
-    req.flash('success', 'A new User Account has been created')
-    res.redirect('back')
 }
 
 exports.getUsers = async(req, res) => {

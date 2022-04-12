@@ -92,4 +92,7 @@ block content
     //-     h6=business.author.name
     if business.file
       .pdf
-        embed(src=`/uploads/${business.file}#toolbar=1` type='application/pdf' width='1000vw' height='700px')
+        -const source = business.fileDir ? business.fileDir : `/uploads/${business.file}`
+        embed(src=`${source}#toolbar=1` type='application/pdf' width='1000vw' height='700px')
+        
+    

@@ -455,11 +455,12 @@ exports.userTasks = async(req, res) => {
 
     if (!userTasks.length && skip) {
         req.flash('info', `Page ${page} does not exist only page ${pages}`)
-        res.redirect(`/tasks/${pages}`)
+        res.redirect(`/history/tasks/${req.user.userName}/${req.user._id}/page/${pages}`)
         return
     }
+    const url = `/history/tasks/${req.user.userName}/${req.user._id}`
 
-    res.render('tasks', { title: 'User Tasks', userTasks, page, pages, total })
+    res.render('tasks', { title: 'User Tasks', userTasks, page, pages, total, url })
 }
 
 exports.getStats = async(req, res) => {

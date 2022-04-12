@@ -51,6 +51,10 @@ const businessSchema = new Schema({
         type: String,
         required: 'You must supply a pdf file'
     },
+    fileDir: {
+        type: String,
+        unique: true
+    },
     queuedTo: {
         type: mongoose.Schema.ObjectId,
         ref: 'User',
