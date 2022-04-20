@@ -6,7 +6,7 @@ block header
       //- !=h.dump(user.userType)
       a(href="/")
         img(src="/images/logos.png" alt="Site logo")
-    -const route = user.userType ? '/' : '/admin'
+    -const route = user && user.userType ? '/' : '/admin'
     a.nav__button.button(href=route)
       !=h.icon('arrow-left-solid')
       span BACK
@@ -15,7 +15,7 @@ block header
         !=h.icon('user-solid')
         -const userName = user ? user.userName: 'admin'
         span=userName
-      if !user.userType
+      if user && !user.userType
         a.button(href='/register-user')
           !=h.icon('user-plus-solid')
           span Register User
@@ -33,7 +33,7 @@ block content
       a.cancel(href='/') cancel
       a.confirm(href=`/treat/${business.slug}/${business.id}`) confirm
   .business
-    if ((business.isTreated == false || null) && (user.userType == 'headUser'))
+    if (user && (business.isTreated == false || null) && (user.userType == 'headUser'))
       a.mark(style='cursor:pointer;color:white;padding:10px;margin-top:10px; background-color:brown;border-radius:6px;') Mark as Treated
 
     .business__grid--show
