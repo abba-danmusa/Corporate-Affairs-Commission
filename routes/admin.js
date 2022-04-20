@@ -14,12 +14,12 @@ router.get('/admin/register-user', adminController.passwordProtected, adminContr
 router.get('/admin/registered-users', adminController.passwordProtected, catchErrors(adminController.getUsers))
 router.get('/admin/register-admin', adminController.passwordProtected, adminController.registerAdminForm)
 router.get('/admin/reset-user/:id', adminController.passwordProtected, catchErrors(adminController.resetUser))
-router.get('/admin/delete-user/:id', adminController.passwordProtected, catchErrors(adminController.deleteUser))
-
-// router.get('/admin/search/results', adminController.getSearchedData)
-// router.param('/admin/search/results?search=q/page/:page', adminController.getSearchedData)
+router.get('/admin/update-user/:id', adminController.passwordProtected, catchErrors(adminController.updateUser))
+    // router.get('/admin/search/results', adminController.getSearchedData)
+    // router.param('/admin/search/results?search=q/page/:page', adminController.getSearchedData)
 
 // Post routes
+router.post('/admin/update-user/:id', adminController.passwordProtected, catchErrors(adminController.updatedUser))
 router.post('/admin', authController.loginAdmin)
 router.post('/admin/register-user', adminController.passwordProtected, catchErrors(adminController.validateRegister), catchErrors(adminController.register))
     // router.post('/admin/', adminController.passwordProtected, adminController.resetUser)

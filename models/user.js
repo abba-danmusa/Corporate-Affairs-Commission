@@ -38,6 +38,8 @@ const userSchema = new Schema({
         type: Number,
         unique: true
     },
+    isRegular: Boolean,
+    task: Number,
     slug: String,
 })
 
@@ -51,11 +53,18 @@ userSchema.pre('save', async function(next) {
         this.serialNumber = users * 1000000
         return next()
     }
-    // if (this.userType === 'headUser') {
+    const users = await this.constructor.find({ userType: 'headUser' }).countDocuments()
 
-    const users = await this.constructor.find({ userType: 'headUser' })
+    if ((this.userType == 'headUser') && (this.isRegular === false)) {
+        this.isRegular = false
+        this.task = 0
+        this.serialNumber = users + 1
+        return next()
+    }
+
     this.isActive = true
-    this.serialNumber = users.length + 1
+    this.serialNumber = users + 1
+    this.isRegular = true
     if (this.serialNumber == 1) {
         this.taskFlag = true
     } else this.taskFlag = false

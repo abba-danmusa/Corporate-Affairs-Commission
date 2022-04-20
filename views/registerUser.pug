@@ -24,75 +24,74 @@ block header
         span History
 
 block content
-  .inner
-    .signup-form
+  .register-form
 
-      h2 Register
-      form.register__user(action="/admin/register-user" method="post")
-        .left__register
-          .form-group
-            input(type="text" class="form-control" name="name" placeholder="Full Name" required="required")
+    h2 Register
+    form.register__user(action="/admin/register-user" method="post")
+      .left__register
+        .form-group
+          input(type="text" class="form-control" name="name" placeholder="Full Name" required="required")
 
-          .form-group
-            input(type="text" class="form-control" name="userName" placeholder="User Name" required="required")
-
-          .form-group
-            label(for='userType') Account Type
-            select(id="select" name="userType")
-              //- option(value="headAdmin") ADMIN, HEAD OFFICE
-              option(value="headSupervisor") SUPERVISOR, HEAD OFFICE
-              option(value="zonalSupervisor") SUPERVISOR, ZONAL OFFICE
-              option(value="headUser") USER, HEAD OFFICE
-              option(value="zonalAdmin") ADMIN, ZONAL OFFICE
-              option(value="zonalUser") USER, ZONAL OFFICE
-            //- input(type="text" class="form-control" name="userType" value="administrator" required="required" readonly)
-        .right__register
-          .form-group
-            input(type="password" class="form-control" name="password" placeholder="Password" required="required")
-
-          .form-group
-            input(type="password" class="form-control" name="confirm-password" placeholder="Confirm Password" required="required")
+        .form-group
+          input(type="text" class="form-control" name="userName" placeholder="User Name" required="required")
+        .form-group
+          label(for='userType' style='margin-left: 7vw;') Account Type
+          select(id="select" name="userType" style='margin-left: 7vw;')
+            //- option(value="headAdmin") ADMIN, HEAD OFFICE
+            option(value="headSupervisor") SUPERVISOR, HEAD OFFICE
+            option(value="zonalSupervisor") SUPERVISOR, ZONAL OFFICE
+            option(value="headUser") SPU USER
+            option(value="zonalAdmin") ADMIN, ZONAL OFFICE
+            option(value="zonalUser") USER, ZONAL OFFICE
+        .form-group.isRegular__form-group
             
-          label(for="select") State:
-          select(id="select" name="state")
-            optgroup(label="SELECT--")
-            option(value="LAGOS") LAGOS
-            option(value="FCT") FCT
-            option(value="RIVERS") RIVERS
-            option(value="ABIA") ABIA
-            option(value="ADAMAWA") ADAMAWA
-            option(value="ANAMBRA") ANAMBRA
-            option(value="AKWA-IBOM") AKWA-IBOM
-            option(value="BAUCHI") BAUCHI
-            option(value="BAYELSA") BAYELSA
-            option(value="BENUE") BENUE
-            option(value="BORNU") BORNU
-            option(value="CROSS-RIVER") CROSS-RIVER
-            option(value="DELTA") DELTA
-            option(value="EBONYI") EBONYI
-            option(value="EDO") EDO
-            option(value="EKITI") EKITI
-            option(value="ENUGU") ENUGU
-            option(value="GOMBE") GOMBE
-            option(value="IMO") IMO
-            option(value="JIGAWA") JIGAWA
-            option(value="KADUNA") KADUNA
-            option(value="KANO") KANO
-            option(value="KATSINA") KATSINA
-            option(value="KEBBI") KEBBI
-            option(value="KOGI") KOGI
-            option(value="KWARA") KWARA
-            option(value="NASARAWA") NASARAWA
-            option(value="NIGER") NIGER
-            option(value="ONDO") ONDO
-            option(value="OGUN") OGUN
-            option(value="OYO") OYO
-            option(value="OSUN") OSUN
-            option(value="PLATEAU") PLATEAU
-            option(value="SOKOTO") SOKOTO
-            option(value="TARABA") TARABA
-            option(value="YOBE") YOBE
-            option(value="ZAMFARA") ZAMFARA
+          //- input(type="text" class="form-control" name="userType" value="administrator" required="required" readonly)
+      .right__register
+        .form-group
+          input(type="password" class="form-control" name="password" placeholder="Password" required="required")
 
-          .form-group
-            button.button(type="submit" class="btn btn-success btn-lg btn-block") Register
+        .form-group
+          input(type="password" class="form-control" name="confirm-password" placeholder="Confirm Password" required="required")
+          
+        select(id="select" name="state" style='width: 200px;margin-left: 7vw;')
+          optgroup(label="SELECT STATE")
+          option.select__state(value="FCT") FCT
+          option.select__state(value="LAGOS") LAGOS
+          option.select__state(value="RIVERS") RIVERS
+          option.select__state(value="ABIA") ABIA
+          option.select__state(value="ADAMAWA") ADAMAWA
+          option.select__state(value="ANAMBRA") ANAMBRA
+          option.select__state(value="AKWA-IBOM") AKWA-IBOM
+          option.select__state(value="BAUCHI") BAUCHI
+          option.select__state(value="BAYELSA") BAYELSA
+          option.select__state(value="BENUE") BENUE
+          option.select__state(value="BORNU") BORNU
+          option.select__state(value="CROSS-RIVER") CROSS-RIVER
+          option.select__state(value="DELTA") DELTA
+          option.select__state(value="EBONYI") EBONYI
+          option.select__state(value="EDO") EDO
+          option.select__state(value="EKITI") EKITI
+          option.select__state(value="ENUGU") ENUGU
+          option.select__state(value="GOMBE") GOMBE
+          option.select__state(value="IMO") IMO
+          option.select__state(value="JIGAWA") JIGAWA
+          option.select__state(value="KADUNA") KADUNA
+          option.select__state(value="KANO") KANO
+          option.select__state(value="KATSINA") KATSINA
+          option.select__state(value="KEBBI") KEBBI
+          option.select__state(value="KOGI") KOGI
+          option.select__state(value="KWARA") KWARA
+          option.select__state(value="NASARAWA") NASARAWA
+          option.select__state(value="NIGER") NIGER
+          option.select__state(value="ONDO") ONDO
+          option.select__state(value="OGUN") OGUN
+          option.select__state(value="OYO") OYO
+          option.select__state(value="OSUN") OSUN
+          option.select__state(value="PLATEAU") PLATEAU
+          option.select__state(value="SOKOTO") SOKOTO
+          option.select__state(value="TARABA") TARABA
+          option.select__state(value="YOBE") YOBE
+          option.select__state(value="ZAMFARA") ZAMFARA
+
+        .form-group
+          button.button(type="submit" class="btn btn-success btn-lg btn-block") Register

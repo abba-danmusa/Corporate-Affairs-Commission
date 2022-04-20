@@ -42,6 +42,9 @@ const businessSchema = new Schema({
         type: Date,
         default: Date.now()
     },
+    dateShared: {
+        type: Date
+    },
     author: {
         type: mongoose.Schema.ObjectId,
         ref: 'User',
@@ -97,7 +100,7 @@ businessSchema.statics.getPendingTasks = function(userID) {
 }
 
 businessSchema.statics.getTodaysPendingTasks = function(userID) {
-    return this.find({ dateEntered: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) }, queuedTo: { '$in': [ObjectId(userID)] }, isTreated: false })
+    return this.find({ $or: [{ dateEntered: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) }, queuedTo: { '$in': [ObjectId(userID)] }, isTreated: false }, { dateShared: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) }, queuedTo: { '$in': [ObjectId(userID)] }, isTreated: false }] })
 }
 
 businessSchema.statics.getTreatedTasks = function(userID) {

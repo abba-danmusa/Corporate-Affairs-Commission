@@ -1,0 +1,95 @@
+extends layout
+
+block header
+  nav.nav
+    .site-identity
+      a(href="/admin")
+        img(src="/images/logos.png" alt="Site logo")
+    a.nav__button.button(href='/admin')
+      !=h.icon('arrow-left-solid')
+      span BACK
+    .nav__buttons
+      
+      a.button(href='#')
+        !=h.icon('user-solid') 
+        span admin
+      a.button(href='/admin/register-user')
+        !=h.icon('user-plus-solid')
+        span Register User
+      a.button(href='/admin/registered-users')
+        !=h.icon('users-solid')
+        span Users
+      a.button(href='/admin/businesses')
+        !=h.icon('history-solid')
+        span History
+
+block content
+  .signup-form
+    h2(style='color:#1c330d') Update User
+    form.register__user(action=`/admin/update-user/${updateUser._id}` method="post")
+      
+      .field
+        label(for='name') Full Name:
+        input(type="text" class="form-control" name="name" placeholder="Full Name" required="required" value=`${updateUser.name}`)
+
+      .field
+        label(for='userName') User Name:
+        input(type="text" class="form-control" name="userName" placeholder="User Name" required="required" value=`${updateUser.userName}`)
+      //- .form-group
+      //-   label(for='userType') Account Type
+      //-   select(id="select" name="userType")
+      //-     //- option(value="headAdmin") ADMIN, HEAD OFFICE
+      //-     option(value="headSupervisor") SUPERVISOR, HEAD OFFICE
+      //-     option(value="zonalSupervisor") SUPERVISOR, ZONAL OFFICE
+      //-     option(value="headUser") SPU USER
+      //-     option(value="zonalAdmin") ADMIN, ZONAL OFFICE
+      //-     option(value="zonalUser") USER, ZONAL OFFICE
+      //- .form-group.isRegular__form-group
+          
+        //- input(type="text" class="form-control" name="userType" value="administrator" required="required" readonly)
+      if updateUser.userType !== 'headUser'
+        .field
+          label(for="select") State:
+          select(id="select" name="state")
+            optgroup(label="SELECT--")
+            option.select__state(value="FCT") FCT
+            option.select__state(value="LAGOS") LAGOS
+            option.select__state(value="RIVERS") RIVERS
+            option.select__state(value="ABIA") ABIA
+            option.select__state(value="ADAMAWA") ADAMAWA
+            option.select__state(value="ANAMBRA") ANAMBRA
+            option.select__state(value="AKWA-IBOM") AKWA-IBOM
+            option.select__state(value="BAUCHI") BAUCHI
+            option.select__state(value="BAYELSA") BAYELSA
+            option.select__state(value="BENUE") BENUE
+            option.select__state(value="BORNU") BORNU
+            option.select__state(value="CROSS-RIVER") CROSS-RIVER
+            option.select__state(value="DELTA") DELTA
+            option.select__state(value="EBONYI") EBONYI
+            option.select__state(value="EDO") EDO
+            option.select__state(value="EKITI") EKITI
+            option.select__state(value="ENUGU") ENUGU
+            option.select__state(value="GOMBE") GOMBE
+            option.select__state(value="IMO") IMO
+            option.select__state(value="JIGAWA") JIGAWA
+            option.select__state(value="KADUNA") KADUNA
+            option.select__state(value="KANO") KANO
+            option.select__state(value="KATSINA") KATSINA
+            option.select__state(value="KEBBI") KEBBI
+            option.select__state(value="KOGI") KOGI
+            option.select__state(value="KWARA") KWARA
+            option.select__state(value="NASARAWA") NASARAWA
+            option.select__state(value="NIGER") NIGER
+            option.select__state(value="ONDO") ONDO
+            option.select__state(value="OGUN") OGUN
+            option.select__state(value="OYO") OYO
+            option.select__state(value="OSUN") OSUN
+            option.select__state(value="PLATEAU") PLATEAU
+            option.select__state(value="SOKOTO") SOKOTO
+            option.select__state(value="TARABA") TARABA
+            option.select__state(value="YOBE") YOBE
+            option.select__state(value="ZAMFARA") ZAMFARA
+
+      .field  
+        button.button(type="submit" class="btn btn-success btn-lg btn-block") Update User
+      

@@ -20,16 +20,16 @@ include mixins/_pagination
 block content
   .left
     center
-      h3 TODAY
-    .pendings
-      h3.untreatedToday= untreatedToday.length
-      hr
-      h4 UNTREATED
+      h3(style='color:#1c330d; font-size:14px') TODAY
+    .pendings(style='color:red')
+      h3.untreatedToday= untreatedToday
+      hr(style='border-color:red')
+      h4(style='font-size:14px') UNTREATED
       //- h6 TODAY
-    .treated
-      h3= treatedTasks.length
+    a.treated(href=`/history/tasks/${user.userName}/${user._id}` style='text-decoration:none;color:#1c330d;')
+      h3= treatedTasks
       hr
-      h4 TREATED
+      h4(style='font-size:14px') TREATED
       //- h6 TODAY
   .task
     //- .treated
@@ -94,15 +94,15 @@ block content
 
   .right
     center
-      h3 TOTAL
-    .total__received
+      h3(style='color:#1c330d;font-size:14px;') TOTAL
+    a.total__received(href=`/history/tasks/${user.userName}/${user._id}` style='text-decoration:none; color: orange')
       h3.totalReceived= total.length
       hr
-      h4 RECEIVED
-    .total__pendings
-      h3.totalUntreated= pendingTasks.length
-      hr
-      h4 UNTREATED
+      h4(style='font-size:14px') RECEIVED
+    a.total__pendings(href=`/history/tasks/${user.userName}/${user._id}` style='text-decoration:none; color:brown;')
+      h3.totalUntreated= pendingTasks
+      hr(style='border-color:brown')
+      h4(style='font-size:14px') UNTREATED
     //- .total__pendings
     //-   h3= pendingTasks.length
     //-   h4 TOTAL PENDINGS

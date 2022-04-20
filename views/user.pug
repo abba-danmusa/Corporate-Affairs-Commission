@@ -22,14 +22,13 @@ block header
 
 block content
   .share__overlay
-    center
-      h3(style='color:white') Are you sure?
-      //- else
-        h3 Mark as untreated?
-    center.overlay-content
-      a.share__cancel(href='/') Cancel
-      form(action=`/share/${user.slug}/${user._id}` method='post')
-        button.button.share__button--submit(type=submit style='border:none;cursor:pointer;background-color:transparent;') Confirm
+    center.share__overlay-content
+      h3=`Enter the number you want to share. Maximum of ${pendingTasks.length}`
+      form(action=`/share/user/${user.slug}/${user._id}` method='post')
+        input(type='number' placeholder='How many?' min='1' max=`${pendingTasks.length}` name='number' required)
+        br
+        a.share__cancel(href='/') Cancel
+        button.button.share__button--submit(type='submit' style='border:none;cursor:pointer;background-color:red') Confirm
   .user__taskQueue
     center.user__info
       h1(style='color: #1c330d;')= user.name

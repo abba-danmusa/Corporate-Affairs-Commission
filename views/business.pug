@@ -26,11 +26,10 @@ block header
 
 block content
   .overlay
-    center
-      h3(style='color:white') Are you sure this document is treated?
+    center.overlay-content
+      h3(style='color:#6e7c65;margin-bottom:80px;') Are you sure this document is treated?
       //- else
         h3 Mark as untreated?
-    center.overlay-content
       a.cancel(href='/') cancel
       a.confirm(href=`/treat/${business.slug}/${business.id}`) confirm
   .business

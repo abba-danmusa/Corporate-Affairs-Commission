@@ -1,0 +1,10 @@
+{
+  "editor.tabSize": 2,
+  "editor.cursorStyle": "block",
+  "workbench.colorTheme": "Visual Studio Dark",
+  "workbench.preferredDarkColorTheme": "Default Dark+",
+  "workbench.preferredHighContrastColorTheme": "Default Dark+",
+  "workbench.preferredHighContrastLightColorTheme": "Default Dark+",
+  "workbench.preferredLightColorTheme": "Default Dark+",
+  "editor.fontSize": 14
+}

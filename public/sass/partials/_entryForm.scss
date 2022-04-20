@@ -4,20 +4,21 @@
     backdrop-filter: blur(2px);
     border-radius: 20px;
     width: 80vw;
-    height: 90vh;
+    height: fit-content;
     margin-left: 10vw;
+    margin-right: 10vw;
+    margin-bottom: 20px;
     align-items: center;
     color: #1c330d;
     z-index: 1;
     h2 {
         margin-left: 3vw;
     }
-    form {
-        // background-color: black;
+    #businessDetailsForm {
         display: grid;
-        grid-auto-rows: 1fr 1fr;
-        gap: 10px;
-        // justify-content: space-between;
+        grid-template-columns: 1fr 1fr;
+        gap: 0 50px;
+        margin: 0 40px;
         .button {
             padding: 10px;
             font-size: 16px;
@@ -25,15 +26,13 @@
             border: none;
             border-radius: 6px;
         }
-        .left {
-            display: grid;
-            grid-template-columns: auto;
-            width: 40%;
-        }
-        .right {
-            display: grid;
-            grid-template-columns: auto;
-            width: 40%;
+        .form-group {
+            input {
+                margin-top: 0;
+                color: #1c330d;
+                background-color: transparent;
+                border-radius: 10px;
+            }
         }
     }
 }

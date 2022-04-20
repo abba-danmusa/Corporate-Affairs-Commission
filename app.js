@@ -20,6 +20,8 @@ const multer = require('multer')
 const jimp = require('jimp')
 const uuid = require('uuid')
 const fs = require('fs')
+const Day = require('./models/date')
+const authController = require('./controllers/authController')
 
 
 // create express app 
@@ -100,46 +102,45 @@ const upload = multer({ storage: multerOptions }).single('file')
 
 const save = async(req, res) => {
 
-    // get the task-flagged user and the serial number
-    const [taskFlaggedUser] = await User.getTaskFlaggedUser()
-    const userSerialNumber = taskFlaggedUser.serialNumber
+    try {
 
-    // get the next users to be task-flagged
-    let nextTaskFlaggedUser = await User.find({ serialNumber: { $gt: userSerialNumber }, isActive: true })
+        let feedback = ''
 
-    // if users exist, get the first active user after the task-flagged user, if not, get the first active user before the task-flagged user
-    nextTaskFlaggedUser.length ? nextTaskFlaggedUser = nextTaskFlaggedUser[0] : [nextTaskFlaggedUser] = await User.find({ serialNumber: { $lt: userSerialNumber }, isActive: true })
+        while (feedback !== 'successful') {
 
-    // add some necessary properties to the req.body object
-    const [proprietors] = [req.body.proprietors]
-    const author = req.user._id
-    const fileDir = `/uploads/${req.body.regNumber}/${req.body.file}`
-    req.body.proprietors = proprietors
-    req.body.author = author
-    req.body.queuedTo = taskFlaggedUser._id
-    req.body.fileDir = fileDir
+            // get the flagged user
+            const [flaggedUser] = await User.find({ userType: 'headUser', taskFlag: true })
 
-    // save to the database
-    const business = new Business(req.body)
-    await business.save()
+            const serialNum = flaggedUser.serialNumber // get the flagged user's serial number
 
-    // find the task-flagged user and update the taskFlag field to false 
-    await User.findOneAndUpdate({ _id: taskFlaggedUser._id }, { taskFlag: false }, { new: true, runValidators: true }).exec()
+            // get the next user to be task flagged 
+            let [nextUser] = await User.find({ userType: 'headUser', isActive: true, serialNumber: { $gt: serialNum } })
 
-    // if exist, find the next user to be task-flagged and update the taskFlag field to true
-    if (nextTaskFlaggedUser) {
-        await User.findOneAndUpdate({ _id: nextTaskFlaggedUser._id }, { taskFlag: true }, { new: true, runValidators: true }).exec()
+            // update nextUser if user does not exist
+            !nextUser ? [nextUser] = await User.find({ userType: 'headUser', isActive: true, serialNumber: { $lt: serialNum } }) : null
+
+            // if next user does not exist at all; only one user exist, flagged user is next user
+                !nextUser ? nextUser = flaggedUser : null
+
+            // update the feedback value
+            feedback = await assignTask(req, flaggedUser, nextUser)
+        }
+
+        req.flash('success', 'Sent Successfully')
+        res.redirect('back')
+
+    } catch (error) {
+        if (error.keyValue) {
+            const [errType] = error.keyValue.keys()
+            const [err] = error.keyValue.values()
+            const message = errType == businessName ? 'Business name' : 'Reg. number'
+            req.flash('error', `This ${message}; <strong>${err}</strong>, already exist. Please cross check and try again`)
+        } else {
+            req.flash('error', 'Something went wrong. Please try again')
+        }
+
+        res.redirect('back')
     }
-    // if doesn't exist, task-flag the previous user
-    else {
-        await User.findOneAndUpdate({ _id: taskFlaggedUser._id }, { taskFlag: true }, { new: true, runValidators: true }).exec()
-    }
-
-    // emit the saved data
-    io.emit('document', [business])
-
-    req.flash('success', 'Sent Successfully')
-    res.redirect('back')
 }
 
 const edit = async(req, res) => {
@@ -167,9 +168,237 @@ const edit = async(req, res) => {
     }
 }
 
+const assignTask = async(req, flaggedUser, nextUser) => {
+
+    const todaysDate = new Date() // get today's date
+    const [getDate] = await Day.find({}) // get the last saved date
+
+    let feedback
+
+    // if today's date does not equal saved date
+    if ((getDate) && (todaysDate.getDate() !== getDate.date.getDate())) {
+
+        // update the date
+        await Day.findOneAndUpdate({ _id: getDate._id }, { date: new Date() }, { runValidators: true, new: true })
+
+        // reset all the user's tasks number to 0
+        await User.updateMany({ isRegular: false }, { task: 0 }, { runValidators: true, new: true })
+    }
+    // no saved date
+    if (!getDate) {
+        // save a date for the first time into the database
+        await new Day({ date: todaysDate }).save()
+    }
+
+    // if flagged user is none regular
+    if (flaggedUser.isRegular === false) {
+
+        // and flagged user's task is less than 5
+        if (flaggedUser.task < 5) {
+
+            // add some necessary properties to the req.body object
+            const [proprietors] = [req.body.proprietors]
+            const author = req.user._id
+            const fileDir = `/uploads/${req.body.regNumber}/${req.body.file}`
+            req.body.proprietors = proprietors
+            req.body.author = author
+            req.body.queuedTo = flaggedUser._id // assign the task to the flagged user
+            req.body.fileDir = fileDir
+
+            // save the business to the database
+            const business = new Business(req.body)
+            await business.save()
+
+            // unflag the flagged user
+            await User.findOneAndUpdate({ _id: flaggedUser._id }, { task: flaggedUser.task + 1, taskFlag: false }, { runValidators: true, new: true })
+
+            // flag the next user
+            await User.findOneAndUpdate({ _id: nextUser._id }, { taskFlag: true }, { runValidators: true, new: true })
+
+            // send to the flagged user's task queue
+            io.emit('document', [business])
+
+            // send feedback successful since a user has been assigned to the task
+            feedback = 'successful'
+
+            // if the task number is greater than 5
+        } else {
+
+            // unflag the flagged user
+            await User.findOneAndUpdate({ _id: flaggedUser._id }, { taskFlag: false }, { runValidators: true, new: true })
+
+            // flag the next user
+            await User.findOneAndUpdate({ _id: nextUser._id }, { taskFlag: true }, { runValidators: true, new: true })
+
+            // send feedback unsuccessful since no user has been assigned to the task
+            feedback = 'unsuccessful'
+        }
+
+        // user is regular
+    }
+    if (flaggedUser.isRegular) {
+
+        // add some necessary properties to the req.body object
+        const [proprietors] = [req.body.proprietors]
+        const author = req.user._id
+        const fileDir = `/uploads/${req.body.regNumber}/${req.body.file}`
+        req.body.proprietors = proprietors
+        req.body.author = author
+        req.body.queuedTo = flaggedUser._id // assign the task to the flagged user
+        req.body.fileDir = fileDir
+
+        // save the business to the database
+        const business = new Business(req.body)
+        await business.save()
+
+        // unflag the flagged user
+        await User.findOneAndUpdate({ _id: flaggedUser._id }, { taskFlag: false }, { runValidators: true, new: true })
+
+        // flag the next user
+        await User.findOneAndUpdate({ _id: nextUser._id }, { taskFlag: true }, { runValidators: true, new: true })
+
+        // send to the flagged user's task queue
+        io.emit('document', [business])
+
+        // send feedback successful since a user has been assigned to the task
+        feedback = 'successful'
+    }
+    return feedback
+}
+
+const shareTaskQueue = async(req, res) => {
+
+    try {
+        // get all the businesses that are assigned to the user and are untreated
+        const usersTaskQueue = await Business.find({ queuedTo: req.params.id, isTreated: false }).limit(parseInt(req.body.number))
+
+        // deactivate user so that user gets none
+        await User.findOneAndUpdate({ _id: req.params.id }, { isActive: false }, { runValidators: true, new: true })
+
+        // loop through all the user's task queue and reassign to others
+        for (let i = 0; i < usersTaskQueue.length; i++) {
+
+            let feedback = ''
+
+            while (feedback !== 'successful') {
+
+                // get the flagged user
+                const [flaggedUser] = await User.find({ userType: 'headUser', taskFlag: true })
+
+                const serialNum = flaggedUser.serialNumber // get the flagged user's serial number
+
+                // get the next user to be task flagged 
+                let [nextUser] = await User.find({ userType: 'headUser', isActive: true, serialNumber: { $gt: serialNum } })
+
+                // update nextUser if user does not exist
+                !nextUser ? [nextUser] = await User.find({ userType: 'headUser', isActive: true, serialNumber: { $lt: serialNum } }) : null
+
+                // if next user does not exist at all; only one user exist, flagged user is next user
+                    !nextUser ? nextUser = flaggedUser : null
+
+                // update the feedback value
+                feedback = await reAssignTask(flaggedUser, nextUser, usersTaskQueue[i])
+            }
+
+
+        }
+
+        // reactivate the user
+        await User.findOneAndUpdate({ _id: req.params.id }, { isActive: true }, { runValidators: true, new: true })
+
+        req.flash('success', 'Successfully distributed to other users')
+        res.redirect('back')
+
+    } catch (err) {
+
+        req.flash('error', 'Oops! Something went wrong. Please try again later')
+        res.redirect('back')
+    }
+
+}
+
+const reAssignTask = async(flaggedUser, nextUser, business) => {
+
+    const todaysDate = new Date() // get today's date
+    const [getDate] = await Day.find({}) // get the last saved date
+
+    let feedback
+
+    // if today's date does not equal saved date
+    if ((getDate) && (todaysDate.getDate() !== getDate.date.getDate())) {
+
+        // update the date
+        await Day.findOneAndUpdate({ _id: getDate._id }, { date: new Date() }, { runValidators: true, new: true })
+
+        // reset all the user's tasks number to 0
+        await User.updateMany({ isRegular: false }, { task: 0 }, { runValidators: true, new: true })
+    }
+    // no saved date
+    if (!getDate) {
+        // save a date for the first time into the database
+        await new Day({ date: todaysDate }).save()
+    }
+
+    // if flagged user is none regular
+    if (flaggedUser.isRegular === false) {
+
+        // and flagged user's task is less than 5
+        if (flaggedUser.task < 5) {
+
+            // find the business and update the queued field
+            await Business.findOneAndUpdate({ _id: business._id }, { queuedTo: flaggedUser._id, dateShared: Date.now() }, { runValidators: true, new: true })
+
+            // unflag the flagged user
+            await User.findOneAndUpdate({ _id: flaggedUser._id }, { task: flaggedUser.task + 1, taskFlag: false }, { runValidators: true, new: true })
+
+            // flag the next user
+            await User.findOneAndUpdate({ _id: nextUser._id }, { taskFlag: true }, { runValidators: true, new: true })
+
+            // send to the flagged user's task queue
+            io.emit('document', [business])
+
+            // send feedback successful since a user has been assigned to the task
+            feedback = 'successful'
+
+            // if the task number is greater than 5
+        } else {
+
+            // unflag the flagged user
+            await User.findOneAndUpdate({ _id: flaggedUser._id }, { taskFlag: false }, { runValidators: true, new: true })
+
+            // flag the next user
+            await User.findOneAndUpdate({ _id: nextUser._id }, { taskFlag: true }, { runValidators: true, new: true })
+
+            // send feedback unsuccessful since no user has been assigned to the task
+            feedback = 'unsuccessful'
+        }
+
+        // user is regular
+    }
+    if (flaggedUser.isRegular) {
+
+        // find the business and update the queued field
+        await Business.findOneAndUpdate({ _id: business._id }, { queuedTo: flaggedUser._id, dateShared: Date.now() }, { runValidators: true, new: true })
+
+        // unflag the flagged user
+        await User.findOneAndUpdate({ _id: flaggedUser._id }, { taskFlag: false }, { runValidators: true, new: true })
+
+        // flag the next user
+        await User.findOneAndUpdate({ _id: nextUser._id }, { taskFlag: true }, { runValidators: true, new: true })
+
+        // send to the flagged user's task queue
+        io.emit('document', [business])
+
+        // send feedback successful since a user has been assigned to the task
+        feedback = 'successful'
+    }
+    return feedback
+}
+
 // app.use('/admin', adminRoutes)
 app.use('/', adminRoutes, userRoutes)
 app.post('/', upload, catchErrors(save))
+app.post('/share/user/:user/:id', authController.isLoggedIn, catchErrors(shareTaskQueue))
 app.post('/edit/:id', upload, catchErrors(edit))
 
 // if that above routes didnt work, 404 them and forward to error handler
@@ -215,15 +444,15 @@ io.use(function(socket, next) {
 // })
 
 io.on('connection', async function(socket) {
-    // Business.find({ isTreated: false || null })
-    //     .sort({ _id: -1 })
-    //     .limit(50)
-    //     .then(data => {
-    //         socket.emit('output', data)
+    Business.find({ dateEntered: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) } })
+        .sort({ _id: -1 })
+        .limit(50)
+        .then(data => {
+            socket.emit('output', data)
 
-    //     }).catch(err => {
-    //         socket.emit('error', err)
-    //     })
+        }).catch(err => {
+            socket.emit('error', err)
+        })
 
     if (socket.request.session.passport) {
         let userName = socket.request.session.passport.user

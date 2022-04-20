@@ -1,92 +1,126 @@
-    .signup-form {
-        display: flex;
-        flex-direction: column;
-        width: 40vw;
-        height: 60vh;
-        margin: 5vh 30vw;
-        align-items: center;
-        color: #1c330d;
-        // background-color: rgba(180, 214, 158, 0.5);
-        // box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        // backdrop-filter: blur(6px);
-        border-radius: 20px;
-        .button {
-            margin: 0 0 4vh 0;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-        }
-        .register__user {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            justify-items: center;
-            // border: 1px ridge #1c330d;
-            width: 40vw;
-            height: 30vw;
-            // background-color: red;
-            .button {
-                padding: 4px;
-                font-size: 16px;
-                margin-top: 2px;
-                &:hover {
-                    cursor: pointer;
-                }
-            }
-            .left__register {
-                display: flex;
-                flex-direction: column;
-                width: 60%;
-            }
-            .right__register {
-                display: flex;
-                flex-direction: column;
-                width: 60%;
-            }
-        }
-    }
-    
-    .form-group {
-        button {
-            margin-top: 7vh;
-            background-color: #1c330d;
-            color: white;
-        }
-    }
-    
-    input[type=text],
-    input[type=password],
-    input[type=date],
-    input[type=file],
-    select {
-        width: 100%;
-        padding: 15px;
-        margin: 5px 0 22px 0;
-        display: inline-block;
+.signup-form {
+    // box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    // backdrop-filter: blur(2px);
+    // border-radius: 20px;
+    display: grid;
+    width: 60vw;
+    height: 75vh;
+    margin-left: 20vw;
+    margin-right: 20vw;
+    margin-bottom: 20px;
+    align-items: center;
+    color: #1c330d;
+    z-index: 1;
+    .button {
+        margin: 0 0 4vh 0;
+        padding: 10px;
         border: none;
-        border-bottom: 5px ridge #1c330d;
-        color: #1c330d;
-        // background-color: #1c330d;
-        // color: white;
+        border-radius: 5px;
     }
-    
-    .login__form {
-        // border-top: 1px ridge #1c330d;
-        // border-radius: 20px;
-        // width: fit-content;
-        margin-top: 0;
-        form {
-            h2 {
-                margin-top: 50px;
+    form {
+        justify-content: center;
+        margin: auto;
+    }
+    .register__user {
+        display: grid;
+        grid-template-rows: 1fr;
+        gap: 0 50px;
+        margin: 0 40px;
+        justify-content: center;
+        .button {
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 2px;
+            border: none;
+            border-radius: 6px;
+        }
+        .field {
+            input,
+            select {
+                margin-top: 0;
+                color: #1c330d;
+                background-color: transparent;
+                border-radius: 10px;
+                width: fit-content;
             }
-            .button {
+            button {
+                background-color: #1c330d;
+                color: white;
+                padding: 5px;
+                border-radius: 5px;
                 &:hover {
                     cursor: pointer;
                 }
             }
         }
-        .form-group {
-            a {
-                color: #1c330d;
+    }
+}
+
+.form-group {
+    width: 200px;
+    button {
+        margin-top: 7vh;
+        background-color: #1c330d;
+        color: white;
+    }
+}
+
+input[type=text],
+input[type=password],
+input[type=date],
+input[type=file],
+select {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    border-bottom: 5px ridge #1c330d;
+    color: #1c330d;
+    // background-color: #1c330d;
+    // color: white;
+}
+
+.login__form {
+    // border-top: 1px ridge #1c330d;
+    // border-radius: 20px;
+    // width: fit-content;
+    form {
+        h2 {
+            margin-top: 50px;
+        }
+        .button {
+            &:hover {
+                cursor: pointer;
             }
         }
     }
+    .form-group {
+        a {
+            color: #1c330d;
+        }
+    }
+}
+
+.register-form {
+    width: 60vw;
+    margin-left: 20vw;
+    // background-color: #1c330d;
+    z-index: 2;
+    .isRegular__form-group {
+        margin-left: 7vw;
+    }
+    .register__user {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        justify-content: center;
+        margin: auto;
+        input {
+            width: 200px;
+            margin-left: 7vw;
+        }
+        button {
+            margin-left: 7vw;
+        }
+    }
+}

@@ -118,10 +118,20 @@ exports.getUsers = async(req, res) => {
     res.render('registeredUsers', { title: 'Users', users })
 }
 
-exports.deleteUser = async(req, res) => {
-    const user = await User.findOneAndDelete({ _id: req.params.id })
-    req.flash('success', 'User has been deleted successfully')
-    res.redirect('back')
+exports.updateUser = async(req, res) => {
+    const [updateUser] = await User.find({ _id: req.params.id })
+    res.render('updateUser', { updateUser })
+}
+
+exports.updatedUser = async(req, res) => {
+    try {
+        const updatedUser = await User.findOneAndUpdate({ _id: req.params.id }, req.body, { runValidators: true, new: true }).exec()
+        req.flash('success', `Successfully updated ${updatedUser.name}`)
+        res.redirect('back')
+    } catch (err) {
+        req.flash('error', 'Something went wrong or duplicate user name; Cross check and try again')
+        res.redirect('back')
+    }
 }
 
 exports.resetUser = async(req, res) => {

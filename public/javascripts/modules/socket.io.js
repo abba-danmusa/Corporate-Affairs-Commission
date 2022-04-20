@@ -103,7 +103,7 @@ export default class Socket {
             //     console.log(user)
             // })
         this.socket.on('output', data => {
-            if (data.length && this.table) {
+            if (data.length && this.adminTable) {
                 data.forEach(item => {
                     this.displayDetails(item)
                 })
@@ -168,7 +168,7 @@ export default class Socket {
                     
                     <td>${data.state}</td>
                     <td>${this.date}</td>
-                    <td style='font-size: 12px; color: brown;'>${data.isTreated == true ? 'TREATED' : 'UNTREATED'}</td>
+                    <td style='font-size: 12px; color:${data.isTreated == true ? 'green' : 'brown'};'>${data.isTreated == true ? 'TREATED' : 'UNTREATED'}</td>
                     <td><a href='/business/${data.slug}/${data._id}' style='color:white;background-color: #1c330d; padding: 4px;'>VIEW</a></td>
                 </tr>
             `

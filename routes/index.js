@@ -48,7 +48,6 @@ router.post('/reset-password/:id', authController.isLoggedIn, authController.con
     // router.post('/edit/:id', authController.isLoggedIn, catchErrors(userController.edit))
 router.post('/deactivate/:user/:id', authController.isLoggedIn, catchErrors(userController.deactivateUser))
 router.post('/activate/:user/:id', authController.isLoggedIn, catchErrors(userController.activateUser))
-router.post('/share/:user/:id', authController.isLoggedIn, catchErrors(userController.shareTaskQueue))
 router.post('/:state/:business/:id', authController.isLoggedIn, catchErrors(userController.acknowledge))
 
 // API's

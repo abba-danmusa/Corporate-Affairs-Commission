@@ -1,5 +1,6 @@
 const Business = require('../models/business')
 const User = require('../models/user')
+const Day = require('../models/date')
 const { promisify } = require('es6-promisify')
 const ObjectId = require('mongodb').ObjectId
 
@@ -12,7 +13,7 @@ exports.resetPassword = async(req, res) => {
     res.render('resetPassword', { title: 'Change Password', resetUser })
 }
 
-exports.loginForm = (req, res) => {
+exports.loginForm = async(req, res) => {
     res.render('login', { title: 'Login' })
 }
 
@@ -35,7 +36,7 @@ exports.entryForm = async(req, res) => {
     } else if (req.user.userType == 'headUser') {
 
         const page = req.params.page || 1
-        const limit = 40
+        const limit = 50
         const skip = (page * limit) - limit
 
         const businessesPromise = Business
@@ -58,9 +59,9 @@ exports.entryForm = async(req, res) => {
             return
         }
 
-        const userPendingTasks = Business.getPendingTasks(req.user._id)
-        const userTreatedTasks = Business.getTreatedTasks(req.user._id)
-        const untreatedTodayPromise = Business.getTodaysPendingTasks(req.user._id)
+        const userPendingTasks = Business.getPendingTasks(req.user._id).countDocuments()
+        const userTreatedTasks = Business.getTreatedTasks(req.user._id).countDocuments()
+        const untreatedTodayPromise = Business.getTodaysPendingTasks(req.user._id).countDocuments()
         const [pendingTasks, treatedTasks, untreatedToday] = await Promise.all([userPendingTasks, userTreatedTasks, untreatedTodayPromise])
 
         res.render('taskQueue', { title: 'Home', businesses, page, pages, total, pendingTasks, treatedTasks, untreatedToday })
@@ -380,52 +381,32 @@ exports.activateUser = async(req, res) => {
 
 exports.shareTaskQueue = async(req, res) => {
 
-    // get all the businesses that are assigned to the user and are untreated
-    const usersTaskQueuePromise = Business.find({ queuedTo: req.params.id, isTreated: false })
+    // // get the task-flagged user and the serial number
+    // const [taskFlaggedUser] = await User.getTaskFlaggedUser()
+    // const userSerialNumber = taskFlaggedUser.serialNumber
 
-    // get the user
-    const userPromise = User.find({ _id: req.params.id })
+    // // get the next users to be task-flagged
+    // let nextTaskFlaggedUser = await User.find({ serialNumber: { $gt: userSerialNumber }, isActive: true })
 
-    // destructure the resolved promise array
-    const [user, usersTaskQueue] = await Promise.all([userPromise, usersTaskQueuePromise])
+    // // if users exist, get the first active user after the task-flagged user, if not, get the first active user before the task-flagged user
+    // nextTaskFlaggedUser.length ? nextTaskFlaggedUser = nextTaskFlaggedUser[0] : [nextTaskFlaggedUser] = await User.find({ serialNumber: { $lt: userSerialNumber }, isActive: true })
 
-    if (user.isActive == true) {
-        req.flash('info', 'Please deactivate the user to share his/her task queue')
-        res.redirect('back')
-        return
-    }
+    // // reassign the task to the task-flagged user
+    // await Business.findOneAndUpdate({ _id: usersTaskQueue[i]._id }, { queuedTo: taskFlaggedUser._id }, { runValidators: true, new: true }).exec()
 
-    // loop through all the user's task queue and reassign to others
-    for (let i = 0; i < usersTaskQueue.length; i++) {
+    // // find the task-flagged user and update the taskFlag field to false 
+    // await User.findOneAndUpdate({ _id: taskFlaggedUser._id }, { taskFlag: false }, { new: true, runValidators: true }).exec()
 
-        // get the task-flagged user and the serial number
-        const [taskFlaggedUser] = await User.getTaskFlaggedUser()
-        const userSerialNumber = taskFlaggedUser.serialNumber
+    // // if exist, find the next user to be task-flagged and update the taskFlag field to true
+    // if (nextTaskFlaggedUser) {
+    //     await User.findOneAndUpdate({ _id: nextTaskFlaggedUser._id }, { taskFlag: true }, { new: true, runValidators: true }).exec()
+    // }
+    // // if doesn't exist, task-flag the previous user
+    // else {
+    //     await User.findOneAndUpdate({ _id: taskFlaggedUser._id }, { taskFlag: true }, { new: true, runValidators: true }).exec()
+    // }
 
-        // get the next users to be task-flagged
-        let nextTaskFlaggedUser = await User.find({ serialNumber: { $gt: userSerialNumber }, isActive: true })
 
-        // if users exist, get the first active user after the task-flagged user, if not, get the first active user before the task-flagged user
-        nextTaskFlaggedUser.length ? nextTaskFlaggedUser = nextTaskFlaggedUser[0] : [nextTaskFlaggedUser] = await User.find({ serialNumber: { $lt: userSerialNumber }, isActive: true })
-
-        // reassign the task to the task-flagged user
-        await Business.findOneAndUpdate({ _id: usersTaskQueue[i]._id }, { queuedTo: taskFlaggedUser._id }, { runValidators: true, new: true }).exec()
-
-        // find the task-flagged user and update the taskFlag field to false 
-        await User.findOneAndUpdate({ _id: taskFlaggedUser._id }, { taskFlag: false }, { new: true, runValidators: true }).exec()
-
-        // if exist, find the next user to be task-flagged and update the taskFlag field to true
-        if (nextTaskFlaggedUser) {
-            await User.findOneAndUpdate({ _id: nextTaskFlaggedUser._id }, { taskFlag: true }, { new: true, runValidators: true }).exec()
-        }
-        // if doesn't exist, task-flag the previous user
-        else {
-            await User.findOneAndUpdate({ _id: taskFlaggedUser._id }, { taskFlag: true }, { new: true, runValidators: true }).exec()
-        }
-    }
-
-    req.flash('success', 'Successfully distributed to other users')
-    res.redirect('back')
 }
 
 exports.userTasks = async(req, res) => {
@@ -540,7 +521,7 @@ exports.treat = async(req, res) => {
     try {
         // get the business and mark it as treated
         await Business.findByIdAndUpdate(req.params.id, { isTreated: true, dateTreated: Date.now() }, { new: true, runValidators: true })
-        req.flash('success', 'Success')
+        req.flash('success', `Success`)
         res.redirect('back')
     } catch (error) {
         req.flash('error', 'Unsuccessful')

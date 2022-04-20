@@ -73,14 +73,85 @@ const totalButton = $('.total__received')
 const treatedButton = $('.treated')
 const pendingButton = $('.total__pendings')
 
-if (totalButton) {
-    totalButton.on('click', () => {
-        totalTasks.style.display = ''
-        pendingsTasks.style.display = 'none'
-        treatedTasks.style.display = 'none'
-    })
+// if (totalButton) {
+//     totalButton.on('click', () => {
+//         totalTasks.style.display = ''
+//         pendingsTasks.style.display = 'none'
+//         treatedTasks.style.display = 'none'
+//     })
 
+// }
+
+// tell if a user is regular or non regular
+const selectUserType = $('#select')
+
+if (selectUserType) {
+
+    selectUserType.on('change', (event) => {
+
+        const select = $$('.elementExist')
+        if (event.target.value !== 'headUser') {
+
+            select.forEach(element => element.remove())
+        }
+
+        if (event.target.value == 'headUser') {
+
+            if (select.length !== 0) return
+
+            // create a select element
+            const isRegularSelect = document.createElement('select')
+
+            // create a label for the element
+            const label = document.createElement('label')
+            label.setAttribute('class', 'elementExist')
+            label.innerHTML = 'SPU Type'
+
+            // name the element
+            isRegularSelect.name = 'isRegular'
+
+            // set the element to required
+            isRegularSelect.setAttribute('required', 'required')
+            isRegularSelect.setAttribute('class', 'elementExist')
+
+            //create two options
+            const option1 = document.createElement('option')
+            const option2 = document.createElement('option')
+
+            // assign their values
+            option1.value = true
+            option2.value = false
+            option1.innerHTML = 'Regular User'
+            option2.innerHTML = 'Non-Regular User'
+
+            // append the options
+            isRegularSelect.append(option1, option2)
+
+            // append the select element and it's label to a form group
+            $('.isRegular__form-group').append(label)
+            $('.isRegular__form-group').append(isRegularSelect)
+
+            // get all the options
+            const stateOptions = $$('.select__state')
+
+            stateOptions.forEach(option => {
+                if (option.value !== 'FCT')
+                    option.setAttribute('disabled', true)
+            })
+
+        }
+    })
 }
+
+// remove flash message after a while
+const removeFlash = $('.flash__remove')
+const errorFlash = $('.flash--error')
+
+if (removeFlash) {
+    if (removeFlash && !errorFlash)
+        setTimeout(() => removeFlash.parentElement.remove(), 3000)
+}
+
 
 if (treatedButton) {
     treatedButton.on('click', () => {
@@ -103,13 +174,16 @@ if (pendingButton) {
 const markAsTreated = $('.mark')
 if (markAsTreated) {
     const overlay = $('.overlay')
+    const overlayContent = $('.overlay-content')
     markAsTreated.on('click', () => {
-        overlay.style.width = '200px'
+        overlay.style.width = '100%'
+        overlayContent.style.display = 'block'
     })
     const cancel = $('.cancel')
     cancel.on('click', (event) => {
         event.preventDefault()
-        overlay.style.width = '0px'
+        overlay.style.width = '0'
+        overlayContent.style.display = 'none'
     })
 }
 
@@ -123,14 +197,18 @@ const shareButton = $('.share__button')
 if (shareButton) {
     const overlay = $('.share__overlay')
     const cancel = $('.share__cancel')
+    const shareContent = $('.share__overlay-content')
 
     shareButton.on('click', () => {
-        console.log('clicked')
-        overlay.style.width = '200px'
+
+        overlay.style.width = '100%'
+        shareContent.style.display = 'block'
+            // overlay.style.height = '300px'
     })
     cancel.on('click', (event) => {
         event.preventDefault()
-        overlay.style.width = '0px'
+        overlay.style.width = '0'
+        shareContent.style.display = 'none'
     })
 
 }

@@ -5,16 +5,18 @@ extends layout
 block content
 
   .inner
-    .signup-form.login__form(style='height:60vh;')
+    .signup-form.login__form(style='height:60vh;margin-top: 10vh;')
       form(action="/login" method="POST")
         h2 Login
         .form-group
-          input(type="text" class="form-control" name="userName" placeholder="User Name" required="required")
+          input(type="text" class="form-control" name="userName" placeholder="User Name" required="required" style='background-color: transparent;')
         .form-group
-          input(type="password" class="form-control" name="password" placeholder="password" required="required")
+          input(type="password" class="form-control" name="password" placeholder="password" required="required" style='background-color: transparent;')
                 
         .form-group
-          button.button(type="submit" class="btn btn-success btn-lg btn-block" id='connectSocket') Login
+          button.button(type="submit" class="btn btn-success btn-lg btn-block" id='connectSocket' style='font-size:14px;padding:6px;') Login
 
         .form-group
           a.link__button(href='/admin') Admin?
+    
+      //- img(src='/images/logos.png' style='margin-right:100px;background-color:white')
