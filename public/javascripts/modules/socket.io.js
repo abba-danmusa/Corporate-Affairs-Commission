@@ -169,7 +169,7 @@ export default class Socket {
                     <td>${data.state}</td>
                     <td>${this.date}</td>
                     <td style='font-size: 12px; color:${data.isTreated == true ? 'green' : 'brown'};'>${data.isTreated == true ? 'TREATED' : 'UNTREATED'}</td>
-                    <td><a href='/business/${data.slug}/${data._id}' style='color:white;background-color: #1c330d; padding: 4px;'>VIEW</a></td>
+                    <td><a href='/admin/business/${data.slug}/${data._id}' style='color:white;background-color: #1c330d; padding: 4px;'>VIEW</a></td>
                 </tr>
             `
         this.table.insertAdjacentHTML('afterbegin', tableRow)
