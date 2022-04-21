@@ -59,6 +59,7 @@ userSchema.pre('save', async function(next) {
         this.isRegular = false
         this.task = 0
         this.serialNumber = users + 1
+        this.isActive = true
         return next()
     }
 
