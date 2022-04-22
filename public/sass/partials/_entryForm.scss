@@ -1,8 +1,8 @@
 .entry-form {
     // background-color: rgba(180, 214, 158, 0.4);
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    backdrop-filter: blur(2px);
-    border-radius: 20px;
+    // box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    // backdrop-filter: blur(2px);
+    // border-radius: 20px;
     width: 80vw;
     height: fit-content;
     margin-left: 10vw;
@@ -18,7 +18,7 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 0 50px;
-        margin: 0 40px;
+        margin: 0 0 0 80px;
         .button {
             padding: 10px;
             font-size: 16px;
@@ -32,6 +32,7 @@
                 color: #1c330d;
                 background-color: transparent;
                 border-radius: 10px;
+                width: 400px;
             }
         }
     }
