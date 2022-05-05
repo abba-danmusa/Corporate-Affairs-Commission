@@ -23,9 +23,20 @@ block header
 block content
   .share__overlay
     center.share__overlay-content
-      h3=`Enter the number you want to share. Maximum of ${pendingTasks.length}`
+      h3=`Enter the number and the user(s) you want to share. Maximum of ${pendingTasks.length}`
       form(action=`/share/user/${user.slug}/${user._id}` method='post')
         input(type='number' placeholder='How many?' min='1' max=`${pendingTasks.length}` name='number' required)
+        br
+        label(for='shareTo' style='font-size:large') Select user(s)
+        br
+        select(name='shareTo' style='width:50%; height:100px; padding:10px 0;background-color:whitesmoke;' multiple)
+          option.selectAll(value='all') All Users
+          each item in users
+            option.options(value=`${item._id}`)= item.name
+        //- div( multiple style='height: 100px;width:50%;overflow-x:scroll;background-color:whitesmoke;padding: 10px 0;display:grid;grid-template-columns: 1fr 5fr;')
+        //-   each item in users
+        //-     input(type='checkbox' name='shareTo' value=`${item._id}`)
+        //-     label(for='shareTo')= item.name
         br
         a.share__cancel(href='/') Cancel
         button.button.share__button--submit(type='submit' style='border:none;cursor:pointer;background-color:red') Confirm

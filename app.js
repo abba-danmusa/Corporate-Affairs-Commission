@@ -269,39 +269,55 @@ const assignTask = async(req, flaggedUser, nextUser) => {
 const shareTaskQueue = async(req, res) => {
 
     try {
+
         // get all the businesses that are assigned to the user and are untreated
         const usersTaskQueue = await Business.find({ queuedTo: req.params.id, isTreated: false }).limit(parseInt(req.body.number))
 
         // deactivate user so that user gets none
         await User.findOneAndUpdate({ _id: req.params.id }, { isActive: false }, { runValidators: true, new: true })
 
-        // loop through all the user's task queue and reassign to others
-        for (let i = 0; i < usersTaskQueue.length; i++) {
+        // if share to users is not 'all'
+        const shareUsers = typeof(req.body.shareTo) == 'string' ? [req.body.shareTo] : req.body.shareTo
 
-            let feedback = ''
+        let shareUsersIndex = 0
 
-            while (feedback !== 'successful') {
+        if (shareUsers.length && shareUsers[0] !== 'all') {
+            for (let i = 0; i < usersTaskQueue.length; i++) {
+                await Business.findOneAndUpdate({ _id: usersTaskQueue[i]._id }, { queuedTo: shareUsers[shareUsersIndex] }, { runValidators: true, new: true })
+                shareUsersIndex++
+                shareUsersIndex >= shareUsers.length ? shareUsersIndex = 0 : null
+            }
+        } else {
 
-                // get the flagged user
-                const [flaggedUser] = await User.find({ userType: 'headUser', taskFlag: true })
+            // loop through all the user's task queue and reassign to others
+            for (let i = 0; i < usersTaskQueue.length; i++) {
 
-                const serialNum = flaggedUser.serialNumber // get the flagged user's serial number
+                let feedback = ''
 
-                // get the next user to be task flagged 
-                let [nextUser] = await User.find({ userType: 'headUser', isActive: true, serialNumber: { $gt: serialNum } })
+                while (feedback !== 'successful') {
 
-                // update nextUser if user does not exist
-                !nextUser ? [nextUser] = await User.find({ userType: 'headUser', isActive: true, serialNumber: { $lt: serialNum } }) : null
+                    // get the flagged user
+                    const [flaggedUser] = await User.find({ userType: 'headUser', taskFlag: true })
 
-                // if next user does not exist at all; only one user exist, flagged user is next user
-                    !nextUser ? nextUser = flaggedUser : null
+                    const serialNum = flaggedUser.serialNumber // get the flagged user's serial number
 
-                // update the feedback value
-                feedback = await reAssignTask(flaggedUser, nextUser, usersTaskQueue[i])
+                    // get the next user to be task flagged 
+                    let [nextUser] = await User.find({ userType: 'headUser', isActive: true, serialNumber: { $gt: serialNum } })
+
+                    // update nextUser if user does not exist
+                    !nextUser ? [nextUser] = await User.find({ userType: 'headUser', isActive: true, serialNumber: { $lt: serialNum } }) : null
+
+                    // if next user does not exist at all; only one user exist, flagged user is next user
+                        !nextUser ? nextUser = flaggedUser : null
+
+                    // update the feedback value
+                    feedback = await reAssignTask(flaggedUser, nextUser, usersTaskQueue[i])
+                }
+
             }
 
-
         }
+
 
         // reactivate the user
         await User.findOneAndUpdate({ _id: req.params.id }, { isActive: true }, { runValidators: true, new: true })

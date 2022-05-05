@@ -1893,8 +1893,8 @@ textarea.tall-textarea {
   -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
           box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   color: #1c330d;
-  width: 300px;
-  height: 300px;
+  width: 450px;
+  height: 450px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -1913,7 +1913,7 @@ textarea.tall-textarea {
   padding: 5px;
   border: none;
   background-color: transparent;
-  border-bottom: 1px ridge #6e7c65;
+  border-bottom: 5px ridge #1c330d;
   text-align: center;
 }
 

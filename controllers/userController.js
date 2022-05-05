@@ -318,11 +318,16 @@ exports.superviseUser = async(req, res) => {
     const userTotalTasks = Business.getUserTotalTasks(req.params.id)
     const userPendingTasks = Business.getPendingTasks(req.params.id)
     const userTreatedTasks = Business.getTreatedTasks(req.params.id)
+    let users = await User.find({ userType: 'headUser', isActive: true })
     const [
         [user], totalTasks, pendingTasks, treatedTasks
     ] = await Promise.all([userPromise, userTotalTasks, userPendingTasks, userTreatedTasks])
 
-    res.render('user', { title: req.params.user, user, totalTasks, pendingTasks, treatedTasks })
+    users = users.filter(item => {
+        return item.id !== user.id
+    })
+
+    res.render('user', { title: req.params.user, user, totalTasks, pendingTasks, treatedTasks, users })
 }
 
 exports.deactivateUser = async(req, res) => {
