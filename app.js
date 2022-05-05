@@ -283,7 +283,7 @@ const shareTaskQueue = async(req, res) => {
 
         if (shareUsers.length && shareUsers[0] !== 'all') {
             for (let i = 0; i < usersTaskQueue.length; i++) {
-                await Business.findOneAndUpdate({ _id: usersTaskQueue[i]._id }, { queuedTo: shareUsers[shareUsersIndex] }, { runValidators: true, new: true })
+                await Business.findOneAndUpdate({ _id: usersTaskQueue[i]._id }, { queuedTo: shareUsers[shareUsersIndex], dateShared: Date.now() }, { runValidators: true, new: true })
                 shareUsersIndex++
                 shareUsersIndex >= shareUsers.length ? shareUsersIndex = 0 : null
             }
