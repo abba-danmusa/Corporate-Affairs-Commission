@@ -158,10 +158,12 @@ const edit = async(req, res) => {
     if (req.body.file !== '' || null || undefined) {
 
         const [proprietors] = [req.body.proprietors]
+        const dir = `/uploads/${req.body.regNumber}/${req.body.file}`
+        req.body.fileDir = dir
 
-        const { regNumber, businessName, businessAddress, dateOfReg, natureOfBusiness, file } = req.body
+        const { regNumber, businessName, businessAddress, dateOfReg, natureOfBusiness, file, fileDir } = req.body
 
-        const business = await Business.findOneAndUpdate({ _id: req.params.id }, { regNumber, businessName, businessAddress, dateOfReg, natureOfBusiness, proprietors, file, treated: false }, { new: true, runValidators: true }).exec()
+        const business = await Business.findOneAndUpdate({ _id: req.params.id }, { regNumber, businessName, businessAddress, dateOfReg, natureOfBusiness, proprietors, file, fileDir, treated: false }, { new: true, runValidators: true }).exec()
 
         req.flash('success', `Successfully updated ${business.businessName}`)
         res.redirect(`/${business.state}/business/${business._id}`)
