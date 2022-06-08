@@ -50,7 +50,7 @@ userSchema.pre('save', async function(next) {
     }
     if (this.userType !== 'headUser') {
         const users = await this.constructor.find({ userType: { '$in': ['headSupervisor', 'zonalAdmin', 'zonalUser', 'zonalSupervisor'] } }).countDocuments()
-        this.serialNumber = users * 1000000
+        this.serialNumber = users + 1 * 1000000
         return next()
     }
     const users = await this.constructor.find({ userType: 'headUser' }).countDocuments()
