@@ -93,6 +93,14 @@ userSchema.statics.getUser = function() {
     ])
 }
 
+userSchema.statics.getStates = function() {
+    return this.aggregate([
+        { $unwind: '$state' },
+        { $group: { _id: '$state', count: { $sum: 1 } } },
+        { $sort: { count: -1 } }
+    ])
+}
+
 // userSchema.pre('save', async function(next) {
 //     if (this.userType == 'admin' || 'supervisor') {
 //         this.hasPrivilege = this.userType

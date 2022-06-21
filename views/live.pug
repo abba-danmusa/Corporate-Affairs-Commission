@@ -28,17 +28,24 @@ block content
 
 
  #live
-    table.table.admin__table
-      thead
-        tr
-          //- th 
-          th REGISTRATION NO
-          th BUSINESS NAME
-          th STATE
-          th DATE REGISTERED
-          th STATUS
-          th ACTION
-      tbody(id="table")
-    script(src="/socket.io/socket.io.js")
+  .users
+    each state in states
+      .user
+        h3= state._id
+        hr(style='color: green; border: 1px ridge green; width: 100%;')
+        h4 TOTAL
+        h4= state.count
+  //- table.table.admin__table
+  //-   thead
+  //-     tr
+  //-       //- th 
+  //-       th REGISTRATION NO
+  //-       th BUSINESS NAME
+  //-       th STATE
+  //-       th DATE REGISTERED
+  //-       th STATUS
+  //-       th ACTION
+  //-   tbody(id="table")
+  //- script(src="/socket.io/socket.io.js")
 
-    //- script(src="/socket.io/socket.io.js")
+  //- script(src="/socket.io/socket.io.js")

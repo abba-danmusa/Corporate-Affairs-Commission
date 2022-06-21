@@ -147,8 +147,10 @@ exports.registerAdmin = async(req, res) => {
     res.redirect('back')
 }
 
-exports.live = (req, res) => {
-    res.render('live', { title: 'Live Data' })
+exports.live = async(req, res) => {
+    const states = await User.getStates()
+        // res.json(states)
+    res.render('live', { title: 'Live Data', states })
 }
 
 exports.getBusinesses = async(req, res) => {
