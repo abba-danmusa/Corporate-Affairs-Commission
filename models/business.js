@@ -84,6 +84,14 @@ businessSchema.index({
 //     }
 // })
 
+businessSchema.statics.getStates = function() {
+    return this.aggregate([
+        { $unwind: '$state' },
+        { $group: { _id: '$state', count: { $sum: 1 } } },
+        { $sort: { count: -1 } }
+    ])
+}
+
 businessSchema.statics.taskTo = function() {
     return this.aggregate([
         {}

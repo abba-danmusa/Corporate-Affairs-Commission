@@ -148,7 +148,7 @@ exports.registerAdmin = async(req, res) => {
 }
 
 exports.live = async(req, res) => {
-    const states = await User.getStates()
+    const states = await Business.getStates()
         // res.json(states)
     res.render('live', { title: 'Live Data', states })
 }

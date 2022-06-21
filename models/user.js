@@ -95,8 +95,8 @@ userSchema.statics.getUser = function() {
 
 userSchema.statics.getStates = function() {
     return this.aggregate([
-        { $unwind: '$state' },
-        { $group: { _id: '$state', count: { $sum: 1 } } },
+        { $unwind: 'business' },
+        { $group: { _id: '$business.state', count: { $sum: 1 } } },
         { $sort: { count: -1 } }
     ])
 }
