@@ -104,41 +104,78 @@ const save = async(req, res) => {
 
     try {
 
-        let feedback = ''
+        // get the flagged user
+        const [flaggedUser] = await User.find({ userType: 'headUser', taskFlag: true })
+            // console.log(flaggedUser)
 
-        while (feedback !== 'successful') {
+        const serialNum = flaggedUser.serialNumber // get the flagged user's serial number
 
-            // get the flagged user
-            const [flaggedUser] = await User.find({ userType: 'headUser', taskFlag: true })
+        // get the next user to be task flagged
+        let [nextUser] = await User.find({ userType: 'headUser', isActive: true, serialNumber: { $gt: serialNum }, $or: [{ task: { $lt: 5 } }, { task: null }] })
 
-            const serialNum = flaggedUser.serialNumber // get the flagged user's serial number
+        // if no next user get the first user
+        !nextUser ? [nextUser] = await User.find({ userType: 'headUser', isActive: true, serialNumber: { $lt: serialNum }, $or: [{ task: { $lt: 5 } }, { task: null }] }) : null
 
-            // get the next user to be task flagged 
-            let [nextUser] = await User.find({ userType: 'headUser', isActive: true, serialNumber: { $gt: serialNum } })
+        // if next user does not exist at all; only one user exist, flagged user is next user
+            !nextUser ? nextUser = flaggedUser : null
 
-            // update nextUser if user does not exist
-            !nextUser ? [nextUser] = await User.find({ userType: 'headUser', isActive: true, serialNumber: { $lt: serialNum } }) : null
+        const todaysDate = new Date() // get today's date
+        const [getDate] = await Day.find({}) // get the last saved date
 
-            // if next user does not exist at all; only one user exist, flagged user is next user
-                !nextUser ? nextUser = flaggedUser : null
+        // if today's date does not equal saved date
+        if ((getDate) && (todaysDate.getDate() !== getDate.date.getDate())) {
 
-            // update the feedback value
-            feedback = await assignTask(req, flaggedUser, nextUser)
+            // update the date
+            await Day.findOneAndUpdate({ _id: getDate._id }, { date: new Date() }, { runValidators: true, new: true })
+
+            // reset all the user's tasks number to 0
+            await User.updateMany({ isRegular: false }, { task: 0 }, { runValidators: true, new: true })
         }
+        // no saved date
+        if (!getDate) {
+            // save a date for the first time into the database
+            await new Day({ date: todaysDate }).save()
+        }
+
+        // add some necessary properties to the req.body object
+        const [proprietors] = [req.body.proprietors]
+        const author = req.user._id
+        const fileDir = `/uploads/${req.body.regNumber}/${req.body.file}`
+        req.body.proprietors = proprietors
+        req.body.author = author
+        req.body.queuedTo = flaggedUser._id // assign the task to the flagged user
+        req.body.fileDir = fileDir
+
+        // save the business to the database
+        const business = new Business(req.body)
+        await business.save()
+
+        // unflag the flagged user
+        if (flaggedUser.isRegular) {
+            // if user is regular
+            await User.findOneAndUpdate({ _id: flaggedUser._id }, { taskFlag: false }, { runValidators: true, new: true }).exec()
+        } else {
+            // if user is non regular
+            await User.findOneAndUpdate({ _id: flaggedUser._id }, { task: flaggedUser.task + 1, taskFlag: false }, { runValidators: true, new: true }).exec()
+        }
+
+        // flag the next user
+        await User.findOneAndUpdate({ _id: nextUser._id }, { taskFlag: true }, { runValidators: true, new: true })
+
+        // send to the flagged user's task queue
+        io.emit('document', [business])
 
         req.flash('success', 'Sent Successfully')
         res.redirect('back')
 
     } catch (error) {
+
         if (error.keyValue) {
-            const [errType] = error.keyValue.keys()
-            const [err] = error.keyValue.values()
-            const message = errType == businessName ? 'Business name' : 'Reg. number'
-            req.flash('error', `This ${message}; <strong>${err}</strong>, already exist. Please cross check and try again`)
+            const [duplicateValue] = Object.values(error.keyValue)
+            req.flash('error', `<strong>${duplicateValue}</strong> already exist. Please cross check and try again`)
         } else {
             req.flash('error', 'Something went wrong. Please try again')
         }
-
         res.redirect('back')
     }
 }
