@@ -180,6 +180,11 @@ const save = async(req, res) => {
     }
 }
 
+const error = async(req, res) => {
+    req.flash('error', 'Something went wrong, Please try again')
+    res.redirect('back')
+}
+
 const edit = async(req, res) => {
     if (req.body.file == '' || null || undefined) {
 
