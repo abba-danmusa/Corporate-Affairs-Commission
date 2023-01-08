@@ -1,5 +1,7 @@
 const passport = require('passport')
 const User = require('../models/user')
+const mongoose = require('mongoose')
+const Config = mongoose.model('Config')
 
 exports.mustChangePassword = (req, res, next) => {
     if (req.user.mustChangePassword === false) {
@@ -108,4 +110,9 @@ exports.isLoggedIn = (req, res, next) => {
     }
     req.flash('info', 'You must login to Enter any Business Info.')
     res.redirect('/login')
+}
+
+exports.isPaid = async(req, res, next) => {
+    const [payment] = await Config.find({ isPaid: true })
+    payment && payment.isPaid ? next() : res.send('500: Internal server error')
 }

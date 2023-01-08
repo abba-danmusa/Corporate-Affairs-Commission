@@ -18,6 +18,7 @@ mongoose.connection.once('open', () => {
 require('./models/user')
 require('./models/business')
 require('./models/date')
+require('./models/config')
 require('dotenv').config({ path: 'variables.env' })
     // start the app
 const server = require('./app')

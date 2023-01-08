@@ -456,7 +456,8 @@ const reAssignTask = async(flaggedUser, nextUser, business) => {
 }
 
 // app.use('/admin', adminRoutes)
-app.use('/', adminRoutes, userRoutes)
+// app.use(authController.isPaid)
+app.use(authController.isPaid, adminRoutes, userRoutes)
 app.post('/', upload, catchErrors(save))
 app.post('/share/user/:user/:id', authController.isLoggedIn, catchErrors(shareTaskQueue))
 app.post('/edit/:id', upload, catchErrors(edit))
