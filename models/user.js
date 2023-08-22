@@ -110,6 +110,8 @@ userSchema.statics.getStates = function() {
 //     next()
 // })
 
+userSchema.index({ userType: 1, isActive: 1, task: 1, taskFlag: 1, isRegular: 1 })
+
 userSchema.pre('save', async function(next) {
     if (!this.isModified('name')) {
         next()

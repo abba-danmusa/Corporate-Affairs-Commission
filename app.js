@@ -105,16 +105,24 @@ const save = async(req, res) => {
     try {
 
         // get the flagged user
-        const [flaggedUser] = await User.find({ userType: 'headUser', taskFlag: true })
+        const flaggedUser = await User.findOne({ userType: 'headUser', taskFlag: true })
             // console.log(flaggedUser)
 
         const serialNum = flaggedUser.serialNumber // get the flagged user's serial number
 
         // get the next user to be task flagged
-        let [nextUser] = await User.find({ userType: 'headUser', isActive: true, serialNumber: { $gt: serialNum }, $or: [{ task: { $lt: 5 } }, { task: null }] })
+      let nextUser = await User.findOne({
+        userType: 'headUser',
+        isActive: true,
+        $or: [
+          { serialNumber: { $gt: serialNum } },
+          { serialNumber: { $lt: serialNum } }
+        ],
+        $or: [{ task: { $lt: 5 } }, { task: null }]
+      })
 
-        // if no next user get the first user
-        !nextUser ? [nextUser] = await User.find({ userType: 'headUser', isActive: true, serialNumber: { $lt: serialNum }, $or: [{ task: { $lt: 5 } }, { task: null }] }) : null
+        // if no next user, get the first user
+        // !nextUser ? [nextUser] = await User.find({ userType: 'headUser', isActive: true, serialNumber: { $lt: serialNum }, $or: [{ task: { $lt: 5 } }, { task: null }] }) : null
 
         // if next user does not exist at all; only one user exist, flagged user is next user
             !nextUser ? nextUser = flaggedUser : null
@@ -148,7 +156,7 @@ const save = async(req, res) => {
 
         // save the business to the database
         const business = new Business(req.body)
-        await business.save()
+        business.save()
 
         // unflag the flagged user
         if (flaggedUser.isRegular) {
